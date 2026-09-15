@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>测试模板</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg-dark:#060d1a;--bg-card:rgba(12,21,37,.75);--bg-card-hover:#14203a;--border-color:rgba(38,208,206,.15);--primary-pink:#ff8a65;--primary-purple:#26d0ce;--primary-red:#ff5252;--primary-coral:#ffd54f;--primary-lavender:#82b1ff;--primary-green:#10b981;--primary-yellow:#fbbf24;--text-white:#fff;--text-gray:#7a96b8;--text-light:#a8c4e8;--gradient-main:linear-gradient(135deg,#ff8a65 0%,#26d0ce 50%,#ff5252 100%);--gradient-love:linear-gradient(135deg,#ff8a65,#ffd54f,#82b1ff);--radius-lg:20px;--radius-md:14px}
+    *{margin:0;padding:0;box-sizing:border-box}body{font-family:'Noto Sans SC',sans-serif;background:var(--bg-dark);color:var(--text-white);line-height:1.6;min-height:100vh;overflow-x:hidden}
+    body::before{content:'';position:fixed;top:0;left:0;width:50%;height:100%;background:radial-gradient(ellipse at top left,rgba(38,208,206,.08),transparent 70%);z-index:0;pointer-events:none}
+    body::after{content:'';position:fixed;bottom:0;right:0;width:50%;height:100%;background:radial-gradient(ellipse at bottom right,rgba(255,138,101,.08),transparent 70%);z-index:0;pointer-events:none}
+    #particles-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+    .container{max-width:520px;margin:0 auto;padding:24px 20px;min-height:100vh;display:flex;flex-direction:column;position:relative;z-index:1}
+    .header{text-align:center;margin-bottom:40px;animation:fadeInDown .6s ease}
+    @keyframes fadeInDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+    @keyframes heartbeat{0%,100%{transform:scale(1)}14%{transform:scale(1.15)}28%{transform:scale(1)}42%{transform:scale(1.15)}70%{transform:scale(1)}}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+    @keyframes slideOutLeft{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(-30px)}}
+    @keyframes slideInRight{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
+    @keyframes selectPulse{0%{box-shadow:0 0 0 0 rgba(255,138,101,.4)}70%{box-shadow:0 0 0 10px rgba(255,138,101,0)}100%{box-shadow:0 0 0 0 rgba(255,138,101,0)}}
+    @keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-5px)}40%,80%{transform:translateX(5px)}}
+    @keyframes sparkle{0%,100%{opacity:0;transform:scale(0)}50%{opacity:1;transform:scale(1)}}
+    .logo{width:100px;height:100px;margin:0 auto 20px;background:var(--gradient-main);border-radius:28px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 40px rgba(255,138,101,.25),0 0 60px rgba(38,208,206,.2);position:relative;animation:heartbeat 1.5s ease infinite;transform:rotate(-5deg)}
+    .logo::before{content:'';position:absolute;inset:-3px;border-radius:28px;background:var(--gradient-main);z-index:-1;opacity:.5;filter:blur(12px)}
+    .logo::after{content:'✨';position:absolute;top:-8px;right:-8px;font-size:20px;animation:sparkle 2s ease infinite}
+    .logo-icon{font-size:48px}.title{font-size:32px;font-weight:700;margin-bottom:12px;background:var(--gradient-main);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:2px}
+    .subtitle{font-size:15px;color:var(--text-gray)}.main-content{flex:1;display:flex;flex-direction:column;animation:fadeInUp .6s ease .2s both}
+    .gender-page{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;animation:fadeInUp .6s ease}
+    .gender-card{background:var(--bg-card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:var(--radius-lg);padding:40px 32px;border:1px solid var(--border-color);width:100%;max-width:420px;text-align:center}
+    .gender-icon{font-size:56px;margin-bottom:20px;animation:float 3s ease infinite}.gender-title{font-size:22px;font-weight:600;color:var(--text-white);margin-bottom:8px}
+    .gender-desc{font-size:14px;color:var(--text-gray);margin-bottom:28px;line-height:1.6}
+    .gender-options{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+    .gender-btn{flex:1;min-width:140px;padding:20px 24px;background:var(--bg-dark);border:2px solid var(--border-color);border-radius:var(--radius-md);color:var(--text-white);font-size:16px;font-weight:600;cursor:pointer;transition:all .3s ease;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:10px}
+    .gender-btn:hover{transform:translateY(-4px);border-color:var(--primary-pink);box-shadow:0 8px 30px rgba(255,138,101,.2)}
+    .gender-btn.male:hover{border-color:var(--primary-purple);box-shadow:0 8px 30px rgba(38,208,206,.2)}
+    .gender-btn .icon{font-size:32px}.gender-hint{margin-top:24px;font-size:13px;color:var(--text-gray);opacity:.8}
+    .test-options{display:flex;flex-direction:column;gap:16px;margin-bottom:32px}
+    .test-option{background:var(--bg-card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:var(--radius-lg);padding:24px;transition:all .3s ease;cursor:pointer;border:1px solid var(--border-color);position:relative;overflow:hidden}
+    .test-option::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gradient-main);opacity:0;transition:opacity .3s ease}
+    .test-option:hover{transform:translateY(-4px);border-color:var(--primary-pink);box-shadow:0 8px 32px rgba(255,138,101,.15)}
+    .test-option:hover::before{opacity:1}
+    .option-header{display:flex;align-items:center;gap:16px}
+    .option-icon{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;background:var(--gradient-main);box-shadow:0 4px 20px rgba(255,138,101,.3)}
+    .option-title{font-size:18px;font-weight:600;color:var(--text-white);margin-bottom:4px}.option-desc{font-size:13px;color:var(--text-gray);line-height:1.5}
+    .disclaimer{background:var(--bg-card);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:var(--radius-md);padding:18px;margin-bottom:24px;border-left:4px solid var(--primary-coral);border:1px solid var(--border-color)}
+    .disclaimer-title{font-size:14px;font-weight:600;color:var(--primary-coral);margin-bottom:8px;display:flex;align-items:center;gap:6px}.disclaimer-text{font-size:13px;color:var(--text-gray);line-height:1.6}
+    .progress-container{margin-bottom:28px}.progress-bar{width:100%;height:8px;background:var(--border-color);border-radius:4px;overflow:hidden;margin-bottom:12px}
+    .progress-fill{height:100%;background:var(--gradient-main);border-radius:4px;transition:width .5s ease;box-shadow:0 0 10px rgba(255,138,101,.3)}.progress-text{font-size:14px;color:var(--text-gray);text-align:center}
+    .question-card{background:var(--bg-card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:var(--radius-lg);padding:28px;border:1px solid var(--border-color);margin-bottom:20px}
+    .question-card.slide-in{animation:slideInRight .4s ease}.question-card.slide-out{animation:slideOutLeft .3s ease forwards}
+    .question-number{display:inline-block;background:var(--gradient-main);color:#fff;font-size:12px;font-weight:600;padding:4px 12px;border-radius:20px;margin-bottom:16px}
+    .question-text{font-size:17px;font-weight:500;color:var(--text-white);margin-bottom:24px;line-height:1.7}.options-grid{display:grid;gap:12px}
+    .option-item{background:rgba(6,13,26,.6);border:2px solid var(--border-color);border-radius:var(--radius-md);padding:16px 20px;cursor:pointer;transition:all .25s ease;display:flex;align-items:center;gap:14px}
+    .option-item:hover{border-color:var(--primary-pink);background:rgba(255,138,101,.05)}
+    .option-item.selected{border-color:var(--primary-pink);background:rgba(255,138,101,.1);box-shadow:0 0 20px rgba(255,138,101,.15);animation:selectPulse .5s ease}
+    .option-radio{width:22px;height:22px;border:2px solid var(--border-color);border-radius:6px;position:relative;flex-shrink:0;transition:all .25s ease}
+    .option-item:hover .option-radio{border-color:var(--primary-pink)}.option-item.selected .option-radio{border-color:var(--primary-pink);background:var(--primary-pink)}
+    .option-item.selected .option-radio::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(45deg);width:6px;height:10px;border:solid var(--bg-dark);border-width:0 2px 2px 0}
+    .option-label{font-size:15px;color:var(--text-light);font-weight:500;transition:color .25s ease}.option-item.selected .option-label{color:var(--primary-pink)}
+    .navigation{display:flex;gap:12px;margin-top:24px}
+    .btn{flex:1;padding:16px 24px;border:none;border-radius:var(--radius-md);font-size:15px;font-weight:600;cursor:pointer;transition:all .3s ease;font-family:inherit}
+    .btn-primary{background:var(--gradient-main);color:#fff;box-shadow:0 4px 20px rgba(255,138,101,.25)}
+    .btn-primary:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 6px 30px rgba(255,138,101,.35)}
+    .btn-secondary{background:var(--bg-card);color:var(--text-light);border:1px solid var(--border-color)}
+    .btn-secondary:hover:not(:disabled){background:var(--bg-card-hover);border-color:var(--primary-pink);color:var(--primary-pink)}
+    .btn:disabled{opacity:.4;cursor:not-allowed}.auto-next-hint{text-align:center;font-size:12px;color:var(--text-gray);margin-top:16px;opacity:.7}
+    .result-card{background:var(--bg-card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:var(--radius-lg);padding:32px;border:1px solid var(--border-color);text-align:center;margin-bottom:20px;position:relative;overflow:hidden}
+    .result-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--gradient-main)}
+    .result-icon{font-size:64px;margin-bottom:20px;animation:heartbeat 1.5s ease infinite}
+    .result-title{font-size:26px;font-weight:700;margin-bottom:20px;color:var(--text-white)}
+    .result-score{font-size:48px;font-weight:700;margin-bottom:12px;background:var(--gradient-main);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .result-level{font-size:16px;font-weight:600;margin-bottom:20px;padding:10px 24px;border-radius:30px;display:inline-block}
+    .result-level.low{background:rgba(122,150,184,.15);color:var(--text-gray);border:1px solid rgba(122,150,184,.3)}
+    .result-level.medium{background:rgba(130,177,255,.15);color:var(--primary-lavender);border:1px solid rgba(130,177,255,.3)}
+    .result-level.high{background:rgba(255,138,101,.15);color:var(--primary-pink);border:1px solid rgba(255,138,101,.3)}
+    .result-level.super{background:rgba(255,82,82,.15);color:var(--primary-red);border:1px solid rgba(255,82,82,.3)}
+    .analysis-section{background:var(--bg-card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:var(--radius-lg);padding:24px;margin:16px 0;border:1px solid var(--border-color);text-align:left}
+    .analysis-title{font-size:18px;font-weight:600;color:var(--text-white);margin-bottom:16px;display:flex;align-items:center;gap:10px}
+    .analysis-content{font-size:14px;color:var(--text-gray);line-height:1.8;white-space:pre-line}
+    .type-badge{display:inline-block;background:var(--gradient-main);color:#fff;padding:8px 18px;border-radius:25px;font-size:14px;font-weight:600;margin-bottom:16px}
+    .signals-list{background:rgba(255,138,101,.05);border-radius:var(--radius-md);padding:16px;margin-top:16px;border:1px solid rgba(255,138,101,.1)}
+    .signals-list strong{color:var(--primary-pink);display:block;margin-bottom:12px}
+    .signal-item{padding:10px 0;border-bottom:1px solid var(--border-color);color:var(--text-light);font-size:14px;display:flex;align-items:center;gap:8px}.signal-item:last-child{border-bottom:none}
+    .signal-item::before{content:'💫';font-size:12px}
+    .dimension-section{background:var(--bg-card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:var(--radius-lg);padding:24px;margin:16px 0;border:1px solid var(--border-color)}
+    .dimension-title{font-size:18px;font-weight:600;color:var(--text-white);margin-bottom:24px;display:flex;align-items:center;justify-content:center;gap:10px}
+    .dimension-item{margin-bottom:20px}.dimension-item:last-child{margin-bottom:0}
+    .dimension-label{display:flex;justify-content:space-between;margin-bottom:10px;font-size:14px;color:var(--text-light);font-weight:500}
+    .dimension-bar{width:100%;height:12px;background:var(--border-color);border-radius:6px;overflow:hidden}
+    .dimension-fill{height:100%;border-radius:6px;transition:width .8s ease}
+    .dimension-fill.low{background:linear-gradient(90deg,#7a96b8,#82b1ff);box-shadow:0 0 15px rgba(130,177,255,.4)}
+    .dimension-fill.medium{background:linear-gradient(90deg,#82b1ff,#ffd54f);box-shadow:0 0 15px rgba(255,213,79,.4)}
+    .dimension-fill.high{background:linear-gradient(90deg,#ffd54f,#ff8a65);box-shadow:0 0 15px rgba(255,138,101,.4)}
+    .dimension-fill.super{background:linear-gradient(90deg,#ff8a65,#ff5252);box-shadow:0 0 15px rgba(255,82,82,.4)}
+    .advice-section{background:var(--bg-card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:var(--radius-lg);padding:24px;margin:16px 0;border:1px solid var(--border-color)}
+    .advice-title{font-size:18px;font-weight:600;color:var(--text-white);margin-bottom:20px;display:flex;align-items:center;justify-content:center;gap:10px}
+    .advice-grid{display:grid;gap:12px}
+    .advice-item{background:rgba(6,13,26,.6);border-radius:var(--radius-md);padding:16px;border:1px solid var(--border-color)}
+    .advice-item-title{font-size:14px;font-weight:600;color:var(--primary-pink);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+    .advice-item-text{font-size:13px;color:var(--text-gray);line-height:1.6}
+    .love-meter{background:var(--bg-card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:var(--radius-lg);padding:24px;margin:16px 0;border:1px solid var(--border-color);text-align:center}
+    .love-meter-title{font-size:16px;font-weight:600;color:var(--text-white);margin-bottom:20px}
+    .love-hearts{display:flex;justify-content:center;gap:8px;font-size:28px;margin-bottom:16px}
+    .love-heart{opacity:.3;transition:all .3s ease}.love-heart.active{opacity:1;animation:heartbeat 1s ease infinite}
+    .love-heart.active:nth-child(2){animation-delay:.1s}.love-heart.active:nth-child(3){animation-delay:.2s}
+    .love-heart.active:nth-child(4){animation-delay:.3s}.love-heart.active:nth-child(5){animation-delay:.4s}
+    .love-percentage{font-size:14px;color:var(--text-gray)}
+    .password-page{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;animation:fadeInUp .6s ease}
+    .password-card{background:var(--bg-card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:var(--radius-lg);padding:40px 32px;border:1px solid var(--border-color);width:100%;max-width:380px;text-align:center}
+    .password-icon{font-size:48px;margin-bottom:20px}.password-title{font-size:20px;font-weight:600;color:var(--text-white);margin-bottom:8px}
+    .password-desc{font-size:14px;color:var(--text-gray);margin-bottom:24px}.password-input-wrap{position:relative;margin-bottom:20px}
+    .password-input{width:100%;padding:16px 20px;background:rgba(6,13,26,.6);border:2px solid var(--border-color);border-radius:var(--radius-md);color:var(--text-white);font-size:18px;font-family:inherit;text-align:center;letter-spacing:8px;transition:all .3s ease;outline:none}
+    .password-input:focus{border-color:var(--primary-pink);box-shadow:0 0 20px rgba(255,138,101,.15)}
+    .password-input.error{border-color:var(--primary-red);animation:shake .5s ease}.password-input::placeholder{letter-spacing:2px;color:var(--text-gray)}
+    .password-error{color:var(--primary-red);font-size:13px;margin-top:-12px;margin-bottom:16px;display:none}.password-error.show{display:block}
+    .password-btn{width:100%;padding:16px 24px;background:var(--gradient-main);border:none;border-radius:var(--radius-md);color:#fff;font-size:16px;font-weight:600;cursor:pointer;transition:all .3s ease;font-family:inherit}
+    .password-btn:hover{transform:translateY(-2px);box-shadow:0 6px 30px rgba(255,138,101,.35)}.password-hint{margin-top:20px;font-size:12px;color:var(--text-gray);opacity:.7}
+    .result-advice{background:var(--bg-card);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:var(--radius-md);padding:20px;margin:16px 0;border:1px solid var(--border-color);border-left:4px solid var(--primary-lavender)}
+    .result-advice-title{font-size:16px;font-weight:600;color:var(--primary-lavender);margin-bottom:12px}
+    .result-advice-text{font-size:14px;color:var(--text-gray);line-height:1.7}
+    .footer{margin-top:auto;text-align:center;padding:32px 0 24px;color:var(--text-gray);font-size:13px;border-top:1px solid var(--border-color)}
+    .footer-note{font-size:11px;line-height:1.6;color:var(--text-gray);opacity:.7}
+    .floating-hearts{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:hidden;z-index:0}
+    .floating-heart{position:absolute;font-size:20px;opacity:0.1;animation:floatUp 15s linear infinite}
+    @keyframes floatUp{0%{transform:translateY(100vh) rotate(0deg);opacity:0}10%{opacity:0.1}90%{opacity:0.1}100%{transform:translateY(-100px) rotate(360deg);opacity:0}}
+  </style>
+</head>
+<body>
+<canvas id="particles-canvas"></canvas>
+<div class="floating-hearts" id="floating-hearts"></div>
+<div class="container">
+  <div class="header">
+    <div class="logo"><div class="logo-icon" id="logo-icon">💘</div></div>
+    <h1 class="title" id="page-title">暗恋测试</h1>
+    <p class="subtitle" id="page-subtitle">测测TA是不是也在偷偷喜欢你</p>
+  </div>
+  <div class="main-content" id="main-content"></div>
+  <div class="footer">
+    <div class="footer-note" id="footer-note">本测试仅供娱乐参考<br>真爱需要勇敢表达哦~</div>
+  </div>
+</div>
+<script>
+/* ================================================================
+ *  H5测试模板引擎 — 换主题只需修改下面 THEME_CONFIG
+ *  模板支持占位符: {pronoun} {count} {current} {total} {score} {percentage}
+ * ================================================================ */
+
+const THEME_CONFIG = {
+
+  /* ---- 页面基础信息 ---- */
+  pageTitle: "TA是不是暗恋你？| 暗恋测试",
+  logoEmoji: "💘",
+  title: "暗恋测试",
+  subtitle: "测测TA是不是也在偷偷喜欢你",
+
+  /* ---- 密码保护 (enabled=false 则跳过密码页直接进入) ---- */
+  password: {
+    enabled: true,
+    value: "5233",
+    icon: "🔐",
+    title: "请输入访问密码",
+    desc: "输入密码后即可开始测试~",
+    btnText: "💕 确认进入",
+    errorText: "密码错误，请重新输入",
+    hint: "提示：请联系管理员获取密码"
+  },
+
+  /* ---- 性别/分组选择 (enabled=false 则跳过直接用 defaultGroup 的题目) ---- */
+  genderSelection: {
+    enabled: true,
+    icon: "💝",
+    title: "首先，告诉我你的性别",
+    desc: "我们将根据你的性别，为你定制专属的测试题目~",
+    options: [
+      { id: "male",   icon: "👦", label: "我是男生", cssClass: "male",   pronoun: "她" },
+      { id: "female", icon: "👧", label: "我是女生", cssClass: "female", pronoun: "他" }
+    ],
+    hintTemplate: "🔮 共{count}道题，约3-5分钟完成"
+  },
+
+  /* ---- 开始测试页 ---- */
+  startPage: {
+    icon: "💕",
+    title: "开始测试",
+    descTemplate: "通过{count}道精心设计的题目，分析{pronoun}对你的态度",
+    disclaimer: {
+      icon: "💝",
+      title: "温馨提示",
+      textTemplate: "请根据{pronoun}平时对你的真实表现来回答，不要过度脑补或美化哦~测试结果仅供参考，真爱还需要勇敢表达！"
+    }
+  },
+
+  /* ---- 答题页配置 ---- */
+  quizPage: {
+    progressTemplate: "第 {current} 题，共 {total} 题",
+    autoNextHint: "💫 选择后自动跳转下一题",
+    prevBtn: "← 上一题",
+    nextBtn: "下一题 →",
+    resultBtn: "查看结果 💘",
+    autoNext: true
+  },
+
+  /* ---- 题目 (按分组 key 对应 genderSelection.options 的 id；若 genderSelection.enabled=false 用 defaultGroup) ---- */
+  questions: {
+    male: [
+      "当你们有眼神接触时，她是否会快速移开视线或脸红？",
+      "她是否会在社交媒体上特别关注你的动态？",
+      "她是否会找各种理由和你待在一起？",
+      "她是否会主动关心你的身体状况或心情？",
+      "当你们聊天时，她是否会主动找话题延续对话？",
+      "她是否会主动给你带小礼物或好吃的？",
+      "她是否会记住你们之间的重要日子或对话？",
+      "当你和其他女生说话时，她是否会表现得有些不自然？",
+      "当你心情不好时，她是否特别敏感并想要安慰你？",
+      "她是否会记住你无意间提到的小事（比如你喜欢的食物、电影等）？",
+      "当你们一起走路时，她是否会不自觉地靠近你？",
+      "她是否愿意和你分享她的私人事情或小秘密？",
+      "她是否经常通过朋友来打听你的消息？",
+      "她是否曾经暗示过想和你有更多的相处时间？",
+      "她发消息给你的时候，是否经常使用可爱的表情包或语气词？",
+      "她对你说话的语气是否比对其他人更温柔？",
+      "当你需要帮助时，她是否总是第一时间出现？",
+      "当你们在一起时，你是否注意到她会不自觉地整理头发或衣服？",
+      "她是否会主动邀请你参加她的活动或聚会？",
+      "当你夸她的时候，她是否会表现得很开心但又有点害羞？"
+    ],
+    female: [
+      "当你们有眼神接触时，他是否会微笑或表现得有些紧张？",
+      "他是否会主动在社交媒体上和你互动？",
+      "他是否会找各种借口和你说话或见面？",
+      "他是否会主动关心你的安全（比如提醒你路上小心）？",
+      "当你们聊天时，他是否会认真回复你的每一条消息？",
+      "他是否会注意到你的新发型、新衣服等细节？",
+      "他是否会记住你的生日或其他重要日子？",
+      "当你和其他男生互动时，他是否会显得有些在意？",
+      "当你不开心时，他是否会第一时间发现并关心你？",
+      "他是否会特意记住你说过的话，并在之后提起？",
+      "当你们一起时，他是否会表现得比平时话多或话少？",
+      "他是否愿意和你分享他的想法和困扰？",
+      "他是否会在朋友面前提起你或夸赞你？",
+      "他是否曾经用行动暗示过他对你的特别关注？",
+      "他是否愿意花时间陪你做你喜欢的事情？",
+      "他对你说话时是否比对别人更耐心？",
+      "当你遇到困难时，他是否会主动提供帮助？",
+      "当你们在一起时，他是否会不自觉地看向你？",
+      "他是否会主动邀请你一起做某些事情？",
+      "当你夸他的时候，他是否会显得有点不好意思？"
+    ]
+  },
+
+  /* ---- genderSelection.enabled=false 时使用的默认分组 key ---- */
+  defaultGroup: "male",
+
+  /* ---- 选项 (label=显示文字, value=分值) ---- */
+  options: [
+    { label: "从来没有",   value: 0 },
+    { label: "偶尔一两次", value: 1 },
+    { label: "有时候会",   value: 2 },
+    { label: "经常这样",   value: 3 },
+    { label: "每次都是",   value: 4 }
+  ],
+
+  /* ---- 结果配置 ---- */
+  results: {
+    scoreTitle: "测试完成",
+    maxScore: 80,  // 题数 × 每题最高分值
+
+    heartMeter: {
+      icon: "💫",
+      titleTemplate: "{pronoun}对你的心动指数",
+      heartEmoji: "⭐",
+      percentageTemplate: "心动概率：约 {percentage}%"
+    },
+
+    analysis: {
+      icon: "💌",
+      title: "详细分析",
+      signalsIcon: "💫",
+      signalsTitleTemplate: "{pronoun}喜欢你的信号："
+    },
+
+    /* 等级: 按 minScore 从高到低匹配，命中第一个即停 */
+    levels: [
+      {
+        minScore: 65,
+        level: "💖 超级心动",
+        icon: "😍",
+        cssClass: "super",
+        loveType: "铁证如山型",
+        summaryTemplate: "{pronoun}对你的好感已经藏不住了！从{pronoun}的行为来看，{pronoun}对你有着明显的特殊感情。{pronoun}不仅关注你的一举一动，还在很多细节上表现出对你的在意。\n\n恭喜你，{pronoun}大概率是喜欢你的！不过表白还是要选对时机哦~",
+        signals: [
+          { questionIndex: 4,  minValue: 3, text: "主动找你聊天，想要了解你更多" },
+          { questionIndex: 7,  minValue: 3, text: "在意你和其他异性的互动" },
+          { questionIndex: 3,  minValue: 3, text: "特别关心你的身体和心情" },
+          { questionIndex: 2,  minValue: 3, text: "找各种理由想和你待在一起" },
+          { questionIndex: 13, minValue: 3, text: "暗示过想要更多相处时间" }
+        ]
+      },
+      {
+        minScore: 50,
+        level: "💗 好感满满",
+        icon: "🥰",
+        cssClass: "high",
+        loveType: "暗流涌动型",
+        summaryTemplate: "{pronoun}对你的好感度很高！虽然{pronoun}可能还没有明确表达，但从很多细节都能看出{pronoun}对你有特别的感觉。{pronoun}会特别在意你，也愿意为你付出。\n\n建议你可以制造更多独处的机会，看看{pronoun}的反应~",
+        signals: [
+          { questionIndex: 9,  minValue: 2, text: "会记住你说过的话" },
+          { questionIndex: 11, minValue: 2, text: "愿意和你分享私人事情" },
+          { questionIndex: 16, minValue: 2, text: "总是第一时间帮助你" },
+          { questionIndex: 15, minValue: 2, text: "对你说话特别温柔/耐心" }
+        ]
+      },
+      {
+        minScore: 35,
+        level: "💜 有点意思",
+        icon: "🤔",
+        cssClass: "medium",
+        loveType: "若即若离型",
+        summaryTemplate: "{pronoun}对你有一定的好感，但还不是非常明显。{pronoun}可能还在观察和了解你，或者性格比较内敛不善于表达。\n\n建议继续保持互动，创造更多了解彼此的机会。如果你喜欢{pronoun}，可以适当主动一些哦~",
+        signals: [
+          { questionIndex: 4,  minValue: 2, text: "会主动和你聊天" },
+          { questionIndex: 14, minValue: 2, text: "愿意陪你做一些事" },
+          { questionIndex: 18, minValue: 2, text: "会邀请你参加活动" }
+        ]
+      },
+      {
+        minScore: 0,
+        level: "🤍 朋友状态",
+        icon: "🙂",
+        cssClass: "low",
+        loveType: "普通朋友型",
+        summaryTemplate: "目前来看，{pronoun}对你的表现更像是普通朋友之间的相处。不过别灰心！感情是可以慢慢培养的。\n\n如果你喜欢{pronoun}，可以尝试增加互动，展现自己的魅力。也许{pronoun}只是还没发现你的好呢~",
+        signals: [
+          { questionIndex: -1, minValue: 0, text: "目前没有太明显的特殊对待" }
+        ]
+      }
+    ],
+
+    /* 维度分析: questionIndices 为 0-based 题号，maxScore = 该维度题数 × 最高分值 */
+    dimensions: {
+      title: "📊 四维度分析",
+      items: [
+        { icon: "👀", name: "关注度", questionIndices: [4,9,0,1,13] },
+        { icon: "💗", name: "关心度", questionIndices: [3,16,2,8] },
+        { icon: "🤝", name: "亲密度", questionIndices: [14,11,15,10,18] },
+        { icon: "✨", name: "专属感", questionIndices: [17,12,7,5,19,6] }
+      ]
+    },
+
+    /* 建议: 按 minScore 从高到低匹配，命中第一个即停 */
+    advice: {
+      title: "💡 给你的建议",
+      groups: [
+        {
+          minScore: 50,
+          items: [
+            { icon: "🎯", title: "抓住时机", textTemplate: "{pronoun}对你的好感已经很明显了，可以选择一个合适的时机和氛围，勇敢表达你的心意。" },
+            { icon: "💫", title: "创造浪漫", textTemplate: "多制造一些独处的机会，比如一起看电影、散步等，让感情自然升温。" }
+          ]
+        },
+        {
+          minScore: 35,
+          items: [
+            { icon: "🌟", title: "展现魅力", textTemplate: "继续保持你的优点，让{pronoun}看到更多你的闪光点。" },
+            { icon: "💬", title: "增加互动", textTemplate: "多找机会和{pronoun}聊天、相处，加深彼此的了解。" }
+          ]
+        },
+        {
+          minScore: 0,
+          items: [
+            { icon: "😊", title: "做好自己", textTemplate: "不要刻意迎合，继续做最真实的自己，吸引力自然会来。" },
+            { icon: "🌈", title: "保持乐观", textTemplate: "感情需要时间培养，不要着急，缘分到了自然会开花结果。" }
+          ]
+        }
+      ]
+    },
+
+    /* 结果页底部免责 */
+    disclaimer: {
+      icon: "💝",
+      title: "温馨提示",
+      text: "本测试仅供娱乐参考，感情的事情复杂多变，不能仅凭一个测试就下定论。最重要的是用心去感受，勇敢去表达。祝你幸福！"
+    }
+  },
+
+  /* ---- 结果页按钮 ---- */
+  resultButtons: {
+    restart: "🔄 重新测试",
+    home: "🏠 返回首页"
+  },
+
+  /* ---- 底部文字 ---- */
+  footer: {
+    note: "本测试仅供娱乐参考<br>真爱需要勇敢表达哦~"
+  },
+
+  /* ---- 漂浮emoji ---- */
+  floatingEmojis: ['💫','⭐','🌟','✨','🌙','💫','⭐','🌟'],
+  floatingCount: 15,
+
+  /* ---- 粒子背景颜色 ---- */
+  particleColors: ['#ff8a65','#26d0ce','#ff5252','#ffd54f','#82b1ff','#4dd0e1','#80deea']
+};
+
+/* ================================================================ * 
+ *  模板引擎 — 以下代码通用，换主题无需修改
+ * ================================================================ */
+
+// 模板占位符替换: tpl("第{current}题", {current:1}) => "第1题"
+function tpl(t,vars){
+  return t.replace(/\{(\w+)\}/g,function(_,k){
+    return vars[k]!==undefined?String(vars[k]):'';
+  });
+}
+
+// 运行时状态
+var testData={
+  group:null,
+  pronoun:'',
+  currentQuestion:0,
+  answers:[],
+  isTransitioning:false
+};
+
+// 获取当前分组的题目
+function getQuestions(){
+  var gkey=testData.group||THEME_CONFIG.defaultGroup;
+  return THEME_CONFIG.questions[gkey];
+}
+
+// 获取选项最高分值
+function getMaxOptionValue(){
+  var max=0;
+  THEME_CONFIG.options.forEach(function(o){if(o.value>max)max=o.value});
+  return max;
+}
+
+// ===== 初始化页面 =====
+function initPage(){
+  document.title=THEME_CONFIG.pageTitle;
+  document.getElementById('logo-icon').textContent=THEME_CONFIG.logoEmoji;
+  document.getElementById('page-title').textContent=THEME_CONFIG.title;
+  document.getElementById('page-subtitle').textContent=THEME_CONFIG.subtitle;
+  document.getElementById('footer-note').innerHTML=THEME_CONFIG.footer.note;
+
+  if(THEME_CONFIG.password.enabled){
+    showPasswordPage();
+  }else{
+    showGroupPage();
+  }
+}
+
+// ===== 漂浮emoji =====
+function createFloatingEmojis(){
+  var container=document.getElementById('floating-hearts');
+  var emojis=THEME_CONFIG.floatingEmojis;
+  var count=THEME_CONFIG.floatingCount;
+  for(var i=0;i<count;i++){
+    var el=document.createElement('div');
+    el.className='floating-heart';
+    el.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+    el.style.left=Math.random()*100+'%';
+    el.style.animationDelay=Math.random()*15+'s';
+    el.style.animationDuration=(15+Math.random()*10)+'s';
+    container.appendChild(el);
+  }
+}
+
+// ===== 粒子系统 =====
+class ParticleSystem{
+  constructor(canvas){
+    this.canvas=canvas;this.ctx=canvas.getContext('2d');this.particles=[];
+    this.mouse={x:null,y:null,radius:150};
+    this.colors=THEME_CONFIG.particleColors;
+    this.resize();this.init();this.animate();
+    window.addEventListener('resize',()=>{this.resize();this.init()});
+    window.addEventListener('mousemove',(e)=>{this.mouse.x=e.x;this.mouse.y=e.y});
+    window.addEventListener('mouseout',()=>{this.mouse.x=null;this.mouse.y=null});
+  }
+  resize(){this.canvas.width=window.innerWidth;this.canvas.height=window.innerHeight}
+  init(){
+    this.particles=[];
+    var num=Math.floor((this.canvas.width*this.canvas.height)/6000);
+    for(var i=0;i<num;i++){
+      var size=Math.random()*2.5+0.5;
+      var x=Math.random()*this.canvas.width;
+      var y=Math.random()*this.canvas.height;
+      this.particles.push({x:x,y:y,size:size,speedX:(Math.random()-0.5)*0.6,speedY:(Math.random()-0.5)*0.6,color:this.colors[Math.floor(Math.random()*this.colors.length)],opacity:Math.random()*0.5+0.2,baseX:x,baseY:y});
+    }
+  }
+  drawParticle(p){
+    this.ctx.beginPath();this.ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+    this.ctx.fillStyle=p.color;this.ctx.globalAlpha=p.opacity;this.ctx.fill();this.ctx.globalAlpha=1;
+  }
+  connectParticles(){
+    var maxDist=80;
+    for(var i=0;i<this.particles.length;i++){
+      for(var j=i+1;j<this.particles.length;j++){
+        var dx=this.particles[i].x-this.particles[j].x;
+        var dy=this.particles[i].y-this.particles[j].y;
+        var dist=Math.sqrt(dx*dx+dy*dy);
+        if(dist<maxDist){
+          this.ctx.beginPath();this.ctx.strokeStyle=this.particles[i].color;
+          this.ctx.globalAlpha=(1-dist/maxDist)*0.2;this.ctx.lineWidth=0.5;
+          this.ctx.moveTo(this.particles[i].x,this.particles[i].y);
+          this.ctx.lineTo(this.particles[j].x,this.particles[j].y);
+          this.ctx.stroke();this.ctx.globalAlpha=1;
+        }
+      }
+    }
+  }
+  update(){
+    for(var p of this.particles){
+      if(this.mouse.x!==null){
+        var dx=this.mouse.x-p.x,dy=this.mouse.y-p.y;
+        var dist=Math.sqrt(dx*dx+dy*dy);
+        if(dist<this.mouse.radius){
+          var force=(this.mouse.radius-dist)/this.mouse.radius;
+          p.x-=dx/dist*force*2;p.y-=dy/dist*force*2;
+        }
+      }
+      p.x+=(p.baseX-p.x)*0.012+p.speedX;p.y+=(p.baseY-p.y)*0.012+p.speedY;
+      if(p.x<0||p.x>this.canvas.width)p.speedX*=-1;
+      if(p.y<0||p.y>this.canvas.height)p.speedY*=-1;
+    }
+  }
+  animate(){
+    this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
+    for(var p of this.particles)this.drawParticle(p);
+    this.connectParticles();this.update();
+    requestAnimationFrame(()=>this.animate());
+  }
+}
+
+// ===== 密码页 =====
+function showPasswordPage(){
+  var pc=THEME_CONFIG.password;
+  var html='<div class="password-page"><div class="password-card">';
+  html+='<div class="password-icon">'+pc.icon+'</div>';
+  html+='<div class="password-title">'+pc.title+'</div>';
+  html+='<div class="password-desc">'+pc.desc+'</div>';
+  html+='<div class="password-input-wrap">';
+  html+='<input type="password" class="password-input" id="password-input" placeholder="••••" maxlength="'+pc.value.length+'" oninput="checkPassword()" onkeypress="if(event.keyCode===13)verifyPassword()">';
+  html+='</div>';
+  html+='<div class="password-error" id="password-error">'+pc.errorText+'</div>';
+  html+='<button class="password-btn" onclick="verifyPassword()">'+pc.btnText+'</button>';
+  html+='<div class="password-hint">'+pc.hint+'</div>';
+  html+='</div></div>';
+  document.getElementById('main-content').innerHTML=html;
+}
+
+function checkPassword(){
+  document.getElementById('password-input').classList.remove('error');
+  document.getElementById('password-error').classList.remove('show');
+}
+
+function verifyPassword(){
+  var input=document.getElementById('password-input');
+  if(input.value===THEME_CONFIG.password.value){
+    showGroupPage();
+  }else{
+    input.classList.add('error');
+    document.getElementById('password-error').classList.add('show');
+    input.value='';
+  }
+}
+
+// ===== 分组/性别选择页 =====
+function showGroupPage(){
+  var gs=THEME_CONFIG.genderSelection;
+  if(!gs.enabled){
+    testData.group=THEME_CONFIG.defaultGroup;
+    var defOpt=gs.options.find(function(o){return o.id===THEME_CONFIG.defaultGroup});
+    testData.pronoun=defOpt?defOpt.pronoun:'';
+    showStartPage();
+    return;
+  }
+  var q=getQuestions();
+  var qCount=q?q.length:0;
+  var html='<div class="gender-page"><div class="gender-card">';
+  html+='<div class="gender-icon">'+gs.icon+'</div>';
+  html+='<div class="gender-title">'+gs.title+'</div>';
+  html+='<div class="gender-desc">'+gs.desc+'</div>';
+  html+='<div class="gender-options">';
+  gs.options.forEach(function(opt){
+    html+='<button class="gender-btn '+opt.cssClass+'" onclick="selectGroup(\''+opt.id+'\',\''+opt.pronoun+'\')"><span class="icon">'+opt.icon+'</span><span>'+opt.label+'</span></button>';
+  });
+  html+='</div>';
+  html+='<div class="gender-hint">'+tpl(gs.hintTemplate,{count:qCount})+'</div>';
+  html+='</div></div>';
+  document.getElementById('main-content').innerHTML=html;
+}
+
+function selectGroup(groupId,pronoun){
+  testData.group=groupId;
+  testData.pronoun=pronoun;
+  showStartPage();
+}
+
+// ===== 开始测试页 =====
+function showStartPage(){
+  var sp=THEME_CONFIG.startPage;
+  var q=getQuestions();
+  var qCount=q?q.length:0;
+  var vars={count:qCount,pronoun:testData.pronoun};
+
+  var html='<div class="test-options">';
+  html+='<div class="test-option" onclick="startTest()">';
+  html+='<div class="option-header">';
+  html+='<div class="option-icon">'+sp.icon+'</div>';
+  html+='<div>';
+  html+='<div class="option-title">'+sp.title+'</div>';
+  html+='<div class="option-desc">'+tpl(sp.descTemplate,vars)+'</div>';
+  html+='</div></div></div></div>';
+  html+='<div class="disclaimer">';
+  html+='<div class="disclaimer-title">'+sp.disclaimer.icon+' '+sp.disclaimer.title+'</div>';
+  html+='<div class="disclaimer-text">'+tpl(sp.disclaimer.textTemplate,vars)+'</div>';
+  html+='</div>';
+  document.getElementById('main-content').innerHTML=html;
+}
+
+function startTest(){
+  testData.currentQuestion=0;
+  testData.isTransitioning=false;
+  testData.answers=new Array(getQuestions().length).fill(null);
+  showQuestion();
+}
+
+// ===== 答题页 =====
+function showQuestion(animate){
+  var q=getQuestions();
+  var o=THEME_CONFIG.options;
+  var qp=THEME_CONFIG.quizPage;
+  var p=((testData.currentQuestion+1)/q.length)*100;
+  var vars={current:testData.currentQuestion+1,total:q.length,count:q.length,pronoun:testData.pronoun};
+
+  var html='<div class="progress-container">';
+  html+='<div class="progress-bar"><div class="progress-fill" style="width:'+p+'%"></div></div>';
+  html+='<div class="progress-text">'+tpl(qp.progressTemplate,vars)+'</div></div>';
+
+  html+='<div class="question-card'+(animate?' slide-in':'')+'" id="question-card">';
+  html+='<div class="question-number">Q'+(testData.currentQuestion+1)+'</div>';
+  html+='<div class="question-text">'+q[testData.currentQuestion]+'</div>';
+  html+='<div class="options-grid">';
+
+  for(var i=0;i<o.length;i++){
+    html+='<div class="option-item'+(testData.answers[testData.currentQuestion]===o[i].value?' selected':'')+'" onclick="selectOption('+o[i].value+')">';
+    html+='<div class="option-radio"></div>';
+    html+='<div class="option-label">'+o[i].label+'</div></div>';
+  }
+
+  html+='</div>';
+  html+='<div class="auto-next-hint">'+qp.autoNextHint+'</div></div>';
+
+  html+='<div class="navigation">';
+  html+='<button class="btn btn-secondary" onclick="previousQuestion()"'+(testData.currentQuestion===0?' disabled':'')+'>'+qp.prevBtn+'</button>';
+  html+='<button class="btn btn-primary" onclick="nextQuestion()"'+(testData.answers[testData.currentQuestion]===null?' disabled':'')+'>';
+  html+=(testData.currentQuestion===q.length-1?qp.resultBtn:qp.nextBtn)+'</button></div>';
+
+  document.getElementById('main-content').innerHTML=html;
+}
+
+function selectOption(v){
+  if(testData.isTransitioning)return;
+  testData.answers[testData.currentQuestion]=v;
+
+  var q=getQuestions();
+  var opts=document.querySelectorAll('.option-item');
+  opts.forEach(function(o){o.classList.remove('selected')});
+
+  var ov=THEME_CONFIG.options;
+  ov.forEach(function(o,i){if(o.value===v)opts[i].classList.add('selected')});
+
+  if(THEME_CONFIG.quizPage.autoNext){
+    if(testData.currentQuestion<q.length-1){
+      testData.isTransitioning=true;
+      document.getElementById('question-card').classList.add('slide-out');
+      setTimeout(function(){
+        testData.currentQuestion++;
+        testData.isTransitioning=false;
+        showQuestion(true);
+      },350);
+    }else{
+      setTimeout(function(){showResult()},400);
+    }
+  }
+}
+
+function nextQuestion(){
+  if(testData.isTransitioning)return;
+  var q=getQuestions();
+  if(testData.currentQuestion<q.length-1){
+    testData.isTransitioning=true;
+    document.getElementById('question-card').classList.add('slide-out');
+    setTimeout(function(){
+      testData.currentQuestion++;
+      testData.isTransitioning=false;
+      showQuestion(true);
+    },350);
+  }else{
+    showResult();
+  }
+}
+
+function previousQuestion(){
+  if(testData.isTransitioning)return;
+  if(testData.currentQuestion>0){
+    testData.currentQuestion--;
+    showQuestion(true);
+  }
+}
+
+// ===== 结果页 =====
+function showResult(){
+  var a=testData.answers,t=0;
+  for(var i=0;i<a.length;i++)t+=a[i];
+
+  var cfg=THEME_CONFIG.results;
+  var max=cfg.maxScore;
+  var percentage=Math.round((t/max)*100);
+  var pronoun=testData.pronoun;
+  var vars={score:t,percentage:percentage,pronoun:pronoun};
+
+  // 匹配等级
+  var level=null;
+  for(var i=0;i<cfg.levels.length;i++){
+    if(t>=cfg.levels[i].minScore){level=cfg.levels[i];break;}
+  }
+
+  // 维度计算
+  var dims=[];
+  cfg.dimensions.items.forEach(function(dim){
+    var score=0;
+    dim.questionIndices.forEach(function(idx){
+      if(a[idx])score+=a[idx];
+    });
+    var dimMax=dim.questionIndices.length*getMaxOptionValue();
+    var dimPct=dimMax>0?Math.round((score/dimMax)*100):0;
+    dims.push({icon:dim.icon,name:dim.name,score:score,max:dimMax,percentage:dimPct});
+  });
+
+  // 心动指数
+  var heartCount=Math.min(5,Math.max(1,Math.ceil(percentage/20)));
+
+  // === 生成HTML ===
+  var h='<div class="result-card">';
+  h+='<div class="result-icon">'+level.icon+'</div>';
+  h+='<div class="result-title">'+cfg.scoreTitle+'</div>';
+  h+='<div class="result-score">'+t+' 分</div>';
+  h+='<div class="result-level '+level.cssClass+'">'+level.level+'</div>';
+  h+='</div>';
+
+  // 心动指数
+  var hm=cfg.heartMeter;
+  h+='<div class="love-meter">';
+  h+='<div class="love-meter-title">'+hm.icon+' '+tpl(hm.titleTemplate,vars)+'</div>';
+  h+='<div class="love-hearts">';
+  for(var i=1;i<=5;i++){
+    h+='<span class="love-heart'+(i<=heartCount?' active':'')+'">'+hm.heartEmoji+'</span>';
+  }
+  h+='</div>';
+  h+='<div class="love-percentage">'+tpl(hm.percentageTemplate,vars)+'</div>';
+  h+='</div>';
+
+  // 详细分析
+  var an=cfg.analysis;
+  h+='<div class="analysis-section">';
+  h+='<div class="analysis-title">'+an.icon+' '+an.title+'</div>';
+  h+='<div class="type-badge">'+level.loveType+'</div>';
+  h+='<div class="analysis-content">'+tpl(level.summaryTemplate,vars)+'</div>';
+
+  // 信号列表
+  var validSignals=[];
+  level.signals.forEach(function(sig){
+    if(sig.questionIndex<0||a[sig.questionIndex]>=sig.minValue){
+      validSignals.push(sig.text);
+    }
+  });
+  if(validSignals.length>0){
+    h+='<div class="signals-list"><strong>'+an.signalsIcon+' '+tpl(an.signalsTitleTemplate,vars)+'</strong>';
+    for(var i=0;i<validSignals.length;i++){
+      h+='<div class="signal-item">'+validSignals[i]+'</div>';
+    }
+    h+='</div>';
+  }
+  h+='</div>';
+
+  // 维度分析
+  h+='<div class="dimension-section">';
+  h+='<div class="dimension-title">'+cfg.dimensions.title+'</div>';
+  dims.forEach(function(d){
+    var dimClass=d.percentage>=75?'super':d.percentage>=50?'high':d.percentage>=30?'medium':'low';
+    h+='<div class="dimension-item">';
+    h+='<div class="dimension-label"><span>'+d.icon+' '+d.name+'</span><span>'+d.score+'/'+d.max+'</span></div>';
+    h+='<div class="dimension-bar"><div class="dimension-fill '+dimClass+'" style="width:'+d.percentage+'%"></div></div></div>';
+  });
+  h+='</div>';
+
+  // 建议
+  var adviceGroup=null;
+  for(var i=0;i<cfg.advice.groups.length;i++){
+    if(t>=cfg.advice.groups[i].minScore){adviceGroup=cfg.advice.groups[i];break;}
+  }
+  h+='<div class="advice-section">';
+  h+='<div class="advice-title">'+cfg.advice.title+'</div>';
+  h+='<div class="advice-grid">';
+  adviceGroup.items.forEach(function(item){
+    h+='<div class="advice-item"><div class="advice-item-title">'+item.icon+' '+item.title+'</div>';
+    h+='<div class="advice-item-text">'+tpl(item.textTemplate,vars)+'</div></div>';
+  });
+  h+='</div></div>';
+
+  // 免责声明
+  h+='<div class="result-advice">';
+  h+='<div class="result-advice-title">'+cfg.disclaimer.icon+' '+cfg.disclaimer.title+'</div>';
+  h+='<div class="result-advice-text">'+cfg.disclaimer.text+'</div></div>';
+
+  // 按钮
+  h+='<div class="navigation" style="margin-top:24px">';
+  h+='<button class="btn btn-secondary" onclick="restartTest()">'+THEME_CONFIG.resultButtons.restart+'</button>';
+  h+='<button class="btn btn-primary" onclick="goHome()">'+THEME_CONFIG.resultButtons.home+'</button></div>';
+
+  document.getElementById('main-content').innerHTML=h;
+}
+
+function restartTest(){
+  testData.currentQuestion=0;
+  testData.answers=new Array(getQuestions().length).fill(null);
+  showQuestion();
+}
+
+function goHome(){
+  showGroupPage();
+}
+
+// ===== 启动 =====
+createFloatingEmojis();
+new ParticleSystem(document.getElementById('particles-canvas'));
+initPage();
+</script>
+</body>
+</html>
