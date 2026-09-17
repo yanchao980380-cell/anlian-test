@@ -1,0 +1,9 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>人物背景 · 人物志</title>
+<style>body{margin:0;background:#f5f3e9;color:#243e34;font-family:system-ui,"Microsoft YaHei",sans-serif;line-height:1.9}main{max-width:600px;margin:auto;padding:32px 22px}a{color:#386c56}h1{font-size:28px}h2{margin:0;font-size:24px}.intro,.era{color:#758075;font-size:13px}article{margin:24px 0;padding:24px;border:1px solid #dce1d1;border-radius:18px;background:#fffef8;scroll-margin-top:20px}article:target{border-color:#668568;box-shadow:0 4px 20px #34563710}p{margin-bottom:0}.note{border-top:1px solid #e4e7dc;padding-top:16px;font-size:12px;color:#758075}</style>
+</head><body><main><a href="./">返回人物志</a><h1>人物背景小笺</h1><p class="intro">随评测提供的人物简介，可直接在本站阅读。人物生平与评测中的风格创作分别看待。</p><div id="biographies"></div><p class="note">本页是简要背景说明，不是完整传记。报告中的匹配、优势与行动建议属于趣味创作，不代表对历史人物的心理测量。</p></main><script src="data.js"></script><script>
+const root=document.getElementById('biographies');
+for(const person of HistoryQuiz.profiles){const article=document.createElement('article');article.id=person.id;const title=document.createElement('h2');title.textContent=person.name;const era=document.createElement('div');era.className='era';era.textContent=person.era;const text=document.createElement('p');text.textContent=person.history;article.append(title,era,text);root.append(article);}
+const id=decodeURIComponent(location.hash.slice(1));if(id)document.getElementById(id)?.scrollIntoView();
+</script></body></html>
