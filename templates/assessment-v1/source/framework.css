@@ -1,0 +1,12 @@
+/* Project page frame, with the assessment's own theme. */
+.quiz-frame{width:min(100%,460px);min-height:100svh;overflow:clip;background:#171316}
+.quiz-frame::before{display:none}
+.quiz-frame .topbar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:52px;padding:12px 23px;padding-top:calc(12px + env(safe-area-inset-top));background:rgba(23,19,22,.97);border-bottom:1px solid #493738;font-size:11px;color:#c8b0a1;letter-spacing:1px}
+.topbar i{font-style:normal;color:#97616c;margin:0 5px}
+#quiz-home{background:transparent;padding:6px 0;font-size:11px;color:#dec0b3;cursor:pointer}
+#quiz-home[hidden]{display:none}
+.quiz-frame .page{min-height:calc(100svh - 52px);scroll-margin-top:52px}
+.quiz-frame #home-page.page{min-height:calc(100svh - 52px);height:auto;max-height:none}
+.quiz-frame #home-page .hero{min-height:calc(100svh - 52px)!important}
+@media(max-width:360px){.quiz-frame .topbar{padding-left:16px;padding-right:16px}}
+@media print{.quiz-frame .topbar{display:none}}

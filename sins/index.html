@@ -1,0 +1,3825 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-mp-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>七宗罪 vs 七美德 · 双面之镜</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23070607'/%3E%3Cpath d='M32 8l20 20-20 28L12 28 32 8z' fill='%239f2430' stroke='%23d7ad67' stroke-width='3'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='24' font-family='serif' font-weight='700' fill='%23f1dcc0'%3E7%3C/text%3E%3C/svg%3E">
+  <style>
+    :root {
+      --bg: #070607;
+      --panel: rgba(20, 17, 16, 0.82);
+      --panel-strong: rgba(28, 22, 20, 0.96);
+      --ink: #f5ead8;
+      --muted: #bcae9a;
+      --dim: #786d61;
+      --line: rgba(239, 214, 174, 0.16);
+      --line-strong: rgba(239, 214, 174, 0.28);
+      --gold: #d7ad67;
+      --gold-soft: #f1dcc0;
+      --crimson: #9f2430;
+      --crimson-bright: #dc4956;
+      --ember: #e9834e;
+      --shadow: 0 26px 74px rgba(0, 0, 0, 0.48);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+      background: #030303;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 74% 12%, rgba(159, 36, 48, 0.26), transparent 34%),
+        radial-gradient(circle at 9% 66%, rgba(215, 173, 103, 0.13), transparent 28%),
+        linear-gradient(180deg, #070607 0%, #170d0e 48%, #050405 100%);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      letter-spacing: 0;
+    }
+
+    button {
+      border: 0;
+      font: inherit;
+      color: inherit;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    h1, h2, h3, p {
+      margin: 0;
+    }
+
+    .app {
+      position: relative;
+      width: min(100%, 460px);
+      min-height: 100vh;
+      margin: 0 auto;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0)),
+        repeating-linear-gradient(90deg, rgba(239, 214, 174, 0.028) 0 1px, transparent 1px 42px),
+        #080607;
+      box-shadow: 0 0 0 1px rgba(239, 214, 174, 0.06), 0 38px 100px rgba(0, 0, 0, 0.58);
+    }
+
+    .app::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 50% 20%, rgba(220, 73, 86, 0.06), transparent 36%),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 80px),
+        linear-gradient(0deg, rgba(255, 255, 255, 0.018) 0 1px, transparent 1px 80px);
+      opacity: 0.5;
+      mask-image: linear-gradient(90deg, transparent, #000 20%, #000 80%, transparent);
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      display: none;
+      min-height: 100vh;
+      padding: 22px 18px calc(32px + env(safe-area-inset-bottom));
+    }
+
+    .page.active {
+      display: block;
+      animation: pageIn 0.34s ease both;
+    }
+
+    #home-page.page {
+      min-height: 100svh;
+      height: 100svh;
+      max-height: 100svh;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    #home-page .hero {
+      margin: 0;
+      width: 100%;
+    }
+
+    @keyframes pageIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero {
+      position: relative;
+      min-height: 100svh;
+      height: 100svh;
+      max-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 0;
+      margin: -22px -18px calc(-32px - env(safe-area-inset-bottom));
+      padding: 10px 18px calc(10px + env(safe-area-inset-bottom));
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 32%, rgba(159, 36, 48, 0.22), transparent 32%),
+        radial-gradient(circle at 82% 12%, rgba(215, 173, 103, 0.15), transparent 26%),
+        linear-gradient(180deg, rgba(8, 6, 7, 0.45), rgba(8, 6, 7, 0.94) 78%),
+        #080607;
+    }
+
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .hero::before {
+      opacity: 0.32;
+      background:
+        radial-gradient(circle at 50% 40%, transparent 0 132px, rgba(215, 173, 103, 0.18) 133px 134px, transparent 135px),
+        radial-gradient(circle at 50% 40%, transparent 0 184px, rgba(215, 173, 103, 0.12) 185px 186px, transparent 187px),
+        linear-gradient(120deg, transparent 0 49%, rgba(215, 173, 103, 0.12) 49.3%, transparent 50.3%),
+        linear-gradient(60deg, transparent 0 49%, rgba(215, 173, 103, 0.08) 49.3%, transparent 50.3%);
+    }
+
+    .hero::after {
+      background: linear-gradient(180deg, transparent 0 66%, rgba(8, 6, 7, 0.96) 100%);
+    }
+
+    .hero-top,
+    .hero-main,
+    .hero-bottom {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--gold);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+
+    .mini-seal {
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line-strong);
+      color: var(--gold-soft);
+      background: rgba(15, 12, 12, 0.74);
+      transform: rotate(45deg);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.24);
+    }
+
+    .mini-seal span {
+      transform: rotate(-45deg);
+      font-size: 10px;
+    }
+
+    .hero-main {
+      flex: 1 1 auto;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
+      padding: 6px 0 0;
+    }
+
+    .hero-title {
+      margin-top: 2px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .hero-title .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+
+    .hero-title .kicker::before,
+    .hero-title .kicker::after {
+      content: "";
+      width: 20px;
+      height: 1px;
+      background: currentColor;
+      opacity: 0.72;
+    }
+
+    .hero-title h1 {
+      margin-top: 4px;
+      font-size: clamp(34px, 9.5vw, 48px);
+      line-height: 1;
+      font-weight: 950;
+      letter-spacing: 0;
+      color: var(--gold-soft);
+      text-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 28px rgba(159, 36, 48, 0.22);
+    }
+
+    .hero-title p {
+      max-width: 300px;
+      margin: 6px auto 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .sin-wheel {
+      --wheel-size: min(72vw, 300px);
+      --wheel-radius: calc(var(--wheel-size) / 2);
+      --node-size: clamp(48px, 14vw, 62px);
+      position: relative;
+      width: var(--wheel-size);
+      height: var(--wheel-size);
+      aspect-ratio: 1 / 1;
+      margin: 0 auto;
+      border: 1px solid rgba(215, 173, 103, 0.22);
+      border-radius: 50%;
+      background:
+        radial-gradient(circle, rgba(239, 214, 174, 0.12) 0 1px, transparent 2px),
+        repeating-conic-gradient(from -90deg, rgba(215, 173, 103, 0.12) 0 1deg, transparent 1deg 51.4deg),
+        radial-gradient(circle at 50% 50%, rgba(159, 36, 48, 0.18), rgba(8, 6, 7, 0.5) 44%, rgba(8, 6, 7, 0.86) 70%);
+      box-shadow: inset 0 0 44px rgba(0, 0, 0, 0.62), 0 16px 36px rgba(0, 0, 0, 0.38);
+      animation: wheelIn 0.9s ease both;
+      flex: 0 0 auto;
+    }
+
+    @keyframes wheelIn {
+      from { opacity: 0; transform: scale(0.94) rotate(-8deg); }
+      to { opacity: 1; transform: scale(1) rotate(0); }
+    }
+
+    .sin-wheel::before,
+    .sin-wheel::after {
+      content: "";
+      position: absolute;
+      inset: 18%;
+      border: 1px solid rgba(215, 173, 103, 0.18);
+      border-radius: 50%;
+    }
+
+    .sin-wheel::after {
+      inset: 34%;
+      border-color: rgba(220, 73, 86, 0.24);
+      box-shadow: 0 0 24px rgba(159, 36, 48, 0.22);
+    }
+
+    .wheel-core {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      z-index: 2;
+      width: 28%;
+      height: 28%;
+      min-width: 48px;
+      min-height: 48px;
+      display: grid;
+      place-items: center;
+      color: var(--gold-soft);
+      border: 1px solid rgba(215, 173, 103, 0.34);
+      background:
+        conic-gradient(from 22deg, rgba(159, 36, 48, 0.6), rgba(12, 10, 10, 0.8), rgba(215, 173, 103, 0.36), rgba(159, 36, 48, 0.6));
+      transform: translate(-50%, -50%) rotate(45deg);
+      box-shadow: 0 0 32px rgba(159, 36, 48, 0.28);
+    }
+
+    .wheel-core span {
+      transform: rotate(-45deg);
+      font-size: clamp(18px, 5vw, 24px);
+      font-weight: 900;
+    }
+
+    .sin-node {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      z-index: 3;
+      width: var(--node-size);
+      height: var(--node-size);
+      min-height: var(--node-size);
+      padding: 2px;
+      display: grid;
+      place-items: center;
+      gap: 0;
+      text-align: center;
+      border: 1px solid rgba(215, 173, 103, 0.32);
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 50% 24%, rgba(220, 73, 86, 0.34), transparent 42%),
+        rgba(11, 9, 9, 0.86);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.32);
+      transform:
+        translate(-50%, -50%)
+        rotate(var(--angle))
+        translateY(calc(var(--wheel-radius) * -0.78))
+        rotate(calc(var(--angle) * -1));
+    }
+
+    .sin-node b {
+      display: block;
+      color: var(--gold-soft);
+      font-size: clamp(10px, 2.8vw, 12px);
+      line-height: 1.05;
+      font-weight: 900;
+    }
+
+    .sin-node small {
+      display: none;
+    }
+
+    .hero-bottom {
+      display: grid;
+      gap: 8px;
+      flex: 0 0 auto;
+      margin-top: auto;
+    }
+
+    .info-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border: 1px solid var(--line);
+      background: rgba(12, 10, 10, 0.7);
+      box-shadow: none;
+    }
+
+    .info-strip div {
+      min-width: 0;
+      padding: 8px 6px;
+      text-align: center;
+      border-right: 1px solid var(--line);
+    }
+
+    .info-strip div:last-child {
+      border-right: 0;
+    }
+
+    .info-strip strong {
+      display: block;
+      color: var(--gold-soft);
+      font-size: 15px;
+      line-height: 1;
+      font-weight: 900;
+    }
+
+    .info-strip span {
+      display: block;
+      margin-top: 4px;
+      color: var(--dim);
+      font-size: 10px;
+      white-space: nowrap;
+    }
+
+    .primary-btn,
+    .ghost-btn {
+      width: 100%;
+      min-height: 46px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: transform 0.18s ease, filter 0.18s ease, opacity 0.18s ease;
+    }
+
+    #home-page .primary-btn {
+      min-height: 48px;
+      font-size: 16px;
+      box-shadow: 0 10px 24px rgba(159, 36, 48, 0.28);
+    }
+
+    #home-page .sin-wheel {
+      --wheel-size: min(56vw, 230px);
+    }
+
+    #home-page .hero-title h1 {
+      font-size: clamp(30px, 8.5vw, 42px);
+    }
+
+    #home-page .hero-title p {
+      font-size: 11px;
+    }
+
+    #home-page .mode-card b {
+      font-size: 14px;
+    }
+
+    .mode-pick {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .mode-card {
+      position: relative;
+      min-width: 0;
+      min-height: 92px;
+      padding: 12px 10px 11px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+      text-align: left;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+      border: 1px solid rgba(239, 214, 174, 0.18);
+      color: var(--gold-soft);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 50%),
+        rgba(14, 11, 11, 0.72);
+    }
+
+    .mode-card:active {
+      transform: scale(0.98);
+    }
+
+    .mode-card.selected {
+      border-color: rgba(220, 73, 86, 0.72);
+      background:
+        radial-gradient(circle at 50% 0%, rgba(159, 36, 48, 0.28), transparent 55%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 48%),
+        rgba(22, 12, 13, 0.92);
+      box-shadow:
+        0 0 0 1px rgba(220, 73, 86, 0.22),
+        0 12px 28px rgba(159, 36, 48, 0.22);
+    }
+
+    .mode-card .mode-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 7px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      border: 1px solid rgba(239, 214, 174, 0.22);
+      background: rgba(0, 0, 0, 0.24);
+      color: var(--muted);
+    }
+
+    .mode-card.selected .mode-tag {
+      color: #fff3df;
+      border-color: rgba(239, 214, 174, 0.32);
+      background: rgba(159, 36, 48, 0.45);
+    }
+
+    .mode-card b {
+      display: block;
+      margin-top: 6px;
+      font-size: 15px;
+      font-weight: 900;
+      line-height: 1.2;
+      letter-spacing: 0.01em;
+    }
+
+    .mode-card small {
+      display: block;
+      margin-top: 4px;
+      color: var(--dim);
+      font-size: 10px;
+      font-weight: 600;
+      line-height: 1.35;
+    }
+
+    .mode-card.selected small {
+      color: var(--muted);
+    }
+
+    .mode-card .mode-check {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 1px solid rgba(239, 214, 174, 0.28);
+      background: rgba(0, 0, 0, 0.25);
+      display: grid;
+      place-items: center;
+      opacity: 0.45;
+    }
+
+    .mode-card.selected .mode-check {
+      opacity: 1;
+      border-color: rgba(241, 220, 192, 0.55);
+      background: linear-gradient(135deg, #b7333d, #78171f);
+      box-shadow: 0 0 10px rgba(220, 73, 86, 0.35);
+    }
+
+    .mode-card .mode-check::after {
+      content: "";
+      width: 8px;
+      height: 4px;
+      border-left: 1.8px solid transparent;
+      border-bottom: 1.8px solid transparent;
+      transform: rotate(-45deg) translate(0.5px, -0.5px);
+    }
+
+    .mode-card.selected .mode-check::after {
+      border-left-color: #fff3df;
+      border-bottom-color: #fff3df;
+    }
+
+    .result-layout { display: none; }
+    .result-layout.active { display: block; }
+
+    .primary-btn {
+      color: #fff3df;
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: 0.02em;
+      background:
+        linear-gradient(90deg, rgba(255, 255, 255, 0.12), transparent 18% 82%, rgba(255, 255, 255, 0.1)),
+        linear-gradient(135deg, #78171f, #b7333d 52%, #77171d);
+      border: 1px solid rgba(239, 214, 174, 0.24);
+      box-shadow: 0 18px 42px rgba(159, 36, 48, 0.28);
+    }
+
+    .ghost-btn {
+      color: var(--gold-soft);
+      background: rgba(15, 12, 12, 0.56);
+      border: 1px solid var(--line);
+    }
+
+    .primary-btn:active,
+    .ghost-btn:active {
+      transform: scale(0.985);
+      filter: brightness(1.06);
+    }
+
+    .primary-btn:disabled,
+    .ghost-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.46;
+      transform: none;
+      filter: none;
+    }
+
+    .safe-note {
+      color: var(--dim);
+      font-size: 12px;
+      line-height: 1.7;
+      text-align: center;
+    }
+
+    #home-page .safe-note {
+      font-size: 10px;
+      line-height: 1.4;
+      margin: 0;
+    }
+
+    .history-btn {
+      width: 100%;
+      min-height: 42px;
+      margin-top: 0;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      color: var(--gold-soft);
+      font: inherit;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      background: rgba(15, 12, 12, 0.56);
+    }
+
+    .history-btn.hidden {
+      display: none;
+    }
+
+    .history-btn:active {
+      transform: scale(0.985);
+      filter: brightness(1.06);
+    }
+
+    .history-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 2200;
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 18px;
+      background: rgba(0, 0, 0, 0.58);
+      backdrop-filter: blur(4px);
+    }
+
+    .history-modal-backdrop.show {
+      display: flex;
+    }
+
+    .history-modal {
+      width: min(460px, 100%);
+      max-height: min(72vh, 560px);
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      border: 1px solid var(--line-strong);
+      border-radius: 14px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 30%),
+        rgba(18, 14, 14, 0.98);
+      box-shadow: 0 24px 68px rgba(0, 0, 0, 0.48);
+      overflow: hidden;
+    }
+
+    .history-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 16px 16px 12px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .history-head b {
+      color: var(--gold-soft);
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+    }
+
+    .history-head-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .history-clear,
+    .history-close {
+      border: 0;
+      background: transparent;
+      color: var(--dim);
+      font: inherit;
+      font-size: 13px;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .history-close {
+      color: var(--gold-soft);
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .history-list {
+      display: grid;
+      align-content: start;
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .history-empty {
+      padding: 28px 16px;
+      color: var(--dim);
+      font-size: 13px;
+      text-align: center;
+      line-height: 1.7;
+    }
+
+    .history-item {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 4px 12px;
+      align-items: center;
+      padding: 14px 16px;
+      border: 0;
+      border-bottom: 1px solid rgba(239, 214, 174, 0.08);
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .history-item:last-child {
+      border-bottom: 0;
+    }
+
+    .history-item:active {
+      background: rgba(159, 36, 48, 0.12);
+    }
+
+    .history-item strong {
+      color: var(--gold-soft);
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .history-item span {
+      color: var(--dim);
+      font-size: 12px;
+    }
+
+    .history-item em {
+      grid-row: 1 / 3;
+      grid-column: 2;
+      color: var(--crimson-bright);
+      font-style: normal;
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .history-modal-foot {
+      padding: 12px 16px 16px;
+      border-top: 1px solid var(--line);
+    }
+
+    .history-modal-foot .ghost-btn {
+      min-height: 44px;
+      font-size: 15px;
+    }
+
+    .quiz-head {
+      position: relative;
+      display: grid;
+      gap: 10px;
+      margin: -2px 0 12px;
+      padding: 14px 14px 12px;
+      border: 1px solid rgba(239, 214, 174, 0.13);
+      border-radius: var(--radius);
+      background:
+        radial-gradient(circle at 12% 14%, rgba(215, 173, 103, 0.12), transparent 28%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.012)),
+        rgba(10, 8, 8, 0.66);
+      box-shadow: 0 16px 44px rgba(0, 0, 0, 0.24);
+      overflow: hidden;
+    }
+
+    .quiz-head::after {
+      content: "";
+      position: absolute;
+      right: -58px;
+      top: -58px;
+      width: 138px;
+      height: 138px;
+      border: 1px solid rgba(215, 173, 103, 0.15);
+      border-radius: 50%;
+      background: repeating-conic-gradient(from -90deg, rgba(215, 173, 103, 0.15) 0 1deg, transparent 1deg 51.4deg);
+      opacity: 0.72;
+      pointer-events: none;
+    }
+
+    .quiz-topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .quiz-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      color: var(--gold-soft);
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .quiz-title::before {
+      content: "";
+      width: 12px;
+      height: 12px;
+      border: 1px solid var(--gold);
+      transform: rotate(45deg);
+      background: rgba(159, 36, 48, 0.5);
+    }
+
+    .progress-track {
+      position: relative;
+      height: 7px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(239, 214, 174, 0.12);
+    }
+
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--crimson), var(--ember), var(--gold));
+      box-shadow: 0 0 18px rgba(220, 73, 86, 0.46);
+      transition: width 0.28s ease;
+    }
+
+    .question-panel {
+      position: relative;
+      padding: 20px 18px 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background:
+        radial-gradient(circle at 92% 10%, rgba(215, 173, 103, 0.11), transparent 22%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.015)),
+        var(--panel);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .question-panel::before {
+      content: "";
+      position: absolute;
+      left: 20px;
+      right: 20px;
+      top: 17px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(215, 173, 103, 0.42), transparent);
+    }
+
+    .question-panel::after {
+      content: "";
+      position: absolute;
+      right: 16px;
+      top: 28px;
+      width: 78px;
+      height: 78px;
+      border: 1px solid rgba(215, 173, 103, 0.15);
+      border-radius: 50%;
+      background:
+        repeating-conic-gradient(from -90deg, rgba(215, 173, 103, 0.12) 0 1deg, transparent 1deg 51.4deg),
+        radial-gradient(circle, rgba(159, 36, 48, 0.12), transparent 58%);
+      opacity: 0.76;
+      pointer-events: none;
+    }
+
+    .question-meta {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .question-num {
+      color: var(--crimson-bright);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 46px;
+      line-height: 1;
+      opacity: 0.78;
+    }
+
+    .question-text {
+      position: relative;
+      z-index: 1;
+      margin-top: 12px;
+      color: var(--gold-soft);
+      font-size: 24px;
+      line-height: 1.38;
+      font-weight: 900;
+    }
+
+    .question-help {
+      position: relative;
+      z-index: 1;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .options {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 8px;
+      margin-top: 17px;
+    }
+
+    .option-btn {
+      width: 100%;
+      min-height: 53px;
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      text-align: left;
+      color: var(--muted);
+      border: 1px solid rgba(239, 214, 174, 0.12);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(90deg, rgba(255, 255, 255, 0.025), transparent),
+        rgba(9, 8, 8, 0.58);
+      cursor: pointer;
+      transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+    }
+
+    .option-btn.selected {
+      color: var(--gold-soft);
+      border-color: rgba(220, 73, 86, 0.62);
+      background:
+        linear-gradient(90deg, rgba(159, 36, 48, 0.76), rgba(14, 11, 11, 0.88) 72%, rgba(215, 173, 103, 0.12)),
+        rgba(159, 36, 48, 0.42);
+      box-shadow: 0 12px 26px rgba(159, 36, 48, 0.2);
+    }
+
+    .option-btn:active {
+      transform: scale(0.988);
+    }
+
+    .option-mark {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      color: var(--gold);
+      border: 1px solid rgba(215, 173, 103, 0.42);
+      border-radius: 50%;
+      font-weight: 900;
+      font-family: Georgia, "Times New Roman", serif;
+      transition: 0.18s ease;
+    }
+
+    .option-btn.selected .option-mark {
+      color: #fff3df;
+      border-color: rgba(241, 220, 192, 0.5);
+      background: rgba(159, 36, 48, 0.58);
+    }
+
+    .option-label {
+      min-width: 0;
+      font-size: 15px;
+      line-height: 1.45;
+    }
+
+    .quiz-actions {
+      position: sticky;
+      bottom: 0;
+      z-index: 5;
+      display: grid;
+      grid-template-columns: 0.82fr 1.18fr;
+      gap: 10px;
+      margin-top: 12px;
+      padding: 10px 0 calc(8px + env(safe-area-inset-bottom));
+      background: linear-gradient(180deg, rgba(8, 6, 7, 0), rgba(8, 6, 7, 0.96) 30%, rgba(8, 6, 7, 0.99));
+    }
+
+    .loading-wrap,
+    .gate-wrap {
+      min-height: calc(100vh - 54px);
+      display: grid;
+      place-items: center;
+    }
+
+    .loading-panel,
+    .gate-panel {
+      position: relative;
+      width: 100%;
+      padding: 28px 20px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background:
+        radial-gradient(circle at 50% 18%, rgba(159, 36, 48, 0.22), transparent 32%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.018)),
+        var(--panel-strong);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .loading-kicker,
+    .gate-kicker,
+    .result-kicker {
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .loading-sigil {
+      position: relative;
+      width: 214px;
+      height: 214px;
+      margin: 18px auto;
+      border: 1px solid rgba(215, 173, 103, 0.18);
+      border-radius: 50%;
+      background:
+        repeating-conic-gradient(from -90deg, rgba(215, 173, 103, 0.2) 0 1deg, transparent 1deg 51.4deg),
+        radial-gradient(circle, rgba(159, 36, 48, 0.22), transparent 58%);
+      animation: sigilSpin 8s linear infinite;
+    }
+
+    @keyframes sigilSpin {
+      to { transform: rotate(360deg); }
+    }
+
+    .loading-sigil::before,
+    .loading-sigil::after {
+      content: "";
+      position: absolute;
+      inset: 40px;
+      border: 1px solid rgba(215, 173, 103, 0.22);
+      border-radius: 50%;
+      box-shadow: inset 0 0 20px rgba(159, 36, 48, 0.24);
+    }
+
+    .loading-sigil::after {
+      inset: 78px;
+      border-radius: 8px;
+      transform: rotate(45deg);
+      background: rgba(159, 36, 48, 0.2);
+    }
+
+    .loading-dot {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 20px;
+      height: 20px;
+      border: 1px solid rgba(215, 173, 103, 0.44);
+      border-radius: 50%;
+      background: #0b0909;
+      transform:
+        translate(-50%, -50%)
+        rotate(var(--angle))
+        translateY(-96px)
+        rotate(calc(var(--angle) * -1));
+      box-shadow: 0 0 18px rgba(220, 73, 86, 0.3);
+    }
+
+    .loading-title {
+      color: var(--gold-soft);
+      font-size: 28px;
+      line-height: 1.2;
+      font-weight: 950;
+      text-align: center;
+    }
+
+    .loading-title span {
+      color: var(--crimson-bright);
+    }
+
+    .loading-copy {
+      margin: 10px auto 18px;
+      max-width: 330px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+      text-align: center;
+    }
+
+    .loading-steps {
+      display: grid;
+      gap: 9px;
+      margin-top: 16px;
+    }
+
+    .loading-step {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      color: var(--dim);
+      border: 1px solid rgba(239, 214, 174, 0.1);
+      background: rgba(8, 7, 7, 0.54);
+      border-radius: var(--radius);
+      font-size: 13px;
+      transition: 0.22s ease;
+    }
+
+    .loading-step strong {
+      flex: 0 0 auto;
+      color: inherit;
+      font-size: 12px;
+    }
+
+    .loading-step.active,
+    .loading-step.done {
+      color: var(--gold-soft);
+      border-color: rgba(215, 173, 103, 0.25);
+    }
+
+    .loading-step.active strong {
+      color: var(--crimson-bright);
+    }
+
+    .loading-step.done strong {
+      color: var(--gold);
+    }
+
+    .gate-panel {
+      display: grid;
+      gap: 12px;
+      padding: 18px 18px 16px;
+      background:
+        radial-gradient(circle at 50% 16%, rgba(215, 173, 103, 0.16), transparent 28%),
+        radial-gradient(circle at 50% 48%, rgba(159, 36, 48, 0.2), transparent 34%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.052), rgba(255, 255, 255, 0.014)),
+        var(--panel-strong);
+    }
+
+    .gate-panel::before {
+      content: "";
+      position: absolute;
+      inset: 10px;
+      border: 1px solid rgba(215, 173, 103, 0.11);
+      border-radius: calc(var(--radius) - 2px);
+      pointer-events: none;
+    }
+
+    .gate-seal {
+      position: relative;
+      width: 142px;
+      height: 142px;
+      margin: 0 auto 2px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(215, 173, 103, 0.24);
+      border-radius: 50%;
+      background:
+        repeating-conic-gradient(from -90deg, rgba(215, 173, 103, 0.18) 0 1deg, transparent 1deg 51.4deg),
+        radial-gradient(circle at 50% 50%, rgba(159, 36, 48, 0.32), rgba(9, 7, 7, 0.76) 62%);
+      box-shadow: inset 0 0 34px rgba(0, 0, 0, 0.4), 0 20px 48px rgba(0, 0, 0, 0.34);
+    }
+
+    .gate-seal::before,
+    .gate-seal::after {
+      content: "";
+      position: absolute;
+      border: 1px solid rgba(215, 173, 103, 0.18);
+      pointer-events: none;
+    }
+
+    .gate-seal::before {
+      inset: 22px;
+      border-radius: 50%;
+    }
+
+    .gate-seal::after {
+      width: 54px;
+      height: 54px;
+      transform: rotate(45deg);
+      background: rgba(159, 36, 48, 0.24);
+      box-shadow: 0 0 26px rgba(220, 73, 86, 0.18);
+    }
+
+    .gate-seal-core {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 4px;
+      place-items: center;
+      color: var(--gold-soft);
+      text-align: center;
+    }
+
+    .gate-seal-core strong {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 36px;
+      line-height: 0.9;
+    }
+
+    .gate-seal-core span {
+      color: var(--gold);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .gate-title {
+      color: var(--gold-soft);
+      font-size: 28px;
+      line-height: 1.12;
+      font-weight: 950;
+      text-align: center;
+    }
+
+    .gate-copy {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.62;
+      text-align: center;
+    }
+
+    .gate-preview-title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: var(--gold-soft);
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    .gate-preview-title::before,
+    .gate-preview-title::after {
+      content: "";
+      width: 24px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold));
+      opacity: 0.64;
+    }
+
+    .gate-preview-title::after {
+      background: linear-gradient(90deg, var(--gold), transparent);
+    }
+
+    .gate-preview {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 9px;
+    }
+
+    .preview-tile {
+      min-height: 88px;
+      display: grid;
+      place-items: center;
+      gap: 8px;
+      padding: 12px 7px;
+      text-align: center;
+      border: 1px solid rgba(239, 214, 174, 0.14);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent),
+        rgba(10, 8, 8, 0.56);
+      border-radius: var(--radius);
+    }
+
+    .preview-tile strong {
+      color: var(--crimson-bright);
+      font-size: 30px;
+      line-height: 1;
+      font-family: Georgia, "Times New Roman", serif;
+    }
+
+    .preview-tile span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .gate-lock-list {
+      display: grid;
+      gap: 8px;
+      padding: 10px 12px;
+      border: 1px solid rgba(239, 214, 174, 0.12);
+      border-radius: var(--radius);
+      background: rgba(8, 7, 7, 0.48);
+    }
+
+    .gate-lock-row {
+      display: grid;
+      grid-template-columns: 22px 1fr auto;
+      align-items: center;
+      gap: 10px;
+      min-height: 30px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .gate-lock-row i {
+      width: 18px;
+      height: 18px;
+      display: block;
+      border: 1px solid rgba(215, 173, 103, 0.32);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(159, 36, 48, 0.42), transparent 58%);
+    }
+
+    .gate-lock-row b {
+      color: var(--gold-soft);
+      font-size: 13px;
+    }
+
+    .gate-lock-row span {
+      color: var(--dim);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .result-page {
+      padding: 12px 12px calc(26px + env(safe-area-inset-bottom));
+      background:
+        radial-gradient(circle at 14% 6%, rgba(159, 36, 48, 0.22), transparent 27%),
+        radial-gradient(circle at 88% 6%, rgba(159, 36, 48, 0.2), transparent 24%),
+        radial-gradient(circle at 50% 34%, rgba(215, 173, 103, 0.07), transparent 34%),
+        linear-gradient(180deg, #050404 0%, #110909 48%, #040303 100%);
+    }
+
+    .sin-report {
+      position: relative;
+      overflow: hidden;
+      padding: 13px 12px 14px;
+      border: 1px solid rgba(215, 173, 103, 0.38);
+      border-radius: var(--radius);
+      background:
+        radial-gradient(circle at 0 0, rgba(159, 36, 48, 0.24), transparent 24%),
+        radial-gradient(circle at 100% 0, rgba(159, 36, 48, 0.2), transparent 26%),
+        radial-gradient(circle at 50% 16%, rgba(215, 173, 103, 0.08), transparent 34%),
+        repeating-linear-gradient(90deg, rgba(239, 214, 174, 0.025) 0 1px, transparent 1px 44px),
+        rgba(6, 6, 5, 0.94);
+      box-shadow: var(--shadow), inset 0 0 0 1px rgba(239, 214, 174, 0.06);
+    }
+
+    .sin-report::before,
+    .sin-report::after {
+      content: "";
+      position: absolute;
+      pointer-events: none;
+    }
+
+    .sin-report::before {
+      inset: 8px;
+      border: 1px solid rgba(215, 173, 103, 0.18);
+      border-radius: calc(var(--radius) - 2px);
+    }
+
+    .sin-report::after {
+      left: 0;
+      right: 0;
+      top: 0;
+      height: 164px;
+      opacity: 0.68;
+      background:
+        radial-gradient(circle at 10% 38%, rgba(159, 36, 48, 0.54) 0 11px, transparent 12px),
+        radial-gradient(circle at 13% 30%, rgba(120, 23, 31, 0.52) 0 15px, transparent 16px),
+        radial-gradient(circle at 90% 38%, rgba(159, 36, 48, 0.54) 0 11px, transparent 12px),
+        radial-gradient(circle at 87% 30%, rgba(120, 23, 31, 0.52) 0 15px, transparent 16px),
+        linear-gradient(90deg, rgba(159, 36, 48, 0.22), transparent 24% 76%, rgba(159, 36, 48, 0.2));
+      mask-image: linear-gradient(180deg, #000, transparent 86%);
+    }
+
+    .result-head,
+    .dual-chief-grid,
+    .report-main-grid,
+    .report-bottom-grid,
+    .report-footer {
+      position: relative;
+      z-index: 1;
+    }
+
+    .result-report-title .vs-title-mark {
+      display: inline-block;
+      margin: 0 4px;
+      padding: 2px 8px 3px;
+      border-radius: 4px;
+      color: #fff3df;
+      background: linear-gradient(135deg, #78171f, #b7333d 52%, #77171d);
+      border: 1px solid rgba(239, 214, 174, 0.28);
+      font-size: 0.72em;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
+    .dual-chief-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .chief-card {
+      position: relative;
+      min-width: 0;
+      padding: 16px 12px 14px;
+      text-align: center;
+      border: 1px solid rgba(215, 173, 103, 0.24);
+      border-radius: var(--radius);
+      background:
+        radial-gradient(circle at 50% 0%, rgba(159, 36, 48, 0.14), transparent 42%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.038), rgba(255, 255, 255, 0.01)),
+        rgba(9, 9, 8, 0.78);
+      box-shadow: inset 0 0 0 1px rgba(239, 214, 174, 0.035), 0 14px 36px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+    }
+
+    .chief-card.chief-virtue {
+      background:
+        radial-gradient(circle at 50% 0%, rgba(215, 173, 103, 0.16), transparent 42%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.038), rgba(255, 255, 255, 0.01)),
+        rgba(9, 9, 8, 0.78);
+    }
+
+    .chief-card span {
+      display: block;
+      color: var(--dim);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+
+    .chief-card small {
+      display: block;
+      margin-top: 10px;
+      color: var(--gold);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+    }
+
+    .chief-card h2 {
+      margin-top: 4px;
+      color: var(--gold-soft);
+      font-family: Georgia, "Times New Roman", "Songti SC", serif;
+      font-size: clamp(28px, 8vw, 36px);
+      line-height: 1.05;
+      font-weight: 900;
+    }
+
+    .chief-card.chief-virtue h2 {
+      color: #f6e7c8;
+    }
+
+    .chief-card strong {
+      display: block;
+      margin-top: 8px;
+      color: var(--crimson-bright);
+      font-size: 22px;
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .chief-card.chief-virtue strong {
+      color: var(--gold);
+    }
+
+    .chief-card strong::after {
+      content: " / 100";
+      color: var(--dim);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .balance-line {
+      margin: 12px 2px 0;
+      color: var(--ember);
+      font-size: 13px;
+      line-height: 1.6;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    .radar-hint {
+      margin-top: 4px;
+      color: var(--dim);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .dual-star-map {
+      padding: 4px 0 8px;
+    }
+
+    .dual-radar-svg {
+      max-height: 340px;
+    }
+
+    .radar-area-sin {
+      fill: rgba(159, 36, 48, 0.42);
+      stroke: rgba(220, 73, 86, 0.92);
+      stroke-width: 2;
+      filter: drop-shadow(0 0 12px rgba(159, 36, 48, 0.36));
+    }
+
+    .radar-area-virtue {
+      fill: rgba(215, 173, 103, 0.22);
+      stroke: rgba(241, 220, 192, 0.88);
+      stroke-width: 2;
+      filter: drop-shadow(0 0 10px rgba(215, 173, 103, 0.28));
+    }
+
+    .radar-dot-sin {
+      fill: #ffd0d4;
+      stroke: #160d0e;
+      stroke-width: 2;
+    }
+
+    .radar-dot-virtue {
+      fill: var(--gold-soft);
+      stroke: #160d0e;
+      stroke-width: 2;
+    }
+
+    .radar-label-sin {
+      fill: #f0c4b0;
+      font-size: 12px;
+      font-weight: 800;
+      text-anchor: middle;
+      dominant-baseline: middle;
+    }
+
+    .radar-label-virtue {
+      fill: var(--gold-soft);
+      font-size: 12px;
+      font-weight: 800;
+      text-anchor: middle;
+      dominant-baseline: middle;
+    }
+
+    .radar-score {
+      font-size: 10px;
+      font-weight: 800;
+      text-anchor: middle;
+      dominant-baseline: middle;
+    }
+
+    .radar-score-sin { fill: #dc4956; }
+    .radar-score-virtue { fill: var(--gold); }
+
+    .radar-divider {
+      stroke: rgba(241, 220, 192, 0.55);
+      stroke-width: 1.6;
+      stroke-dasharray: 4 3;
+    }
+
+    .dual-rank-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .virtue-rank-section .seal-bar b {
+      color: var(--gold-soft);
+    }
+
+    .virtue-rank-section .bar-track i {
+      background: linear-gradient(90deg, rgba(215, 173, 103, 0.55), var(--gold));
+    }
+
+    .result-head {
+      padding: 13px 12px 15px;
+      text-align: center;
+      border-bottom: 1px solid rgba(215, 173, 103, 0.3);
+    }
+
+    .result-kicker {
+      color: var(--gold);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.24em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .result-report-title {
+      margin-top: 8px;
+      color: var(--gold-soft);
+      font-family: Georgia, "Times New Roman", "Songti SC", serif;
+      font-size: clamp(22px, 6.2vw, 32px);
+      line-height: 1.25;
+      font-weight: 900;
+      text-align: center;
+      white-space: normal;
+      word-break: keep-all;
+      overflow-wrap: normal;
+      text-shadow: 0 10px 28px rgba(0, 0, 0, 0.56), 0 0 24px rgba(215, 173, 103, 0.12);
+    }
+
+    .result-subtitle {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+      text-align: center;
+    }
+
+    .result-subtitle::before,
+    .result-subtitle::after,
+    .section-title::before,
+    .section-title::after {
+      content: "";
+      width: 28px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold));
+      opacity: 0.72;
+    }
+
+    .result-subtitle::after,
+    .section-title::after {
+      background: linear-gradient(90deg, var(--gold), transparent);
+    }
+
+    .result-hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .score-plate,
+    .dominant-plate,
+    .result-brief-plate,
+    .result-section {
+      position: relative;
+      min-width: 0;
+      border: 1px solid rgba(215, 173, 103, 0.24);
+      border-radius: var(--radius);
+      background:
+        radial-gradient(circle at 50% 0%, rgba(159, 36, 48, 0.12), transparent 34%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.038), rgba(255, 255, 255, 0.01)),
+        rgba(9, 9, 8, 0.78);
+      box-shadow: inset 0 0 0 1px rgba(239, 214, 174, 0.035), 0 14px 36px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+    }
+
+    .score-plate::before,
+    .dominant-plate::before,
+    .result-brief-plate::before,
+    .result-section::before {
+      content: "";
+      position: absolute;
+      inset: 6px;
+      border: 1px solid rgba(215, 173, 103, 0.08);
+      border-radius: calc(var(--radius) - 3px);
+      pointer-events: none;
+    }
+
+    .score-plate,
+    .result-brief-plate {
+      padding: 14px 13px;
+      text-align: center;
+    }
+
+    .score-plate span,
+    .dominant-plate span,
+    .result-brief-plate span {
+      display: block;
+      color: var(--gold-soft);
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .score-plate strong {
+      display: inline-block;
+      margin-top: 12px;
+      color: var(--gold-soft);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 64px;
+      line-height: 0.9;
+      font-weight: 900;
+      text-shadow: 0 0 20px rgba(215, 173, 103, 0.16);
+    }
+
+    .score-plate small {
+      color: var(--gold-soft);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 24px;
+    }
+
+    .score-plate p {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.52;
+    }
+
+    .dominant-plate {
+      display: grid;
+      justify-items: center;
+      gap: 8px;
+      padding: 14px 12px 13px;
+      text-align: center;
+      background:
+        radial-gradient(circle at 50% 46%, rgba(159, 36, 48, 0.36), transparent 38%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.012)),
+        rgba(9, 9, 8, 0.82);
+    }
+
+    .dominant-orb {
+      position: relative;
+      width: 158px;
+      height: 158px;
+      display: grid;
+      place-items: center;
+      align-content: center;
+      gap: 6px;
+      border: 1px solid rgba(215, 173, 103, 0.5);
+      border-radius: 50%;
+      color: var(--gold-soft);
+      background:
+        radial-gradient(circle at 50% 38%, rgba(159, 36, 48, 0.82), rgba(30, 12, 12, 0.88) 56%, rgba(6, 5, 5, 0.95) 72%),
+        repeating-conic-gradient(from -90deg, rgba(215, 173, 103, 0.22) 0 1deg, transparent 1deg 12deg);
+      box-shadow: inset 0 0 34px rgba(0, 0, 0, 0.54), 0 0 32px rgba(159, 36, 48, 0.24);
+      overflow: hidden;
+    }
+
+    .dominant-orb::before {
+      content: "♛";
+      color: var(--gold);
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    .dominant-orb::after {
+      content: "";
+      position: absolute;
+      inset: 7px;
+      border: 1px solid rgba(215, 173, 103, 0.24);
+      border-radius: 50%;
+      box-shadow: inset 0 0 0 8px rgba(215, 173, 103, 0.035);
+    }
+
+    .dominant-orb small {
+      color: var(--gold);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+    }
+
+    .dominant-orb h2 {
+      color: var(--gold-soft);
+      font-family: Georgia, "Times New Roman", "Songti SC", serif;
+      font-size: 38px;
+      line-height: 1;
+      font-weight: 900;
+    }
+
+    .dominant-plate p {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .result-brief-plate b {
+      display: block;
+      margin-top: 12px;
+      color: var(--gold-soft);
+      font-size: 20px;
+      line-height: 1.3;
+    }
+
+    .result-brief-plate p {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.65;
+      text-align: left;
+    }
+
+    .report-main-grid,
+    .report-bottom-grid {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .result-section {
+      padding: 13px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: var(--gold-soft);
+      font-size: 18px;
+      font-weight: 950;
+      text-align: center;
+    }
+
+    .star-map {
+      display: grid;
+      place-items: center;
+      margin-top: 8px;
+      padding: 6px 0 0;
+    }
+
+    .radar-svg {
+      width: 100%;
+      aspect-ratio: 1;
+      max-height: 276px;
+      overflow: visible;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(159, 36, 48, 0.14), transparent 44%),
+        radial-gradient(circle at 50% 50%, transparent 0 41%, rgba(215, 173, 103, 0.06) 42% 43%, transparent 44%);
+    }
+
+    .dual-radar-svg {
+      max-height: min(88vw, 360px);
+      background:
+        linear-gradient(90deg, rgba(159, 36, 48, 0.12) 0 50%, rgba(215, 173, 103, 0.1) 50% 100%),
+        radial-gradient(circle at 50% 50%, rgba(159, 36, 48, 0.1), transparent 48%),
+        radial-gradient(circle at 50% 50%, transparent 0 41%, rgba(215, 173, 103, 0.06) 42% 43%, transparent 44%);
+    }
+
+    .radar-grid {
+      fill: none;
+      stroke: rgba(215, 173, 103, 0.2);
+      stroke-width: 1;
+    }
+
+    .radar-axis {
+      stroke: rgba(215, 173, 103, 0.26);
+      stroke-width: 1;
+    }
+
+    .radar-area {
+      fill: rgba(159, 36, 48, 0.58);
+      stroke: rgba(215, 173, 103, 0.9);
+      stroke-width: 1.8;
+      filter: drop-shadow(0 0 14px rgba(159, 36, 48, 0.42));
+    }
+
+    .radar-dot {
+      fill: var(--gold-soft);
+      stroke: #160d0e;
+      stroke-width: 2;
+    }
+
+    .radar-label {
+      fill: var(--gold-soft);
+      font-family: Georgia, "Times New Roman", "Songti SC", serif;
+      font-size: 13px;
+      font-weight: 800;
+      text-anchor: middle;
+      dominant-baseline: middle;
+    }
+
+    .seal-bars {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .seal-bar {
+      display: grid;
+      grid-template-columns: 38px 58px minmax(0, 1fr) 34px;
+      align-items: center;
+      gap: 8px;
+      min-height: 48px;
+      padding: 8px 7px;
+      border-bottom: 1px solid rgba(215, 173, 103, 0.1);
+      background:
+        linear-gradient(90deg, rgba(159, 36, 48, 0.22), transparent 58%),
+        rgba(8, 7, 7, 0.24);
+    }
+
+    .seal-icon {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      color: var(--gold);
+      border: 1px solid rgba(215, 173, 103, 0.28);
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(159, 36, 48, 0.4), transparent 58%),
+        rgba(10, 8, 8, 0.86);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 10px;
+      font-weight: 900;
+    }
+
+    .seal-bar b {
+      color: var(--gold-soft);
+      font-size: 15px;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .bar-track {
+      height: 9px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(239, 214, 174, 0.12);
+    }
+
+    .bar-track i {
+      display: block;
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #5f1419, var(--crimson-bright), var(--gold));
+      box-shadow: 0 0 14px rgba(220, 73, 86, 0.36);
+      animation: barGrow 0.78s ease forwards;
+    }
+
+    @keyframes barGrow {
+      from { width: 0; }
+      to { width: var(--w); }
+    }
+
+    .seal-score {
+      color: var(--gold-soft);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 22px;
+      text-align: right;
+    }
+
+    .result-copy {
+      margin-top: 13px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .rose-sigil {
+      width: 118px;
+      height: 118px;
+      margin: 18px auto 4px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 50% 45%, #bd3340 0 10px, transparent 11px),
+        radial-gradient(ellipse at 46% 42%, rgba(159, 36, 48, 0.95) 0 20px, transparent 21px),
+        radial-gradient(ellipse at 56% 48%, rgba(120, 23, 31, 0.92) 0 24px, transparent 25px),
+        radial-gradient(ellipse at 42% 58%, rgba(92, 20, 24, 0.9) 0 23px, transparent 24px),
+        radial-gradient(circle, rgba(215, 173, 103, 0.16), transparent 58%);
+      box-shadow: 0 0 0 1px rgba(215, 173, 103, 0.18), 0 0 32px rgba(159, 36, 48, 0.22);
+    }
+
+    .keywords {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 13px;
+    }
+
+    .keywords span {
+      padding: 6px 9px;
+      color: var(--gold-soft);
+      border: 1px solid rgba(215, 173, 103, 0.18);
+      border-radius: 999px;
+      background: rgba(215, 173, 103, 0.08);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .matrix {
+      display: grid;
+      gap: 7px;
+      margin-top: 12px;
+    }
+
+    .matrix-item {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      min-height: 42px;
+      padding: 7px 8px;
+      border-bottom: 1px solid rgba(215, 173, 103, 0.1);
+      background: rgba(8, 7, 7, 0.28);
+    }
+
+    .matrix-item strong {
+      order: 2;
+      color: var(--crimson-bright);
+      font-size: 0;
+      white-space: nowrap;
+    }
+
+    .matrix-item strong::before {
+      content: attr(data-flames);
+      color: var(--crimson-bright);
+      font-size: 15px;
+      letter-spacing: 0.08em;
+    }
+
+    .matrix-item b {
+      display: block;
+      color: var(--gold-soft);
+      font-size: 14px;
+    }
+
+    .matrix-item p {
+      margin-top: 3px;
+      color: var(--dim);
+      font-size: 11px;
+      line-height: 1.4;
+    }
+
+    .matrix-legend {
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+      margin-top: 10px;
+      color: var(--dim);
+      font-size: 10px;
+    }
+
+    .advice-grid {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .advice-card {
+      position: relative;
+      min-height: 62px;
+      padding: 8px 8px 8px 52px;
+      border-bottom: 1px solid rgba(215, 173, 103, 0.1);
+      background: rgba(8, 7, 7, 0.24);
+    }
+
+    .advice-card::before {
+      content: attr(data-index);
+      position: absolute;
+      left: 8px;
+      top: 8px;
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      color: var(--gold);
+      border: 1px solid rgba(215, 173, 103, 0.28);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(159, 36, 48, 0.44), transparent 64%);
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: 900;
+    }
+
+    .advice-card b {
+      color: var(--gold-soft);
+      font-size: 15px;
+    }
+
+    .advice-card p {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .report-footer {
+      margin-top: 12px;
+      padding: 14px 10px 2px;
+      text-align: center;
+      border-top: 1px solid rgba(215, 173, 103, 0.22);
+    }
+
+    .report-footer p {
+      margin-bottom: 12px;
+      color: var(--gold-soft);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .report-footer .primary-btn,
+    .report-footer .ghost-btn {
+      min-height: 46px;
+      margin-top: 8px;
+      font-size: 16px;
+    }
+
+    @media (min-width: 430px) {
+      .advice-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 400px) {
+      .result-hero-grid {
+        grid-template-columns: 0.82fr 1.18fr;
+      }
+
+      .result-brief-plate {
+        grid-column: 1 / -1;
+      }
+
+      .result-brief-plate b,
+      .result-brief-plate p {
+        text-align: center;
+      }
+    }
+
+     @media (max-height: 760px) {
+       .hero {
+         padding-top: 8px;
+         padding-bottom: calc(8px + env(safe-area-inset-bottom));
+       }
+
+       .hero-main {
+         gap: 8px;
+         padding-top: 2px;
+         justify-content: flex-start;
+       }
+
+       .hero-title h1 {
+         font-size: clamp(30px, 8.5vw, 42px);
+       }
+
+       .hero-title p {
+         font-size: 11px;
+         -webkit-line-clamp: 2;
+       }
+
+       .sin-wheel {
+         --wheel-size: min(64vw, 260px);
+         --node-size: clamp(44px, 13vw, 56px);
+       }
+
+       .hero-bottom {
+         gap: 6px;
+       }
+
+       #home-page .primary-btn,
+       #home-page .more-test-btn,
+       #home-page .history-btn {
+         min-height: 40px;
+         font-size: 14px;
+       }
+     }
+
+     @media (max-height: 640px) {
+       .hero-top {
+         display: none;
+       }
+
+       .hero-title p {
+         -webkit-line-clamp: 1;
+       }
+
+       .sin-wheel {
+         --wheel-size: min(56vw, 220px);
+         --node-size: clamp(40px, 12vw, 50px);
+       }
+
+       .info-strip strong {
+         font-size: 13px;
+       }
+
+       .info-strip div {
+         padding: 6px 4px;
+       }
+
+       #home-page .safe-note {
+         display: none;
+       }
+     }
+
+     @media (max-width: 370px) {
+       .page {
+         padding-left: 14px;
+         padding-right: 14px;
+       }
+
+       .hero {
+         margin-left: -14px;
+         margin-right: -14px;
+         padding-left: 14px;
+         padding-right: 14px;
+       }
+
+       .question-text {
+         font-size: 22px;
+       }
+
+       .gate-preview {
+         gap: 7px;
+       }
+
+       .preview-tile {
+         padding-left: 5px;
+         padding-right: 5px;
+       }
+     }
+
+     .auth-modal-backdrop{
+       position:fixed;inset:0;background:rgba(12,35,82,.42);backdrop-filter:blur(4px);
+       display:none;align-items:center;justify-content:center;z-index:2000;padding:18px;
+     }
+     .auth-modal-backdrop.show{display:flex!important}
+     .auth-modal{
+       position:relative;width:min(520px,100%);margin:0 auto;
+       background:linear-gradient(140deg,#fff 0%,#f5f7ff 100%);color:#1f2b45;
+       border-radius:18px;box-shadow:0 24px 68px rgba(16,42,96,.18);
+       padding:28px 26px 22px;border:1px solid #dfe7ff;
+     }
+     .auth-close-btn{
+       position:absolute;right:12px;top:12px;border:0;background:transparent;
+       color:#6b7695;font-size:22px;cursor:pointer;line-height:1;
+     }
+     .auth-modal__icon{font-size:48px;text-align:center;margin:4px 0 10px}
+     .auth-modal__title{font-size:22px;font-weight:800;margin:0 0 6px;text-align:center}
+     .auth-modal__desc{margin:0 0 6px;color:#3c4a6b;line-height:1.5;text-align:center;font-weight:600}
+     .auth-modal__sub{margin:0 0 14px;color:#6b7695;line-height:1.5;text-align:center}
+     .auth-field{display:flex;gap:10px;margin-bottom:8px}
+     .auth-input{
+       flex:1;padding:12px 14px;border:1px solid #cfd8f5;border-radius:12px;font-size:16px;
+       background:#fff;font-family:inherit;transition:border-color .2s ease,box-shadow .2s ease;
+     }
+     .auth-input:focus{outline:none;border-color:#4f7af8;box-shadow:0 0 0 3px rgba(79,122,248,.2)}
+     .auth-submit{
+       width:100%;display:inline-flex;align-items:center;justify-content:center;gap:8px;
+       padding:14px 18px;border:none;border-radius:12px;
+       background:linear-gradient(90deg,#4f7af8,#3a60f5);color:#fff;font-size:16px;font-weight:800;
+       letter-spacing:.2px;cursor:pointer;margin-top:12px;font-family:inherit;
+       transition:transform .18s ease,box-shadow .18s ease;
+     }
+     .auth-submit:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(79,122,248,.28)}
+     .auth-error{color:#d32f2f;font-size:14px;margin:6px 0 0;min-height:18px;text-align:left}
+     .auth-link-btn{
+       width:100%;display:inline-flex;align-items:center;justify-content:center;gap:6px;
+       margin-top:10px;padding:12px 16px;border:1px solid #cfd8f5;border-radius:12px;
+       background:#f5f8ff;color:#3a60f5;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;
+     }
+     .auth-link-btn:active{transform:scale(.99)}
+     .auth-tip{margin:10px 0 0;color:#6b7695;font-size:12px;line-height:1.5;text-align:center}
+      .more-test-btn{
+        width:100%;min-height:42px;margin-top:0;border:1px solid rgba(239,214,174,.28);border-radius:var(--radius);
+        color:#fff3df;font-weight:900;cursor:pointer;font-size:14px;
+        background:linear-gradient(135deg,#78171f,#b7333d 52%,#77171d);
+        box-shadow:0 10px 24px rgba(159,36,48,.24);
+        animation:morePulse 1.2s ease-in-out infinite;
+      }
+      #home-page .more-test-btn{margin-top:0}
+     @keyframes morePulse {
+       0%, 100% { transform:scale(1); box-shadow:0 14px 34px rgba(159,36,48,.24); filter:brightness(1); }
+       50% { transform:scale(1.03); box-shadow:0 18px 42px rgba(220,73,86,.48); filter:brightness(1.1); }
+     }
+     .mp-modal-backdrop{
+       position:fixed;inset:0;background:rgba(12,35,82,.42);backdrop-filter:blur(4px);
+       display:none;align-items:center;justify-content:center;z-index:2100;padding:18px;
+     }
+     .mp-modal-backdrop.show{display:flex!important}
+     .mp-modal{
+       position:relative;width:min(420px,100%);margin:0 auto;text-align:center;
+       background:linear-gradient(140deg,#fff 0%,#f5f7ff 100%);color:#1f2b45;
+       border-radius:18px;box-shadow:0 24px 68px rgba(16,42,96,.18);
+       padding:28px 22px 22px;border:1px solid #dfe7ff;
+     }
+     .mp-close-btn{
+       position:absolute;right:12px;top:12px;border:0;background:transparent;
+       color:#6b7695;font-size:22px;cursor:pointer;line-height:1;
+     }
+     .mp-modal h3{margin:0 0 8px;font-size:20px;font-weight:800}
+     .mp-modal p{margin:0;color:#6b7695;font-size:13px;line-height:1.6}
+     .mp-qr-box{
+       margin:16px auto;width:min(340px,100%);border-radius:14px;
+       border:1px solid #e8ecf5;background:#f8faff;display:grid;place-items:center;overflow:hidden;
+       box-shadow:0 8px 24px rgba(16,42,96,.08);
+     }
+     .mp-qr-box img{width:100%;height:auto;display:block}
+     .mp-qr-placeholder{color:#8a94b0;font-size:13px;line-height:1.5;padding:16px}
+     .mp-name{
+       display:inline-flex;align-items:center;gap:8px;margin-top:4px;padding:8px 12px;
+       border-radius:999px;background:#eef3ff;color:#3a60f5;font-size:13px;font-weight:700;
+     }
+     .mp-copy-btn{
+       width:100%;margin-top:14px;padding:12px 16px;border:0;border-radius:12px;
+       background:linear-gradient(90deg,#4f7af8,#3a60f5);color:#fff;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;
+     }
+     .mp-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+     .mp-actions .mp-copy-btn{margin-top:0}
+     .mp-save-btn{
+       width:100%;padding:12px 16px;border:1px solid #cfd8f5;border-radius:12px;
+       background:#f5f8ff;color:#3a60f5;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;
+     }
+   </style>
+ </head>
+ <body>
+   <div id="auth-modal-backdrop" class="auth-modal-backdrop" aria-hidden="true">
+     <div class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+       <button id="auth-close" class="auth-close-btn" type="button" aria-label="关闭">×</button>
+       <div class="auth-modal__icon">🔑</div>
+       <h3 id="auth-title" class="auth-modal__title">需要授权码</h3>
+       <p class="auth-modal__desc">使用本测评需要激活授权码</p>
+        <p class="auth-modal__sub">输入你获得的访问密码，开启本次探索。</p>
+       <div class="auth-field">
+         <input id="auth-input" class="auth-input" type="text" placeholder="请输入授权码" autocomplete="off" />
+       </div>
+       <div id="auth-error" class="auth-error"></div>
+       <button id="auth-submit" class="auth-submit" type="button">验证并开始</button>
+       
+        <p class="auth-tip">仅供娱乐与自我探索，不属于专业心理评估。</p>
+     </div>
+   </div>
+   <div id="mp-modal-backdrop" class="mp-modal-backdrop" aria-hidden="true">
+     <div class="mp-modal" role="dialog" aria-modal="true" aria-labelledby="mp-title">
+       <button id="mp-close" class="mp-close-btn" type="button" aria-label="关闭">×</button>
+       <h3 id="mp-title">20+ 热门测试免费测</h3>
+       <p>微信扫码进「双面之镜」，一口气测完</p>
+       <div class="mp-qr-box" id="mp-qr-box">
+         <div class="mp-qr-placeholder">请放入小程序码图片<br>路径见 AUTH_CONFIG.miniProgramQr</div>
+       </div>
+       <div class="mp-name" id="mp-name">小程序名称待配置</div>
+       <div class="mp-actions">
+         <button id="mp-save" class="mp-save-btn" type="button">一键保存二维码</button>
+         <button id="mp-copy" class="mp-copy-btn" type="button">复制小程序名称</button>
+       </div>
+     </div>
+   </div>
+   <main class="app container quiz-frame"><nav class="topbar" aria-label="页面导航"><span>双面之镜 <i>·</i> 自我探索</span><button id="quiz-home" type="button" onclick="goHome()" hidden>返回首页 ↗</button></nav>
+    <section id="home-page" class="page active">
+      <div class="hero">
+        <div class="cover-meta"><span>THE INNER ARCHIVE</span><span>自我探索 / VOL. 07</span></div>
+        <header class="cover-heading"><p class="cover-eyebrow">每一种欲望，都有它的来处</p><h1>看见暗影。<br><span>也看见微光。</span></h1><p class="cover-description">七宗罪，是理解自己的另一种语言。<br>从日常选择出发，读懂你的内在轮廓。</p></header>
+        <div id="home-wheel" hidden></div>
+        <div class="cover-section-label"><span>选择你的探索方式</span><span>01 — 02</span></div>
+        <div class="mode-pick" role="radiogroup" aria-label="选择测试版本">
+          <button class="mode-card selected" id="mode-card-basic" data-mode="basic" onclick="selectMode('basic')" type="button" role="radio" aria-checked="true"><span class="mode-check" aria-hidden="true"></span><span class="cover-number" aria-hidden="true">VII</span><span class="mode-tag">DESIRE / 欲望侧</span><span class="cover-card-copy"><b>七宗罪</b><small>找到你的主导倾向</small></span><span class="cover-card-footer">七维图谱 <i>↗</i></span></button>
+          <button class="mode-card" id="mode-card-vs" data-mode="vs" onclick="selectMode('vs')" type="button" role="radio" aria-checked="false"><span class="mode-check" aria-hidden="true"></span><span class="cover-number" aria-hidden="true">VII<span>× VII</span></span><span class="mode-tag">DUALITY / 双面对照</span><span class="cover-card-copy"><b>七宗罪 <em>vs</em> 七美德</b><small>欲望与善意，同时读懂</small></span><span class="cover-card-footer">十四维图谱 <i>↗</i></span></button>
+        </div>
+        <div class="cover-benefits"><span>独立倾向解读</span><span>可视化雷达</span><span>生活行动建议</span></div>
+        <div class="hero-bottom"><button class="primary-btn cover-start" type="button" onclick="guardedStart()"><span>开启我的探索</span><span aria-hidden="true">→</span></button><button class="history-btn hidden" id="history-btn" type="button" onclick="openHistoryModal()">测试记录</button><p class="safe-note">仅供娱乐与自我探索，不作心理诊断或医学判断。<br>你的选择没有标准答案。</p></div>
+        <div class="cover-end"><span>SINS &amp; VIRTUES</span><span>不止一面，不被定义。</span></div>
+      </div>
+    </section>
+
+    <div class="history-modal-backdrop" id="history-modal-backdrop" aria-hidden="true" onclick="onHistoryBackdrop(event)">
+      <div class="history-modal" role="dialog" aria-label="测试记录">
+        <div class="history-head">
+          <b>最近测试记录</b>
+          <div class="history-head-actions">
+            <button class="history-clear" type="button" onclick="clearHistory()">清除</button>
+            <button class="history-close" type="button" onclick="closeHistoryModal()" aria-label="关闭">×</button>
+          </div>
+        </div>
+        <div class="history-list" id="history-list"></div>
+        <div class="history-modal-foot">
+          <button class="ghost-btn" type="button" onclick="closeHistoryModal()">关闭</button>
+        </div>
+      </div>
+    </div>
+
+    <section id="quiz-page" class="page">
+      <div class="quiz-head">
+        <div class="quiz-topline">
+          <div class="quiz-title" id="quiz-title">七宗罪测试</div>
+          <div id="progress-text">第 1 / 35 题</div>
+        </div>
+        <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+      </div>
+
+      <div class="question-panel">
+        <div class="question-meta">
+          <div class="question-num" id="question-num">01.</div>
+        </div>
+        <h2 class="question-text" id="question-text"></h2>
+        <p class="question-help">请根据第一直觉选择最接近你的程度，答案没有好坏。</p>
+        <div class="options" id="options-container"></div>
+      </div>
+
+      <div class="quiz-actions">
+        <button class="ghost-btn" type="button" id="prev-btn" onclick="prevQuestion()">上一题</button>
+        <button class="primary-btn" type="button" id="next-btn" onclick="nextQuestion()">下一题</button>
+      </div>
+    </section>
+
+    <section id="loading-page" class="page">
+      <div class="loading-wrap">
+        <div class="loading-panel">
+          <div class="loading-kicker">ANALYZING SEVEN SIGNALS</div>
+          <div class="loading-sigil" aria-hidden="true">
+            <span class="loading-dot" style="--angle: 0deg"></span>
+            <span class="loading-dot" style="--angle: 51.43deg"></span>
+            <span class="loading-dot" style="--angle: 102.86deg"></span>
+            <span class="loading-dot" style="--angle: 154.29deg"></span>
+            <span class="loading-dot" style="--angle: 205.72deg"></span>
+            <span class="loading-dot" style="--angle: 257.15deg"></span>
+            <span class="loading-dot" style="--angle: 308.58deg"></span>
+          </div>
+          <h2 class="loading-title" id="loading-title">正在整理<span>作答线索</span></h2>
+          <p class="loading-copy" id="loading-subtitle">正在读取你的选择分布，生成罪德对照报告。</p>
+          <div class="progress-track"><div class="progress-fill" id="loading-fill"></div></div>
+          <div class="loading-steps" id="loading-steps">
+            <div class="loading-step" data-loading-step="0"><span>整理作答样本</span><strong>等待中</strong></div>
+            <div class="loading-step" data-loading-step="1"><span>归一七重印记</span><strong>等待中</strong></div>
+            <div class="loading-step" data-loading-step="2"><span>校准触发矩阵</span><strong>等待中</strong></div>
+            <div class="loading-step" data-loading-step="3"><span>生成完整报告</span><strong>等待中</strong></div>
+          </div>
+          <p class="safe-note" style="margin-top:14px;">生成过程不会提前展示真实结果。</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="gate-page" class="page">
+      <div class="gate-wrap">
+        <div class="gate-panel">
+          <div class="gate-kicker">REPORT READY</div>
+          <div class="gate-seal" aria-hidden="true">
+            <div class="gate-seal-core">
+              <strong>VII</strong>
+              <span>sealed</span>
+            </div>
+          </div>
+          <h2 class="gate-title" id="gate-title">你的七重倾向报告已生成</h2>
+          <p class="gate-copy" id="gate-copy">完整报告包含倾向指数、结构图谱、触发矩阵与平衡建议。当前页面不会提前展示真实分数。</p>
+          <div class="gate-preview-title">完整报告待解锁</div>
+          <div class="gate-preview" id="gate-preview">
+            <div class="preview-tile"><strong>?</strong><span>倾向指数</span></div>
+            <div class="preview-tile"><strong>?</strong><span>结构图谱</span></div>
+            <div class="preview-tile"><strong>?</strong><span>深度建议</span></div>
+          </div>
+          <div class="gate-lock-list" id="gate-lock-list">
+            <div class="gate-lock-row"><i></i><b>主导印记分析</b><span>LOCKED</span></div>
+            <div class="gate-lock-row"><i></i><b>七重星盘图谱</b><span>LOCKED</span></div>
+            <div class="gate-lock-row"><i></i><b>触发矩阵与建议</b><span>LOCKED</span></div>
+          </div>
+          <button class="primary-btn" type="button" onclick="unlockResult()">解锁完整内容</button>
+          <p class="safe-note">本测试仅用于娱乐和自我觉察，不作为心理诊断依据。</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="result-page" class="page result-page">
+      <!-- 基础版结果 -->
+      <article class="sin-report result-layout" id="result-basic">
+        <header class="result-head">
+          <div class="result-kicker">SEVEN SINS REPORT</div>
+          <h1 class="result-report-title">七宗罪测试结果</h1>
+          <p class="result-subtitle">探索内心的暗影，遇见更完整的自己</p>
+        </header>
+
+        <section class="result-hero-grid">
+          <div class="score-plate">
+            <span>你的总得分</span>
+            <strong id="result-score">0</strong>
+            <small>/ 100</small>
+            <p id="score-quote">“觉察欲望，才能驾驭欲望。”</p>
+          </div>
+          <div class="dominant-plate">
+            <span>你的主导倾向</span>
+            <div class="dominant-orb">
+              <small id="dominant-en">PRIDE</small>
+              <h2 id="dominant-name">傲慢</h2>
+            </div>
+            <p id="dominant-copy"></p>
+          </div>
+          <div class="result-brief-plate">
+            <span>结果解读</span>
+            <b id="result-brief-title">倾向摘要</b>
+            <p id="result-brief-copy"></p>
+          </div>
+        </section>
+
+        <div class="report-main-grid">
+          <section class="result-section chart-section">
+            <h2 class="section-title">七宗罪分布图</h2>
+            <div class="star-map">
+              <svg id="basic-radar-chart" class="radar-svg" viewBox="0 0 300 300" role="img" aria-label="七宗罪分布图"></svg>
+            </div>
+          </section>
+          <section class="result-section ranking-section">
+            <h2 class="section-title">七宗罪维度排行</h2>
+            <div class="seal-bars" id="basic-seal-bars"></div>
+          </section>
+        </div>
+
+        <div class="report-bottom-grid">
+          <section class="result-section insight-section">
+            <h2 class="section-title">洞察总结</h2>
+            <p class="result-copy" id="basic-result-copy"></p>
+            <div class="rose-sigil" aria-hidden="true"></div>
+            <div class="keywords" id="basic-keyword-list"></div>
+          </section>
+          <section class="result-section matrix-section">
+            <h2 class="section-title">触发因素矩阵</h2>
+            <div class="matrix" id="basic-matrix-grid"></div>
+            <div class="matrix-legend"><span>较弱</span><span>中等</span><span>强烈</span><span>极强</span></div>
+          </section>
+          <section class="result-section advice-section">
+            <h2 class="section-title">平衡建议</h2>
+            <div class="advice-grid" id="basic-advice-grid"></div>
+          </section>
+        </div>
+
+        <footer class="report-footer">
+          <p>“光明与黑暗并非敌人，觉察与选择才是力量。”</p>
+          
+          <button class="primary-btn" type="button" onclick="window.print()">保存结果报告</button>
+          <button class="ghost-btn" type="button" onclick="restart()">重新测试</button>
+        </footer>
+      </article>
+
+      <!-- VS 版结果 -->
+      <article class="sin-report result-layout" id="result-vs">
+        <header class="result-head">
+          <div class="result-kicker">SEVEN SINS VS SEVEN VIRTUES</div>
+          <h1 class="result-report-title">你的<span class="vs-title-mark">七宗罪 VS 七美德</span>结果</h1>
+          <p class="result-subtitle">左侧暗影牵引 · 右侧光辉托举</p>
+        </header>
+
+        <section class="dual-chief-grid">
+          <div class="chief-card chief-sin">
+            <span>七宗罪之首</span>
+            <small id="sin-chief-en">PRIDE</small>
+            <h2 id="sin-chief-name">傲慢</h2>
+            <strong id="sin-chief-score">0</strong>
+          </div>
+          <div class="chief-card chief-virtue">
+            <span>七美德之首</span>
+            <small id="virtue-chief-en">HUMILITY</small>
+            <h2 id="virtue-chief-name">谦卑</h2>
+            <strong id="virtue-chief-score">0</strong>
+          </div>
+        </section>
+
+        <p class="balance-line" id="balance-line">暗影与光辉正在对照中……</p>
+
+        <section class="result-section chart-section dual-radar-section">
+          <h2 class="section-title">十四维人格雷达</h2>
+          <p class="radar-hint">左侧七宗罪 · 右侧七美德 · 双轨独立计分</p>
+          <div class="star-map dual-star-map">
+            <svg id="radar-chart" class="radar-svg dual-radar-svg" viewBox="0 0 360 360" role="img" aria-label="十四维罪德雷达"></svg>
+          </div>
+        </section>
+
+        <div class="report-main-grid dual-rank-grid">
+          <section class="result-section ranking-section">
+            <h2 class="section-title">七宗罪排行</h2>
+            <div class="seal-bars" id="seal-bars"></div>
+          </section>
+          <section class="result-section ranking-section virtue-rank-section">
+            <h2 class="section-title">七美德排行</h2>
+            <div class="seal-bars" id="virtue-bars"></div>
+          </section>
+        </div>
+
+        <div class="report-bottom-grid">
+          <section class="result-section insight-section">
+            <h2 class="section-title">洞察总结</h2>
+            <p class="result-copy" id="result-copy"></p>
+            <div class="rose-sigil" aria-hidden="true"></div>
+            <div class="keywords" id="keyword-list"></div>
+          </section>
+          <section class="result-section matrix-section">
+            <h2 class="section-title">触发因素矩阵</h2>
+            <div class="matrix" id="matrix-grid"></div>
+            <div class="matrix-legend"><span>较弱</span><span>中等</span><span>强烈</span><span>极强</span></div>
+          </section>
+          <section class="result-section advice-section">
+            <h2 class="section-title">平衡建议</h2>
+            <div class="advice-grid" id="advice-grid"></div>
+          </section>
+        </div>
+
+        <footer class="report-footer">
+          <p>“暗影与光辉并非敌人，觉察与选择才是力量。”</p>
+          
+          <button class="primary-btn" type="button" onclick="window.print()">保存结果报告</button>
+          <button class="ghost-btn" type="button" onclick="restart()">重新测试</button>
+        </footer>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    const dimOrder = ["pride", "greed", "lust", "envy", "wrath", "gluttony", "sloth"];
+
+    // 雷达轴顺序：左半七罪、右半七德
+    // 罪侧：色欲→嫉妒→暴怒→懒惰→贪婪→暴食→傲慢
+    // 德侧：贞洁→节制→慷慨→勤勉→耐心→仁爱→谦卑
+    const sinRadarOrder = ["lust", "envy", "wrath", "sloth", "greed", "gluttony", "pride"];
+    const virtueRadarOrder = ["chastity", "temperance", "charity", "diligence", "patience", "kindness", "humility"];
+    const radarAxisOrder = [...sinRadarOrder, ...virtueRadarOrder];
+
+    // 对应关系仅用于展示/建议，计分已拆成双轨
+    const sinVirtuePair = {
+      pride: "humility",
+      greed: "charity",
+      lust: "chastity",
+      envy: "kindness",
+      wrath: "patience",
+      gluttony: "temperance",
+      sloth: "diligence"
+    };
+
+    const dimensions = {
+      pride: {
+        name: "傲慢",
+        en: "PRIDE",
+        mark: "PR",
+        desc: "对能力、尊严和自我价值的敏感度。",
+        high: "容易把被忽视理解为被低估，需要练习把自信和证明欲分开。",
+        low: "较少被面子牵动，但也要记得主动看见自己的价值。",
+        keywords: ["自信", "尊严感", "被认可", "不服输"],
+        advice: ["把证明自己改成完成事情。", "当你想立刻反驳时，先确认事实是否真的被误解。", "允许自己有普通、失误和不完美的时刻。"]
+      },
+      greed: {
+        name: "贪婪",
+        en: "GREED",
+        mark: "GR",
+        desc: "对资源、机会和更多筹码的追逐感。",
+        high: "很会看见机会，也容易被更大收益牵着走。",
+        low: "更容易满足于刚好够用，但需要避免错过必要争取。",
+        keywords: ["机会", "收益", "筹码", "扩张"],
+        advice: ["给每个目标设一个够用线，而不是无限加码。", "区分真正需要和害怕落后的囤积。", "争取资源时保留长期关系的余地。"]
+      },
+      lust: {
+        name: "色欲",
+        en: "LUST",
+        mark: "LU",
+        desc: "对吸引力、心动、亲密渴望与欲望信号的回应强度。",
+        high: "容易被强烈吸引点燃，魅力和冲动同时存在。",
+        low: "不太容易被即时吸引牵动，更看重稳定与清醒。",
+        keywords: ["吸引力", "心动", "亲密渴望", "欲望信号"],
+        advice: ["强烈喜欢时，给自己多一晚再做决定。", "把即时心动和长期选择分开评估。", "亲密不等于失去边界，渴望也可以被温和表达。"]
+      },
+      envy: {
+        name: "嫉妒",
+        en: "ENVY",
+        mark: "EN",
+        desc: "面对比较、差距和他人拥有时的心理波动。",
+        high: "对差距非常敏锐，容易从比较中获得动力，也容易被消耗。",
+        low: "比较心较轻，更能保持自己的节奏。",
+        keywords: ["比较", "不甘心", "竞争", "镜像"],
+        advice: ["把他人的成绩翻译成可学习的路径。", "少看结果，多看你愿意付出的代价。", "当比较开始刺痛时，回到自己的进度表。"]
+      },
+      wrath: {
+        name: "暴怒",
+        en: "WRATH",
+        mark: "WR",
+        desc: "被冒犯、被阻碍或被伤害时的情绪升温速度。",
+        high: "边界被碰到时反应锋利，适合练习降温后再表达。",
+        low: "冲突反应较克制，但别把合理愤怒长期压住。",
+        keywords: ["边界", "反击", "锋利", "爆发"],
+        advice: ["先描述事实，再表达感受，最后提出边界。", "不要在最热的十分钟做最重的决定。", "愤怒可以保护你，但不必替你掌控全部行动。"]
+      },
+      gluttony: {
+        name: "暴食",
+        en: "GLUTTONY",
+        mark: "GL",
+        desc: "用消费、娱乐、食物或沉浸感补偿压力的倾向。",
+        high: "很懂享受，也容易把补偿变成过量沉浸。",
+        low: "对即时满足较克制，但需要给自己健康的恢复空间。",
+        keywords: ["沉溺", "补偿", "享乐", "放纵"],
+        advice: ["先允许休息，再给休息设一个结束点。", "用可恢复的快乐替代失控式补偿。", "压力大的时候，把需求说出来比单靠沉浸更有效。"]
+      },
+      sloth: {
+        name: "懒惰",
+        en: "SLOTH",
+        mark: "SL",
+        desc: "面对压力、复杂问题和冲突时的拖延或回避惯性。",
+        high: "容易把困难先放进雾里，短期舒服，长期压力会变重。",
+        low: "行动启动较快，但也要避免用忙碌回避感受。",
+        keywords: ["回避", "拖延", "低能量", "惯性"],
+        advice: ["把任务缩小到十分钟能启动的版本。", "先处理最小事实，不必一次解决全部问题。", "真正的休息会恢复你，逃避只会延后消耗。"]
+      },
+      humility: {
+        name: "谦卑",
+        en: "HUMILITY",
+        mark: "HU",
+        desc: "承认局限、放下证明欲后的平稳与开放。",
+        keywords: ["自知", "接纳", "平稳", "开放"],
+        advice: ["把被看见换成把事情做好。", "允许普通的自己也站得住。", "自信可以安静，不必随时证明。"]
+      },
+      charity: {
+        name: "慷慨",
+        en: "CHARITY",
+        mark: "CH",
+        desc: "愿意分享资源、机会与善意的松弛感。",
+        keywords: ["分享", "余地", "松弛", "给予"],
+        advice: ["在争取之外，留一点给关系。", "够用时也可以停下来。", "慷慨不是牺牲，是不被匮乏感绑架。"]
+      },
+      chastity: {
+        name: "贞洁",
+        en: "CHASTITY",
+        mark: "CS",
+        desc: "对心动与亲密保持清醒边界的能力。",
+        keywords: ["清醒", "边界", "稳定", "节制欲"],
+        advice: ["心动时多留一夜再决定。", "把感觉和选择分开。", "亲密可以热烈，也可以有边界。"]
+      },
+      kindness: {
+        name: "仁爱",
+        en: "KINDNESS",
+        mark: "KI",
+        desc: "在比较中仍能为他人高兴、也为自己留温柔。",
+        keywords: ["善意", "共情", "宽和", "祝福"],
+        advice: ["把别人的成绩读成可学路径。", "比较刺痛时回到自己的进度。", "祝福别人不减损你。"]
+      },
+      patience: {
+        name: "耐心",
+        en: "PATIENCE",
+        mark: "PA",
+        desc: "被冒犯或受阻时先降温、再表达的能力。",
+        keywords: ["降温", "克制", "沉淀", "缓冲"],
+        advice: ["最热的十分钟不做最重决定。", "先事实，再感受，后边界。", "愤怒可以保护你，不必掌控你。"]
+      },
+      temperance: {
+        name: "节制",
+        en: "TEMPERANCE",
+        mark: "TE",
+        desc: "在享受与补偿之间保留主动权的分寸感。",
+        keywords: ["分寸", "收束", "节奏", "自控"],
+        advice: ["允许休息，也给休息设结束点。", "用可恢复的快乐替代失控补偿。", "享受不等于交出主动权。"]
+      },
+      diligence: {
+        name: "勤勉",
+        en: "DILIGENCE",
+        mark: "DI",
+        desc: "面对复杂与压力时仍能迈出第一步的行动力。",
+        keywords: ["启动", "推进", "拆解", "持续"],
+        advice: ["把任务缩到十分钟能启动。", "先处理最小事实。", "真正休息恢复你，逃避延后消耗。"]
+      }
+    };
+
+    // 基础版：经典七宗罪 35 题（含 reverse）
+    const basicQuestions = [
+      { dim: "pride", text: "当我做得不错时，我希望别人主动看见我的能力。" },
+      { dim: "greed", text: "得到一个目标后，我很快会想要下一个更大的目标。" },
+      { dim: "lust", text: "我容易被强烈的吸引力和心动感牵动。" },
+      { dim: "envy", text: "看到同龄人过得更好，我会忍不住比较。" },
+      { dim: "wrath", text: "被冒犯后，我很难马上放下。" },
+      { dim: "gluttony", text: "压力大时，我容易用吃喝、刷剧或购物来安抚自己。" },
+      { dim: "sloth", text: "面对复杂问题，我会先拖一拖再说。" },
+      { dim: "pride", text: "如果被误解为普通，我心里会有点不服。" },
+      { dim: "greed", text: "如果机会有限，我会优先确保自己拿到更多筹码。" },
+      { dim: "lust", text: "被喜欢、被靠近或被渴望时，我的心情会明显起伏。" },
+      { dim: "envy", text: "别人被夸奖时，我有时会想“我也不差”。" },
+      { dim: "wrath", text: "我情绪上来时，表达会变得锋利。" },
+      { dim: "gluttony", text: "一旦开始放松，我常常比计划多沉浸一会儿。" },
+      { dim: "sloth", text: "我有时明知道该处理，却希望问题自己变淡。" },
+      { dim: "pride", text: "我能承认自己犯错，不太需要马上找理由。", reverse: true },
+      { dim: "greed", text: "拥有够用的资源时，我可以安心停下来。", reverse: true },
+      { dim: "lust", text: "即使很心动，我也能先分清感觉和决定。", reverse: true },
+      { dim: "envy", text: "别人比我顺利时，我通常还能为自己高兴。", reverse: true },
+      { dim: "wrath", text: "冲突发生后，我能较快把情绪降温。", reverse: true },
+      { dim: "gluttony", text: "我能在享受中途主动停下来。", reverse: true },
+      { dim: "sloth", text: "就算不想做，我也能较快启动第一小步。", reverse: true },
+      { dim: "pride", text: "即使场面不适合，我也想证明自己比别人判断更准。" },
+      { dim: "greed", text: "我会反复衡量怎样让收益最大化。" },
+      { dim: "lust", text: "为了即时的亲密感或愉悦感，我有时会放下更稳妥的选择。" },
+      { dim: "envy", text: "如果别人轻松得到我想要的东西，我会有些不平衡。" },
+      { dim: "wrath", text: "我会在心里反复回放让我生气的场景。" },
+      { dim: "gluttony", text: "我对能带来即时满足的东西抵抗力不算强。" },
+      { dim: "sloth", text: "比起承担冲突，我更倾向暂时回避。" },
+      { dim: "pride", text: "别人没注意到我的贡献时，我会很在意。" },
+      { dim: "greed", text: "我很难满足于“刚刚好”的结果。" },
+      { dim: "lust", text: "我对暧昧、吸引力或欲望信号的反应很快。" },
+      { dim: "envy", text: "我会暗中关注竞争对象的进展。" },
+      { dim: "wrath", text: "如果对方越界，我会想让对方感受到代价。" },
+      { dim: "gluttony", text: "我会用“今天就算了”给自己开绿灯。" },
+      { dim: "sloth", text: "如果没有外部压力，我很难保持持续推进。" }
+    ];
+
+    // VS 版：双套题库 35 题（21 罪 + 14 德，独立计分）
+    const vsQuestions = [
+      // —— 第 1 轮：七罪情境 ——
+      { track: "sin", dim: "pride", text: "小组汇报时，我更在意自己的方案有没有被当成主方案。" },
+      { track: "sin", dim: "greed", text: "看到限时优惠或稀缺名额，我会有强烈的“再不抢就亏了”的感觉。" },
+      { track: "sin", dim: "lust", text: "聊天里突然出现暧昧暗示时，我的注意力会立刻被吸过去。" },
+      { track: "sin", dim: "envy", text: "朋友晒出更好的生活片段时，我会默默对照自己差在哪里。" },
+      { track: "sin", dim: "wrath", text: "被当众打断或否定时，我身体会先热起来，话也变得更冲。" },
+      { track: "sin", dim: "gluttony", text: "一天特别累时，我会用连刷、点单或小消费把情绪先填满。" },
+      { track: "sin", dim: "sloth", text: "重要但棘手的事，我会先做一堆轻松小事，把真正要事往后推。" },
+
+      // —— 第 2 轮：七德情境 ——
+      { track: "virtue", dim: "humility", text: "被指出疏漏时，我能先听完对方说什么，而不是立刻辩护。" },
+      { track: "virtue", dim: "charity", text: "自己手里资源够用时，我愿意把机会或信息分给同样需要的人。" },
+      { track: "virtue", dim: "chastity", text: "很心动的时候，我仍会先问自己：这是长期选择还是一时冲动。" },
+      { track: "virtue", dim: "kindness", text: "别人拿到我很想要的结果时，我能真心说一句“替你高兴”。" },
+      { track: "virtue", dim: "patience", text: "争吵升温前，我习惯先停几秒，把语气放慢再继续说。" },
+      { track: "virtue", dim: "temperance", text: "享受开始上头时，我能给自己设一个“到这里就停”的节点。" },
+      { track: "virtue", dim: "diligence", text: "不想动的早晨，我仍能先完成一件最小的启动动作。" },
+
+      // —— 第 3 轮：七罪深挖 ——
+      { track: "sin", dim: "pride", text: "如果别人把我的成绩说成运气，我会有强烈的纠正冲动。" },
+      { track: "sin", dim: "greed", text: "已经够用的东西，我仍会想再多囤一点“以防万一”。" },
+      { track: "sin", dim: "lust", text: "为了维持暧昧或被渴望的感觉，我有时会推迟做更清醒的决定。" },
+      { track: "sin", dim: "envy", text: "同类人升职、脱单或暴富时，我会反复想“为什么不是我”。" },
+      { track: "sin", dim: "wrath", text: "冲突结束后很久，我还会在脑子里重演对方该怎么被回击。" },
+      { track: "sin", dim: "gluttony", text: "说好只看一集、只买一件，结果经常明显超标。" },
+      { track: "sin", dim: "sloth", text: "面对可能引发冲突的对话，我更想拖到“以后再说”。" },
+
+      // —— 第 4 轮：七德深挖 ——
+      { track: "virtue", dim: "humility", text: "即使我更专业，我也能承认对方在某个点上比我看得准。" },
+      { track: "virtue", dim: "charity", text: "合作分利时，我不会把所有好处都先锁给自己。" },
+      { track: "virtue", dim: "chastity", text: "吸引力和安全感冲突时，我更倾向先守住边界再谈感觉。" },
+      { track: "virtue", dim: "kindness", text: "看到别人被夸，我能把注意力放在学到了什么，而不是被比下去。" },
+      { track: "virtue", dim: "patience", text: "对方越界后，我更想把边界说清楚，而不是立刻让对方难受。" },
+      { track: "virtue", dim: "temperance", text: "压力大时，我也会休息，但不会让休息变成整晚失控的沉浸。" },
+      { track: "virtue", dim: "diligence", text: "没有人催的时候，我仍能按自己的节奏推进一件难事。" },
+
+      // —— 第 5 轮：七罪收束 ——
+      { track: "sin", dim: "pride", text: "在争论里，我更难接受“我可能错了”这句话。" },
+      { track: "sin", dim: "greed", text: "收益还能再抬一点时，我很难主动停在“刚刚好”。" },
+      { track: "sin", dim: "lust", text: "外表、氛围或身体吸引力，会明显左右我对一个人的判断。" },
+      { track: "sin", dim: "envy", text: "我会偷偷盯着竞争对象的动态，越看越坐立不安。" },
+      { track: "sin", dim: "wrath", text: "一旦觉得被冒犯，我说话的速度和力度都会明显变硬。" },
+      { track: "sin", dim: "gluttony", text: "情绪低落时，我会先找即时满足，再处理真正的问题。" },
+      { track: "sin", dim: "sloth", text: "没人催、也没有截止时间时，我很容易一直拖着不做。" }
+    ];
+
+    let activeMode = "basic"; // basic | vs
+    let questions = basicQuestions;
+
+    const options = [
+      { key: "A", value: 1, text: "非常不像我" },
+      { key: "B", value: 2, text: "不太像我" },
+      { key: "C", value: 3, text: "有时会这样" },
+      { key: "D", value: 4, text: "比较像我" },
+      { key: "E", value: 5, text: "非常像我" }
+    ];
+
+    const profiles = {
+      pride: {
+        title: "王冠型傲慢",
+        summary: "你的七宗罪之首是傲慢。它并不等于自大，而是说明你对能力、尊严和被看见非常敏感。你需要被认可，也擅长把不服气转化成表现力。",
+        shade: "当你感觉被低估时，内心会迅速进入证明模式。真正的平衡点，是让自信支撑行动，而不是被面子牵着走。",
+        adviceTitle: "放下王冠的重量"
+      },
+      greed: {
+        title: "筹码型贪婪",
+        summary: "你的七宗罪之首是贪婪。你很容易看见机会、资源和更优解，擅长为自己争取更多空间，也容易陷入不够多、不够好的循环。",
+        shade: "这种印记适合推进目标，但如果没有够用线，欲望会不断升级。你需要的是清晰选择，而不是无限加码。",
+        adviceTitle: "给欲望画边界"
+      },
+      lust: {
+        title: "火花型色欲",
+        summary: "你的七宗罪之首是色欲。这里指向吸引力、心动、亲密渴望与欲望信号的敏感度。你容易被强烈感受点亮，也更需要区分心动和决定。",
+        shade: "你不是缺乏理性，而是感受系统反应很快。越被点燃，越适合给自己留一点确认时间。",
+        adviceTitle: "让火花慢一点"
+      },
+      envy: {
+        title: "镜像型嫉妒",
+        summary: "你的七宗罪之首是嫉妒。你对比较、差距和他人拥有很敏锐，这能带来动力，也可能让你把别人的人生当作自己的考卷。",
+        shade: "嫉妒背后常常藏着想要。把刺痛翻译成需求，你会更容易回到自己的路线。",
+        adviceTitle: "把比较变成路径"
+      },
+      wrath: {
+        title: "锋刃型暴怒",
+        summary: "你的七宗罪之首是暴怒。你对冒犯和越界的反应直接，边界感被点燃时，表达会很锋利。",
+        shade: "愤怒有保护力，但也有放大器。你真正需要训练的不是压住愤怒，而是让愤怒服务于边界。",
+        adviceTitle: "让锋刃有刀鞘"
+      },
+      gluttony: {
+        title: "深杯型暴食",
+        summary: "你的七宗罪之首是暴食。它不只指食物，也包括消费、娱乐、信息和沉浸式补偿。你很懂享受，也容易用享受覆盖压力。",
+        shade: "短暂补偿可以恢复你，过量沉溺则会偷走主动权。你的关键是把快乐从失控里拿回来。",
+        adviceTitle: "把补偿变成恢复"
+      },
+      sloth: {
+        title: "雾面型懒惰",
+        summary: "你的七宗罪之首是懒惰。它更像一种回避惯性：面对复杂、冲突或压力时，先让事情模糊起来。",
+        shade: "拖延不是你没有能力，而是启动成本被放大。越大的问题，越需要被拆成很小的第一步。",
+        adviceTitle: "从雾里迈一步"
+      }
+    };
+
+    const virtueProfiles = {
+      humility: { title: "沉静型谦卑", line: "你更能放下证明欲，让自信安静地支撑行动。" },
+      charity: { title: "余裕型慷慨", line: "你在争取之外仍能留下分享与关系的空间。" },
+      chastity: { title: "清明型贞洁", line: "你更能把心动与长期选择分开，守住边界。" },
+      kindness: { title: "宽和型仁爱", line: "比较来临时，你仍能为他人留一点善意。" },
+      patience: { title: "缓锋型耐心", line: "被冒犯时，你更可能先降温再表达。" },
+      temperance: { title: "分寸型节制", line: "享受之中，你仍保留主动收束的能力。" },
+      diligence: { title: "破雾型勤勉", line: "面对复杂时，你更能迈出可执行的第一步。" }
+    };
+
+    const loadingPhasesBasic = [
+      { at: 0, percent: 18, step: 0, title: "正在整理<span>作答线索</span>", subtitle: "正在读取 35 道情境题的选择分布。" },
+      { at: 650, percent: 45, step: 1, title: "正在点亮<span>七重印记</span>", subtitle: "正在计算傲慢、贪婪、色欲、嫉妒、暴怒、暴食与懒惰的相对强度。" },
+      { at: 1320, percent: 73, step: 2, title: "正在校准<span>触发矩阵</span>", subtitle: "正在区分欲望牵引、比较压力、情绪升温和回避惯性。" },
+      { at: 1980, percent: 94, step: 3, title: "正在生成<span>完整报告</span>", subtitle: "正在整理主导印记、星盘图谱和安全建议。" }
+    ];
+
+    const loadingPhasesVs = [
+      { at: 0, percent: 18, step: 0, title: "正在整理<span>作答线索</span>", subtitle: "正在读取 35 道双套情境题的选择分布。" },
+      { at: 650, percent: 45, step: 1, title: "正在点亮<span>七重暗影</span>", subtitle: "独立计算傲慢、贪婪、色欲、嫉妒、暴怒、暴食与懒惰。" },
+      { at: 1320, percent: 73, step: 2, title: "正在点亮<span>七重光辉</span>", subtitle: "独立计算谦卑、慷慨、贞洁、仁爱、耐心、节制与勤勉。" },
+      { at: 1980, percent: 94, step: 3, title: "正在生成<span>对照报告</span>", subtitle: "正在整理罪德之首、十四维雷达与平衡建议。" }
+    ];
+
+    let loadingPhases = loadingPhasesBasic;
+
+    let current = 0;
+    let answers = new Array(questions.length).fill(null);
+    let timer = null;
+    let loadingPhaseTimers = [];
+    let viewingHistory = false;
+
+    const HISTORY_KEY = "sins_full35_history_v1";
+    const HISTORY_LIMIT = 8;
+
+    const $ = (id) => document.getElementById(id);
+
+    function init() {
+      renderHomeWheel();
+      renderHistory();
+    }
+
+    function loadHistory() {
+      try {
+        const raw = localStorage.getItem(HISTORY_KEY);
+        const list = raw ? JSON.parse(raw) : [];
+        return Array.isArray(list) ? list : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveHistoryList(list) {
+      try {
+        localStorage.setItem(HISTORY_KEY, JSON.stringify(list.slice(0, HISTORY_LIMIT)));
+      } catch (e) {}
+    }
+
+    function formatHistoryTime(ts) {
+      const d = new Date(ts);
+      if (Number.isNaN(d.getTime())) return "未知时间";
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      const h = String(d.getHours()).padStart(2, "0");
+      const min = String(d.getMinutes()).padStart(2, "0");
+      return `${y}-${m}-${day} ${h}:${min}`;
+    }
+
+    function pushHistory(record) {
+      const list = loadHistory().filter((item) => item.id !== record.id);
+      list.unshift(record);
+      saveHistoryList(list);
+      renderHistory();
+    }
+
+    function renderHistory() {
+      const btn = $("history-btn");
+      const listEl = $("history-list");
+      if (!btn || !listEl) return;
+      const list = loadHistory();
+      if (!list.length) {
+        btn.classList.add("hidden");
+        btn.textContent = "测试记录";
+        listEl.innerHTML = `<div class="history-empty">暂无测试记录<br>完成一次测试后会出现在这里</div>`;
+        closeHistoryModal();
+        return;
+      }
+      btn.classList.remove("hidden");
+      btn.textContent = `测试记录（${list.length}）`;
+      listEl.innerHTML = list.map((item) => {
+        const dim = dimensions[item.topKey] || { name: "未知", en: "" };
+        const modeLabel = item.mode === "vs" ? "罪德对照" : "基础版";
+        const vName = item.mode === "vs" ? (dimensions[item.virtueTopKey]?.name || "") : "";
+        const title = item.mode === "vs"
+          ? `罪：${dim.name}${vName ? ` · 德：${vName}` : ""}`
+          : `${dim.name} · ${item.topScore ?? 0}/100`;
+        return `<button class="history-item" type="button" onclick="openHistory('${item.id}')">
+          <strong>${title}</strong>
+          <em>${item.topScore ?? item.total ?? 0}</em>
+          <span>${formatHistoryTime(item.ts)} · ${modeLabel}</span>
+        </button>`;
+      }).join("");
+    }
+
+    function openHistoryModal() {
+      renderHistory();
+      const backdrop = $("history-modal-backdrop");
+      if (!backdrop) return;
+      if (loadHistory().length === 0) return;
+      backdrop.classList.add("show");
+      backdrop.setAttribute("aria-hidden", "false");
+    }
+
+    function closeHistoryModal() {
+      const backdrop = $("history-modal-backdrop");
+      if (!backdrop) return;
+      backdrop.classList.remove("show");
+      backdrop.setAttribute("aria-hidden", "true");
+    }
+
+    function onHistoryBackdrop(event) {
+      if (event.target === $("history-modal-backdrop")) closeHistoryModal();
+    }
+
+    function openHistory(id) {
+      const item = loadHistory().find((row) => row.id === id);
+      if (!item || !item.scores) return;
+      viewingHistory = true;
+      closeHistoryModal();
+      activeMode = item.mode === "vs" ? "vs" : "basic";
+      applyModeChrome();
+      if (activeMode === "vs") {
+        const sinScores = item.sinScores || Object.fromEntries(dimOrder.map((k) => [k, item.scores[k] ?? 0]));
+        const virtueScores = item.virtueScores || Object.fromEntries(
+          dimOrder.map((k) => {
+            const vk = sinVirtuePair[k];
+            return [vk, item.scores[vk] ?? 50];
+          })
+        );
+        const scores = { ...sinScores, ...virtueScores };
+        const sinAvg = item.sinAvg ?? Math.round(dimOrder.reduce((s, k) => s + (sinScores[k] || 0), 0) / dimOrder.length);
+        const virtueAvg = item.virtueAvg ?? Math.round(Object.values(virtueScores).reduce((s, v) => s + v, 0) / dimOrder.length);
+        showResultLayout("vs");
+        renderVsResultFromData({
+          scores,
+          sinScores,
+          virtueScores,
+          sinAvg,
+          virtueAvg,
+          balance: item.balance ?? (virtueAvg - sinAvg),
+          total: item.total ?? sinAvg
+        });
+      } else {
+        const sinScores = item.sinScores || Object.fromEntries(dimOrder.map((k) => [k, item.scores[k] ?? 0]));
+        showResultLayout("basic");
+        renderBasicResultFromData(sinScores, item.total ?? 0);
+      }
+      setPage("result-page");
+    }
+
+    function clearHistory() {
+      if (!loadHistory().length) return;
+      if (!window.confirm("确定清除全部测试记录？")) return;
+      try {
+        localStorage.removeItem(HISTORY_KEY);
+      } catch (e) {}
+      renderHistory();
+    }
+
+    function renderHomeWheel() {
+      $("home-wheel").insertAdjacentHTML("beforeend", dimOrder.map((key, index) => {
+        const dim = dimensions[key];
+        const angle = `${index * (360 / dimOrder.length)}deg`;
+        return `<div class="sin-node" style="--angle:${angle}"><b>${dim.name}</b><small>${dim.en}</small></div>`;
+      }).join(""));
+    }
+
+    function setPage(id) {
+      document.querySelectorAll(".page").forEach((page) => page.classList.remove("active"));
+      $(id).classList.add("active");
+      window.scrollTo(0, 0);
+    }
+
+     // 引流配置
+     const AUTH_CONFIG = {
+        code: "980380",
+       officialUrl: "",
+       miniProgramName: "双面之镜",
+       miniProgramQr: ""
+     };
+
+     function openExternal(url, fallbackMsg) {
+       const target = String(url || "").trim();
+       if (!target) {
+         alert(fallbackMsg || "链接尚未配置，请先填写真实跳转地址");
+         return;
+       }
+       window.location.href = target;
+     }
+
+     function goOfficialAccount() {
+       openExternal(AUTH_CONFIG.officialUrl, "请先在 AUTH_CONFIG.officialUrl 填入公众号链接");
+     }
+
+     function openMiniProgramModal() {
+       const backdrop = document.getElementById("mp-modal-backdrop");
+       const nameEl = document.getElementById("mp-name");
+       const qrBox = document.getElementById("mp-qr-box");
+       const name = String(AUTH_CONFIG.miniProgramName || "").trim() || "小程序名称待配置";
+       const qr = String(AUTH_CONFIG.miniProgramQr || "").trim();
+       if (nameEl) nameEl.textContent = name;
+       if (qrBox) {
+         if (qr) qrBox.innerHTML = `<img src="${qr}" alt="小程序码">`;
+         else qrBox.innerHTML = `<div class="mp-qr-placeholder">请放入小程序码图片<br>路径见 AUTH_CONFIG.miniProgramQr</div>`;
+       }
+       if (backdrop) {
+         backdrop.classList.add("show");
+         backdrop.style.display = "flex";
+         backdrop.setAttribute("aria-hidden", "false");
+       }
+     }
+
+     function closeMiniProgramModal() {
+       const backdrop = document.getElementById("mp-modal-backdrop");
+       if (backdrop) {
+         backdrop.classList.remove("show");
+         backdrop.style.display = "none";
+         backdrop.setAttribute("aria-hidden", "true");
+       }
+     }
+
+     function copyMiniProgramName() {
+       const name = String(AUTH_CONFIG.miniProgramName || "").trim();
+       if (!name || name === "你的小程序名称") {
+         alert("请先在 AUTH_CONFIG.miniProgramName 填入小程序名称");
+         return;
+       }
+       const done = () => alert("已复制小程序名称，打开微信搜索即可");
+       if (navigator.clipboard && navigator.clipboard.writeText) {
+         navigator.clipboard.writeText(name).then(done).catch(() => window.prompt("请手动复制小程序名称：", name));
+       } else {
+         window.prompt("请手动复制小程序名称：", name);
+       }
+     }
+
+     function saveMiniProgramQr() {
+       const qr = String(AUTH_CONFIG.miniProgramQr || "").trim();
+       if (!qr) {
+         alert("二维码图片尚未配置");
+         return;
+       }
+       const src = document.querySelector("#mp-qr-box img")?.src || qr;
+       const filename = "双面之镜-小程序码.png";
+       const isWeChat = /MicroMessenger/i.test(navigator.userAgent || "");
+
+       const fallbackOpen = () => {
+         const win = window.open(src, "_blank");
+         if (!win) {
+           alert(isWeChat ? "请长按上方二维码图片，选择「保存图片」" : "请长按或右键保存上方二维码图片");
+           return;
+         }
+         if (isWeChat) alert("图片已打开，请长按图片选择「保存图片」");
+       };
+
+       fetch(src)
+         .then((res) => res.blob())
+         .then((blob) => {
+           const url = URL.createObjectURL(blob);
+           const a = document.createElement("a");
+           a.href = url;
+           a.download = filename;
+           a.rel = "noopener";
+           document.body.appendChild(a);
+           a.click();
+           a.remove();
+           setTimeout(() => URL.revokeObjectURL(url), 1500);
+           if (isWeChat) {
+             setTimeout(() => {
+               alert("若未自动保存，请长按上方二维码图片，选择「保存图片」");
+             }, 200);
+           }
+         })
+         .catch(fallbackOpen);
+     }
+
+     function goMiniProgram() {
+       openMiniProgramModal();
+     }
+
+     function openAuthModal() {
+       const backdrop = document.getElementById("auth-modal-backdrop");
+       const input = document.getElementById("auth-input");
+       const err = document.getElementById("auth-error");
+       if (err) err.textContent = "";
+       if (input) input.value = "";
+       if (backdrop) {
+         backdrop.classList.add("show");
+         backdrop.style.display = "flex";
+         backdrop.setAttribute("aria-hidden", "false");
+       }
+       setTimeout(() => input && input.focus(), 60);
+     }
+
+     function closeAuthModal() {
+       const backdrop = document.getElementById("auth-modal-backdrop");
+       const err = document.getElementById("auth-error");
+       if (backdrop) {
+         backdrop.classList.remove("show");
+         backdrop.style.display = "none";
+         backdrop.setAttribute("aria-hidden", "true");
+       }
+       if (err) err.textContent = "";
+     }
+
+     function handleAuthSubmit() {
+       const input = document.getElementById("auth-input");
+       const err = document.getElementById("auth-error");
+       const val = (input && input.value ? input.value : "").trim();
+       if (!val) { if (err) err.textContent = "请输入授权码"; return; }
+       if (val !== String(AUTH_CONFIG.code).trim()) {
+         if (err) err.textContent = "授权码错误，请重试";
+         return;
+       }
+       closeAuthModal();
+       startTest();
+     }
+
+      let pendingMode = "basic";
+
+      function selectMode(mode) {
+        pendingMode = mode === "vs" ? "vs" : "basic";
+        document.querySelectorAll(".mode-card").forEach((card) => {
+          const on = card.getAttribute("data-mode") === pendingMode;
+          card.classList.toggle("selected", on);
+          card.setAttribute("aria-checked", on ? "true" : "false");
+        });
+      }
+
+      function guardedStart() {
+        if (!pendingMode) pendingMode = "basic";
+        openAuthModal();
+      }
+
+      function applyModeChrome() {
+        const isVs = activeMode === "vs";
+        questions = isVs ? vsQuestions : basicQuestions;
+        loadingPhases = isVs ? loadingPhasesVs : loadingPhasesBasic;
+        const quizTitle = $("quiz-title");
+        if (quizTitle) quizTitle.textContent = isVs ? "七宗罪 VS 七美德" : "七宗罪测试";
+        const gateTitle = $("gate-title");
+        const gateCopy = $("gate-copy");
+        if (gateTitle) gateTitle.textContent = isVs ? "你的罪德对照报告已生成" : "你的七重倾向报告已生成";
+        if (gateCopy) {
+          gateCopy.textContent = isVs
+            ? "完整报告包含七宗罪之首、七美德之首、十四维雷达与平衡建议。当前页面不会提前展示真实分数。"
+            : "完整报告包含倾向指数、结构图谱、触发矩阵与平衡建议。当前页面不会提前展示真实分数。";
+        }
+        const gatePreview = $("gate-preview");
+        if (gatePreview) {
+          gatePreview.innerHTML = isVs
+            ? `<div class="preview-tile"><strong>?</strong><span>罪德之首</span></div>
+               <div class="preview-tile"><strong>?</strong><span>十四维雷达</span></div>
+               <div class="preview-tile"><strong>?</strong><span>平衡建议</span></div>`
+            : `<div class="preview-tile"><strong>?</strong><span>倾向指数</span></div>
+               <div class="preview-tile"><strong>?</strong><span>结构图谱</span></div>
+               <div class="preview-tile"><strong>?</strong><span>深度建议</span></div>`;
+        }
+        const gateLocks = $("gate-lock-list");
+        if (gateLocks) {
+          gateLocks.innerHTML = isVs
+            ? `<div class="gate-lock-row"><i></i><b>罪德之首分析</b><span>LOCKED</span></div>
+               <div class="gate-lock-row"><i></i><b>十四维对照雷达</b><span>LOCKED</span></div>
+               <div class="gate-lock-row"><i></i><b>触发矩阵与建议</b><span>LOCKED</span></div>`
+            : `<div class="gate-lock-row"><i></i><b>主导印记分析</b><span>LOCKED</span></div>
+               <div class="gate-lock-row"><i></i><b>七重星盘图谱</b><span>LOCKED</span></div>
+               <div class="gate-lock-row"><i></i><b>触发矩阵与建议</b><span>LOCKED</span></div>`;
+        }
+        const steps = document.querySelectorAll("#loading-steps .loading-step span");
+        if (steps.length >= 4) {
+          if (isVs) {
+            steps[0].textContent = "整理双套题样本";
+            steps[1].textContent = "独立计分七宗罪";
+            steps[2].textContent = "独立计分七美德";
+            steps[3].textContent = "生成对照报告";
+          } else {
+            steps[0].textContent = "整理 35 题样本";
+            steps[1].textContent = "归一七重印记";
+            steps[2].textContent = "校准触发矩阵";
+            steps[3].textContent = "生成完整报告";
+          }
+        }
+      }
+
+      function showResultLayout(mode) {
+        document.querySelectorAll(".result-layout").forEach((el) => el.classList.remove("active"));
+        const target = mode === "vs" ? $("result-vs") : $("result-basic");
+        if (target) target.classList.add("active");
+      }
+
+      function initAuthUI() {
+        const submit = document.getElementById("auth-submit");
+        const close = document.getElementById("auth-close");
+        const input = document.getElementById("auth-input");
+        const goOfficial = document.getElementById("auth-go-official");
+        const mpClose = document.getElementById("mp-close");
+        const mpCopy = document.getElementById("mp-copy");
+        const mpSave = document.getElementById("mp-save");
+        const mpBackdrop = document.getElementById("mp-modal-backdrop");
+        if (submit) submit.addEventListener("click", handleAuthSubmit);
+        if (close) close.addEventListener("click", closeAuthModal);
+        if (input) input.addEventListener("keydown", e => { if (e.key === "Enter") handleAuthSubmit(); });
+        if (goOfficial) goOfficial.addEventListener("click", goOfficialAccount);
+        if (mpClose) mpClose.addEventListener("click", closeMiniProgramModal);
+        if (mpCopy) mpCopy.addEventListener("click", copyMiniProgramName);
+        if (mpSave) mpSave.addEventListener("click", saveMiniProgramQr);
+        if (mpBackdrop) mpBackdrop.addEventListener("click", e => { if (e.target === mpBackdrop) closeMiniProgramModal(); });
+      }
+
+      function startTest() {
+        activeMode = pendingMode === "vs" ? "vs" : "basic";
+        applyModeChrome();
+        answers = new Array(questions.length).fill(null);
+        current = 0;
+        clearTimeout(timer);
+        clearLoadingTimers();
+        setPage("quiz-page");
+        renderQuestion();
+      }
+
+    function renderQuestion() {
+      const q = questions[current];
+      $("progress-text").textContent = `第 ${current + 1} / ${questions.length} 题`;
+      $("progress-fill").style.width = `${((current + 1) / questions.length) * 100}%`;
+      $("question-num").textContent = `${String(current + 1).padStart(2, "0")}.`;
+      $("question-text").textContent = q.text;
+      $("options-container").innerHTML = options.map((opt) => `
+        <button class="option-btn${answers[current] === opt.value ? " selected" : ""}" type="button" onclick="selectOption(${opt.value})">
+          <span class="option-mark">${opt.key}</span>
+          <span class="option-label">${opt.text}</span>
+        </button>
+      `).join("");
+      $("prev-btn").disabled = current === 0;
+      $("next-btn").disabled = answers[current] === null;
+      $("next-btn").textContent = current === questions.length - 1 ? "生成结果" : "下一题";
+    }
+
+    function selectOption(value) {
+      answers[current] = value;
+      document.querySelectorAll(".option-btn").forEach((btn, index) => {
+        btn.classList.toggle("selected", options[index].value === value);
+      });
+      $("next-btn").disabled = false;
+      if (current < questions.length - 1) {
+        setTimeout(nextQuestion, 130);
+      }
+    }
+
+    function prevQuestion() {
+      if (current <= 0) return;
+      current -= 1;
+      renderQuestion();
+    }
+
+    function nextQuestion() {
+      if (answers[current] === null) return;
+      if (current < questions.length - 1) {
+        current += 1;
+        renderQuestion();
+      } else {
+        showLoading();
+      }
+    }
+
+    function showLoading() {
+      clearTimeout(timer);
+      clearLoadingTimers();
+      updateLoading(loadingPhases[0]);
+      loadingPhases.forEach((phase) => {
+        loadingPhaseTimers.push(setTimeout(() => updateLoading(phase), phase.at));
+      });
+      setPage("loading-page");
+      timer = setTimeout(() => {
+        finishLoading();
+        setPage("gate-page");
+      }, 2800);
+    }
+
+    function clearLoadingTimers() {
+      loadingPhaseTimers.forEach((phaseTimer) => clearTimeout(phaseTimer));
+      loadingPhaseTimers = [];
+    }
+
+    function updateLoading(phase) {
+      $("loading-title").innerHTML = phase.title;
+      $("loading-subtitle").textContent = phase.subtitle;
+      $("loading-fill").style.width = `${phase.percent}%`;
+      document.querySelectorAll("[data-loading-step]").forEach((stepEl, index) => {
+        const done = index < phase.step;
+        const active = index === phase.step;
+        stepEl.classList.toggle("done", done);
+        stepEl.classList.toggle("active", active);
+        stepEl.querySelector("strong").textContent = done ? "已完成" : active ? "进行中" : "等待中";
+      });
+    }
+
+    function finishLoading() {
+      $("loading-fill").style.width = "100%";
+      document.querySelectorAll("[data-loading-step]").forEach((stepEl) => {
+        stepEl.classList.add("done");
+        stepEl.classList.remove("active");
+        stepEl.querySelector("strong").textContent = "已完成";
+      });
+    }
+
+    function unlockResult() {
+      renderResult();
+      setPage("result-page");
+    }
+
+    function clampScore(n) {
+      return Math.max(0, Math.min(100, Math.round(n)));
+    }
+
+    function normalizeBand(sum, n, minUnit, maxUnit) {
+      if (!n) return 50;
+      const min = n * minUnit;
+      const max = n * maxUnit;
+      if (max <= min) return 50;
+      return ((sum - min) / (max - min)) * 100;
+    }
+
+    function calculateBasic() {
+      const raw = {};
+      const count = {};
+      dimOrder.forEach((key) => {
+        raw[key] = 0;
+        count[key] = 0;
+      });
+      questions.forEach((q, index) => {
+        const answer = Math.max(1, Math.min(5, answers[index] || 3));
+        const value = q.reverse ? 6 - answer : answer;
+        raw[q.dim] += value;
+        count[q.dim] += 1;
+      });
+      const sinScores = {};
+      dimOrder.forEach((key) => {
+        sinScores[key] = clampScore(normalizeBand(raw[key], count[key], 1, 5));
+      });
+      const total = Math.round(dimOrder.reduce((sum, key) => sum + sinScores[key], 0) / dimOrder.length);
+      return { sinScores, scores: sinScores, total };
+    }
+
+    function calculateVs() {
+      const sinRaw = {};
+      const sinCount = {};
+      const virtueRaw = {};
+      const virtueCount = {};
+
+      dimOrder.forEach((key) => {
+        sinRaw[key] = 0;
+        sinCount[key] = 0;
+      });
+      Object.values(sinVirtuePair).forEach((key) => {
+        virtueRaw[key] = 0;
+        virtueCount[key] = 0;
+      });
+
+      questions.forEach((q, index) => {
+        const answer = Math.max(1, Math.min(5, answers[index] || 3));
+        if (q.track === "virtue") {
+          virtueRaw[q.dim] += answer;
+          virtueCount[q.dim] += 1;
+        } else {
+          sinRaw[q.dim] += answer;
+          sinCount[q.dim] += 1;
+        }
+      });
+
+      const sinScores = {};
+      dimOrder.forEach((key) => {
+        sinScores[key] = clampScore(normalizeBand(sinRaw[key], sinCount[key], 1, 5));
+      });
+
+      const virtueScores = {};
+      Object.keys(virtueRaw).forEach((key) => {
+        virtueScores[key] = clampScore(normalizeBand(virtueRaw[key], virtueCount[key], 1, 5));
+      });
+
+      const scores = { ...sinScores, ...virtueScores };
+      const sinAvg = Math.round(dimOrder.reduce((sum, key) => sum + sinScores[key], 0) / dimOrder.length);
+      const virtueAvg = Math.round(Object.values(virtueScores).reduce((sum, v) => sum + v, 0) / dimOrder.length);
+      const balance = virtueAvg - sinAvg;
+      return { scores, sinScores, virtueScores, sinAvg, virtueAvg, balance, total: sinAvg };
+    }
+
+    function calculate() {
+      return activeMode === "vs" ? calculateVs() : calculateBasic();
+    }
+
+    function levelText(score) {
+      if (score >= 76) return "强";
+      if (score >= 52) return "中高";
+      if (score >= 28) return "中";
+      return "低";
+    }
+
+    function totalLabelBasic(total) {
+      if (total >= 76) return "七面张力较强，欲望、比较或情绪反应更容易形成行动冲动。";
+      if (total >= 56) return "七面张力偏活跃，部分场景会明显触发你的内在印记。";
+      if (total >= 36) return "七面张力较均衡，偶尔被触发，但通常能回到理性节奏。";
+      return "七面张力较轻，你更少被即时欲望和强烈情绪牵动。";
+    }
+
+    function totalLabelVs(sinAvg, virtueAvg, balance) {
+      if (balance >= 18) return "光辉侧整体更托住你，暗影印记会在特定场景闪现，但通常能被美德缓冲。";
+      if (balance <= -18) return "暗影侧牵引更强，欲望、比较或情绪更容易形成行动冲动，对应美德仍有空间被唤醒。";
+      return "罪与德张力较均衡，你在牵引与托举之间来回切换，关键在于识别当下被哪一侧主导。";
+    }
+
+    function radarPoint(index, value, radius = 112, cx = 180, cy = 180, total = 14) {
+      const angle = (-90 + index * (360 / total)) * Math.PI / 180;
+      const distance = radius * (value / 100);
+      return {
+        x: cx + Math.cos(angle) * distance,
+        y: cy + Math.sin(angle) * distance
+      };
+    }
+
+    function renderBasicRadar(scores) {
+      const cx = 150;
+      const cy = 150;
+      const total = dimOrder.length;
+      const pointAt = (index, value, radius = 104) => {
+        const angle = (-90 + index * (360 / total)) * Math.PI / 180;
+        const distance = radius * (value / 100);
+        return { x: cx + Math.cos(angle) * distance, y: cy + Math.sin(angle) * distance };
+      };
+      const ringPoints = (value) => dimOrder.map((_, i) => {
+        const p = pointAt(i, value);
+        return `${p.x.toFixed(1)},${p.y.toFixed(1)}`;
+      }).join(" ");
+      const rings = [25, 50, 75, 100].map((v) => `<polygon class="radar-grid" points="${ringPoints(v)}"></polygon>`).join("");
+      const axes = dimOrder.map((key, index) => {
+        const end = pointAt(index, 100);
+        const label = pointAt(index, 122);
+        return `<line class="radar-axis" x1="${cx}" y1="${cy}" x2="${end.x.toFixed(1)}" y2="${end.y.toFixed(1)}"></line>
+          <text class="radar-label" x="${label.x.toFixed(1)}" y="${label.y.toFixed(1)}">${dimensions[key].name}</text>`;
+      }).join("");
+      const area = dimOrder.map((key, index) => {
+        const p = pointAt(index, scores[key] || 0);
+        return `${p.x.toFixed(1)},${p.y.toFixed(1)}`;
+      }).join(" ");
+      const dots = dimOrder.map((key, index) => {
+        const p = pointAt(index, scores[key] || 0);
+        return `<circle class="radar-dot" cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="4"></circle>`;
+      }).join("");
+      const el = $("basic-radar-chart");
+      if (el) el.innerHTML = `${rings}${axes}<polygon class="radar-area" points="${area}"></polygon>${dots}`;
+    }
+
+    function renderVsRadar(scores) {
+      const cx = 180;
+      const cy = 180;
+      const rings = [25, 50, 75, 100].map((value) => {
+        const pts = radarAxisOrder.map((_, index) => {
+          const point = radarPoint(index, value);
+          return `${point.x.toFixed(1)},${point.y.toFixed(1)}`;
+        }).join(" ");
+        return `<polygon class="radar-grid" points="${pts}"></polygon>`;
+      }).join("");
+
+      const axes = radarAxisOrder.map((key, index) => {
+        const end = radarPoint(index, 100);
+        return `<line class="radar-axis" x1="${cx}" y1="${cy}" x2="${end.x.toFixed(1)}" y2="${end.y.toFixed(1)}"></line>`;
+      }).join("");
+
+      const top = radarPoint(0, 100);
+      const bottom = radarPoint(7, 100);
+      const divider = `<line class="radar-divider" x1="${top.x.toFixed(1)}" y1="${(cy - 118).toFixed(1)}" x2="${bottom.x.toFixed(1)}" y2="${(cy + 118).toFixed(1)}"></line>`;
+
+      const sinArea = sinRadarOrder.map((key, i) => {
+        const point = radarPoint(i, scores[key] || 0);
+        return `${point.x.toFixed(1)},${point.y.toFixed(1)}`;
+      }).join(" ");
+      const sinPoly = `${sinArea} ${cx},${cy}`;
+
+      const virtueArea = virtueRadarOrder.map((key, i) => {
+        const point = radarPoint(i + 7, scores[key] || 0);
+        return `${point.x.toFixed(1)},${point.y.toFixed(1)}`;
+      }).join(" ");
+      const virtuePoly = `${virtueArea} ${cx},${cy}`;
+
+      const sinDots = sinRadarOrder.map((key, i) => {
+        const point = radarPoint(i, scores[key] || 0);
+        const label = radarPoint(i, 128);
+        const scorePos = radarPoint(i, 108);
+        const score = scores[key] || 0;
+        return `<circle class="radar-dot-sin" cx="${point.x.toFixed(1)}" cy="${point.y.toFixed(1)}" r="4"></circle>
+          <text class="radar-label-sin" x="${label.x.toFixed(1)}" y="${label.y.toFixed(1)}">${dimensions[key].name}</text>
+          <text class="radar-score radar-score-sin" x="${scorePos.x.toFixed(1)}" y="${scorePos.y.toFixed(1)}">${score}</text>`;
+      }).join("");
+
+      const virtueDots = virtueRadarOrder.map((key, i) => {
+        const point = radarPoint(i + 7, scores[key] || 0);
+        const label = radarPoint(i + 7, 128);
+        const scorePos = radarPoint(i + 7, 108);
+        const score = scores[key] || 0;
+        return `<circle class="radar-dot-virtue" cx="${point.x.toFixed(1)}" cy="${point.y.toFixed(1)}" r="4"></circle>
+          <text class="radar-label-virtue" x="${label.x.toFixed(1)}" y="${label.y.toFixed(1)}">${dimensions[key].name}</text>
+          <text class="radar-score radar-score-virtue" x="${scorePos.x.toFixed(1)}" y="${scorePos.y.toFixed(1)}">${score}</text>`;
+      }).join("");
+
+      $("radar-chart").innerHTML = `${rings}${axes}${divider}
+        <polygon class="radar-area-sin" points="${sinPoly}"></polygon>
+        <polygon class="radar-area-virtue" points="${virtuePoly}"></polygon>
+        ${sinDots}${virtueDots}`;
+    }
+
+    function matrixFor(scores) {
+      const items = [
+        {
+          name: "自尊敏感",
+          value: Math.round(scores.pride * 0.62 + scores.envy * 0.38),
+          text: "衡量被低估、被比较或被忽视时的内在波动。"
+        },
+        {
+          name: "欲望牵引",
+          value: Math.round(scores.lust * 0.38 + scores.gluttony * 0.36 + scores.greed * 0.26),
+          text: "衡量新鲜感、获得感和即时满足对你的拉力。"
+        },
+        {
+          name: "情绪升温",
+          value: Math.round(scores.wrath * 0.7 + scores.envy * 0.3),
+          text: "衡量被冒犯、受阻或不平衡时的升温速度。"
+        },
+        {
+          name: "回避惯性",
+          value: Math.round(scores.sloth * 0.72 + scores.gluttony * 0.28),
+          text: "衡量压力来临时用拖延、沉浸或模糊处理的倾向。"
+        }
+      ];
+      return items;
+    }
+
+    function flameText(value) {
+      const active = Math.max(1, Math.min(5, Math.ceil(value / 20)));
+      return "●".repeat(active) + "○".repeat(5 - active);
+    }
+
+    function renderBars(targetId, sortedEntries) {
+      const el = $(targetId);
+      if (!el) return;
+      el.innerHTML = sortedEntries.map(([key, score]) => {
+        return `<div class="seal-bar">
+          <span class="seal-icon">${dimensions[key].mark}</span>
+          <b>${dimensions[key].name}</b>
+          <div class="bar-track"><i style="--w:${score}%"></i></div>
+          <span class="seal-score">${score}</span>
+        </div>`;
+      }).join("");
+    }
+
+    function renderBasicResultFromData(sinScores, total) {
+      const sorted = Object.entries(sinScores).sort((a, b) => b[1] - a[1]);
+      const [topKey, topScore] = sorted[0];
+      const second = sorted[1];
+      const profile = profiles[topKey];
+      const topDim = dimensions[topKey];
+      const secondDim = dimensions[second[0]];
+
+      $("result-score").textContent = total;
+      $("dominant-name").textContent = topDim.name;
+      $("dominant-en").textContent = topDim.en;
+      $("dominant-copy").textContent = `${profile.title} · ${topScore}/100`;
+      $("result-brief-title").textContent = `核心倾向是「${topDim.name}」`;
+      $("result-brief-copy").textContent = topScore >= 70
+        ? "该倾向在关键情境中较容易被触发，建议优先关注它带来的行动冲动。"
+        : "该倾向会在特定情境中浮现，更适合被理解为提醒而不是标签。";
+      $("basic-result-copy").textContent = `${profile.summary} ${totalLabelBasic(total)} 你的第二印记是「${secondDim.name}」（${second[1]}/100），它会和主导印记一起影响你的触发方式。${profile.shade}`;
+      $("basic-keyword-list").innerHTML = [...topDim.keywords, secondDim.name, levelText(topScore)]
+        .map((tag) => `<span>${tag}</span>`).join("");
+      renderBasicRadar(sinScores);
+      renderBars("basic-seal-bars", sorted);
+      $("basic-matrix-grid").innerHTML = matrixFor(sinScores).map((item) => `<div class="matrix-item">
+        <div><b>${item.name}</b><p>${item.text}</p></div>
+        <strong data-flames="${flameText(item.value)}">${item.value}</strong>
+      </div>`).join("");
+      const advice = [
+        { title: profile.adviceTitle, text: topDim.advice[0] },
+        { title: "给第二印记留出口", text: secondDim.advice[1] },
+        { title: "降低即时反应", text: topDim.advice[1] },
+        { title: "回到可执行动作", text: topDim.advice[2] }
+      ];
+      $("basic-advice-grid").innerHTML = advice.map((item, index) =>
+        `<div class="advice-card" data-index="${index + 1}"><b>${item.title}</b><p>${item.text}</p></div>`
+      ).join("");
+
+      return {
+        mode: "basic",
+        topKey,
+        topScore,
+        secondKey: second[0],
+        secondScore: second[1],
+        scores: sinScores,
+        sinScores,
+        total
+      };
+    }
+
+    function renderVsResultFromData(payload) {
+      const { scores, sinScores, virtueScores, sinAvg, virtueAvg, balance, total } = payload;
+      const sinSorted = Object.entries(sinScores).sort((a, b) => b[1] - a[1]);
+      const virtueSorted = Object.entries(virtueScores).sort((a, b) => b[1] - a[1]);
+      const [topKey, topScore] = sinSorted[0];
+      const second = sinSorted[1];
+      const [vTopKey, vTopScore] = virtueSorted[0];
+      const profile = profiles[topKey];
+      const topDim = dimensions[topKey];
+      const secondDim = dimensions[second[0]];
+      const vTopDim = dimensions[vTopKey];
+      const vProfile = virtueProfiles[vTopKey];
+
+      $("sin-chief-name").textContent = topDim.name;
+      $("sin-chief-en").textContent = topDim.en;
+      $("sin-chief-score").textContent = topScore;
+      $("virtue-chief-name").textContent = vTopDim.name;
+      $("virtue-chief-en").textContent = vTopDim.en;
+      $("virtue-chief-score").textContent = vTopScore;
+
+      const balanceEl = $("balance-line");
+      if (balanceEl) {
+        if (balance >= 12) {
+          balanceEl.textContent = `光辉略占上风 · 美德均值 ${virtueAvg} · 罪均值 ${sinAvg}`;
+        } else if (balance <= -12) {
+          balanceEl.textContent = `暗影牵引更强 · 罪均值 ${sinAvg} · 美德均值 ${virtueAvg}`;
+        } else {
+          balanceEl.textContent = `罪德势均力敌 · 罪均值 ${sinAvg} · 美德均值 ${virtueAvg}`;
+        }
+      }
+
+      $("result-copy").textContent = `${profile.summary} ${totalLabelVs(sinAvg, virtueAvg, balance)} 你的第二宗罪是「${secondDim.name}」（${second[1]}/100）。与此同时，七美德之首是「${vTopDim.name}」（${vTopScore}/100）——${vProfile.line}${profile.shade}`;
+      $("keyword-list").innerHTML = [
+        ...topDim.keywords.slice(0, 3),
+        vTopDim.name,
+        secondDim.name,
+        levelText(topScore)
+      ].map((tag) => `<span>${tag}</span>`).join("");
+
+      renderVsRadar(scores);
+      renderBars("seal-bars", sinSorted);
+      renderBars("virtue-bars", virtueSorted);
+
+      $("matrix-grid").innerHTML = matrixFor(scores).map((item) => `<div class="matrix-item">
+        <div><b>${item.name}</b><p>${item.text}</p></div>
+        <strong data-flames="${flameText(item.value)}">${item.value}</strong>
+      </div>`).join("");
+
+      const pairedVirtueKey = sinVirtuePair[topKey];
+      const pairedVirtue = dimensions[pairedVirtueKey];
+      const advice = [
+        { title: profile.adviceTitle, text: topDim.advice[0] },
+        { title: `唤醒「${pairedVirtue.name}」`, text: pairedVirtue.advice[0] },
+        { title: "降低即时反应", text: topDim.advice[1] },
+        { title: "回到可执行动作", text: topDim.advice[2] }
+      ];
+      $("advice-grid").innerHTML = advice.map((item, index) =>
+        `<div class="advice-card" data-index="${index + 1}"><b>${item.title}</b><p>${item.text}</p></div>`
+      ).join("");
+
+      return {
+        mode: "vs",
+        topKey,
+        topScore,
+        secondKey: second[0],
+        secondScore: second[1],
+        virtueTopKey: vTopKey,
+        virtueTopScore: vTopScore,
+        scores,
+        sinScores,
+        virtueScores,
+        sinAvg,
+        virtueAvg,
+        balance,
+        total
+      };
+    }
+
+    function renderResult() {
+      const payload = calculate();
+      let meta;
+      if (activeMode === "vs") {
+        showResultLayout("vs");
+        meta = renderVsResultFromData(payload);
+      } else {
+        showResultLayout("basic");
+        meta = renderBasicResultFromData(payload.sinScores, payload.total);
+      }
+      if (!viewingHistory) {
+        pushHistory({
+          id: `${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+          ts: Date.now(),
+          mode: meta.mode,
+          total: meta.total,
+          topKey: meta.topKey,
+          topScore: meta.topScore,
+          secondKey: meta.secondKey,
+          secondScore: meta.secondScore,
+          virtueTopKey: meta.virtueTopKey,
+          virtueTopScore: meta.virtueTopScore,
+          scores: meta.scores,
+          sinScores: meta.sinScores,
+          virtueScores: meta.virtueScores,
+          sinAvg: meta.sinAvg,
+          virtueAvg: meta.virtueAvg,
+          balance: meta.balance
+        });
+      }
+      viewingHistory = false;
+    }
+
+    function restart() {
+      answers = new Array(questions.length).fill(null);
+      current = 0;
+      viewingHistory = false;
+      clearTimeout(timer);
+      clearLoadingTimers();
+      renderHistory();
+      setPage("home-page");
+    }
+
+     function goHome() {
+       renderHistory();
+       setPage("home-page");
+     }
+
+     init();
+     initAuthUI();
+   </script>
+
+
+
+<link rel="stylesheet" href="full.css">
+<link rel="stylesheet" href="cover.css"><link rel="stylesheet" href="framework.css">
+<script src="full.js"></script>
+</body>
+</html>

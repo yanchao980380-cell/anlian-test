@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>心理年龄测试 · 自我探索</title>
+    <link rel="stylesheet" href="theme.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="assets/tailwind.js"></script>
+    
+    <!-- Icons -->
+    <script src="assets/lucide.js"></script>
+    
+    <!-- Chart.js for Radar Chart -->
+    <script src="assets/chart.js"></script>
+
+    <style>
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Animations */
+        @keyframes blob {
+            0% { transform: translate(0px, 0px) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+            100% { transform: translate(0px, 0px) scale(1); }
+        }
+        .animate-blob {
+            animation: blob 7s infinite;
+        }
+        .animation-delay-2000 {
+            animation-delay: 2s;
+        }
+        .animation-delay-4000 {
+            animation-delay: 4s;
+        }
+        
+        @keyframes fade-in-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+            animation: fade-in-up 0.6s ease-out forwards;
+        }
+        
+        @keyframes fade-in {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .animate-fade-in {
+            animation: fade-in 0.4s ease-out forwards;
+        }
+        
+        @keyframes slide-up {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-slide-up {
+            animation: slide-up 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        /* Utility to hide/show screens */
+        .screen {
+            display: none;
+        }
+        .screen.active {
+            display: block;
+        }
+        .nav-bar {
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(226,232,240,0.8);
+        }
+        .nav-bar.hidden {
+            display: none;
+        }
+        .nav-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .nav-logo {
+            font-weight: 700;
+            color: #334155;
+            font-size: 16px;
+        }
+        .nav-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .nav-actions__btn {
+            padding: 8px 16px;
+            border-radius: 999px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .nav-actions__btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(79,70,229,0.12);
+        }
+        .nav-actions__btn--primary {
+            background: linear-gradient(120deg,#4f46e5,#7c3aed);
+            color: #fff;
+        }
+        .nav-actions__btn--ghost {
+            border: 1px solid rgba(79,70,229,0.35);
+            background: rgba(99,102,241,0.08);
+            color: #4f46e5;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 antialiased min-h-screen flex flex-col selection:bg-indigo-100 selection:text-indigo-900">
+
+    <!-- Background Decorative Elements -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] rounded-full bg-blue-100 mix-blend-multiply filter blur-3xl opacity-70 animate-blob"></div>
+        <div class="absolute top-[20%] -right-[10%] w-[50%] h-[50%] rounded-full bg-purple-100 mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
+        <div class="absolute -bottom-[20%] left-[20%] w-[50%] h-[50%] rounded-full bg-pink-100 mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-4000"></div>
+    </div>
+
+    <div class="nav-bar" id="psycheNav">
+        <div class="nav-content">
+            <div class="nav-logo">自我探索 <span> / INNER AGE</span></div>
+            <div class="nav-actions">
+                <button id="quiz-home" class="nav-actions__btn nav-actions__btn--ghost" onclick="app.restart()" hidden>返回首页</button>
+               
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="relative z-10 container mx-auto px-4 py-8 md:py-12 flex flex-col justify-center min-h-screen flex-grow">
+        
+        <!-- 1. START SCREEN -->
+        <div id="start-screen" class="screen active"><div class="age-editorial"><span>INNER AGE / 内在年龄</span><span>一场与自己的对话</span></div>
+            <div class="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-8 animate-fade-in-up">
+                <div class="relative group">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-violet-600 rounded-full blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+                    <div class="relative bg-white p-6 rounded-full shadow-xl">
+                        <i data-lucide="brain" class="w-20 h-20 text-indigo-600"></i>
+                    </div>
+                </div>
+                
+                <div class="space-y-4 max-w-lg">
+                    <h1 class="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-slate-800 to-slate-600">
+                        心理年龄测试
+                    </h1>
+                    <p class="text-slate-500 text-lg md:text-xl leading-relaxed">
+                        时间向前，你的内心停在哪一站？<br/>
+                        从日常选择出发，探索你的内在年龄画像。
+                    </p>
+                </div>
+
+                <button id="start-btn" class="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-medium text-white transition-all duration-200 bg-indigo-600 rounded-full hover:bg-indigo-700 hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    <span>开始探索</span>
+                    <i data-lucide="arrow-right" class="w-5 h-5 ml-2 transition-transform duration-200 group-hover:translate-x-1"></i>
+                </button>
+
+                <div class="pt-8 flex gap-4 text-sm text-slate-400 justify-center">
+                    <span class="flex items-center"><span class="w-1.5 h-1.5 rounded-full bg-green-400 mr-2"></span>无需登录</span>
+                    <span class="flex items-center"><span class="w-1.5 h-1.5 rounded-full bg-purple-400 mr-2"></span>即时结果</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. DATE INPUT SCREEN -->
+        <div id="date-input-screen" class="screen">
+            <div class="w-full max-w-lg mx-auto animate-fade-in flex flex-col items-center justify-center min-h-[50vh]">
+                <div class="bg-white rounded-3xl shadow-xl p-8 md:p-12 w-full text-center border border-slate-100 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"></div>
+                    
+                    <div class="mb-8 flex justify-center">
+                        <div class="p-4 bg-indigo-50 rounded-full text-indigo-600">
+                            <i data-lucide="calendar" class="w-10 h-10"></i>
+                        </div>
+                    </div>
+
+                    <h2 class="text-2xl font-bold text-slate-800 mb-2">首先，确认你的实际年龄</h2>
+                    <p class="text-slate-500 mb-8">我们需要它来计算心理年龄偏差值</p>
+
+                    <div class="grid grid-cols-3 gap-4 mb-10">
+                        <!-- Year -->
+                        <div class="flex flex-col text-left">
+                            <label class="text-xs font-bold text-slate-400 uppercase mb-1 ml-1">年份</label>
+                            <div class="relative">
+                                <select id="input-year" class="w-full appearance-none bg-slate-50 border border-slate-200 text-slate-700 py-3 px-4 pr-8 rounded-xl leading-tight focus:outline-none focus:bg-white focus:border-indigo-500 transition-colors cursor-pointer font-medium">
+                                    <!-- Populated by JS -->
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-500">
+                                    <svg class="fill-current h-4 w-4" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Month -->
+                        <div class="flex flex-col text-left">
+                            <label class="text-xs font-bold text-slate-400 uppercase mb-1 ml-1">月份</label>
+                            <div class="relative">
+                                <select id="input-month" class="w-full appearance-none bg-slate-50 border border-slate-200 text-slate-700 py-3 px-4 pr-8 rounded-xl leading-tight focus:outline-none focus:bg-white focus:border-indigo-500 transition-colors cursor-pointer font-medium">
+                                    <!-- Populated by JS -->
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-500">
+                                    <svg class="fill-current h-4 w-4" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Day -->
+                        <div class="flex flex-col text-left">
+                            <label class="text-xs font-bold text-slate-400 uppercase mb-1 ml-1">日期</label>
+                            <div class="relative">
+                                <select id="input-day" class="w-full appearance-none bg-slate-50 border border-slate-200 text-slate-700 py-3 px-4 pr-8 rounded-xl leading-tight focus:outline-none focus:bg-white focus:border-indigo-500 transition-colors cursor-pointer font-medium">
+                                    <!-- Populated by JS -->
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-500">
+                                    <svg class="fill-current h-4 w-4" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="app.submitDate()" class="w-full group relative inline-flex items-center justify-center px-8 py-4 text-lg font-medium text-white transition-all duration-200 bg-slate-900 rounded-xl hover:bg-indigo-600 hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <span>进入测试</span>
+                        <i data-lucide="arrow-right" class="w-5 h-5 ml-2 transition-transform duration-200 group-hover:translate-x-1"></i>
+                    </button>
+                </div>
+                <p class="mt-6 text-sm text-slate-400">
+                    生日仅用于本次年龄计算，不保存出生日期。历史报告只保存在当前浏览器。
+                </p>
+            </div>
+        </div>
+
+        <!-- 3. QUIZ SCREEN -->
+        <div id="quiz-screen" class="screen">
+            <div class="w-full max-w-2xl mx-auto animate-fade-in">
+                <!-- Progress Header -->
+                <div class="mb-8 space-y-2">
+                    <div class="flex justify-between text-sm font-medium text-slate-500">
+                        <span id="question-counter">Question 1</span>
+                        <span id="question-total">40 total</span>
+                    </div>
+                    <div class="h-2 w-full bg-slate-200 rounded-full overflow-hidden">
+                        <div id="progress-bar" class="h-full bg-indigo-600 transition-all duration-500 ease-out rounded-full" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Question Card -->
+                <div class="bg-white rounded-2xl shadow-xl p-6 md:p-10 border border-slate-100">
+                    <h2 id="question-text" class="text-2xl md:text-3xl font-bold text-slate-800 mb-8 leading-snug">
+                        <!-- Question Text Here -->
+                    </h2>
+
+                    <div id="options-container" class="space-y-4">
+                        <!-- Options generated by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. RESULT SCREEN -->
+        <div id="result-screen" class="screen">
+            <div class="w-full max-w-4xl mx-auto animate-slide-up pb-12">
+                <div class="text-center mb-8">
+                    <span class="inline-block px-4 py-1.5 rounded-full bg-slate-200 text-slate-600 font-semibold text-sm tracking-wide uppercase mb-4">
+                        测试完成
+                    </span>
+                    <h2 class="text-3xl md:text-4xl font-light text-slate-800">你的心理画像</h2>
+                </div>
+
+                <div class="bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-100">
+                    
+                    <!-- 0. Age Comparison -->
+                    <div class="bg-slate-50 p-6 md:p-10 border-b border-slate-200">
+                        <div class="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-12">
+                            <!-- Psych Age -->
+                            <div class="flex-1 w-full bg-white rounded-2xl shadow-sm border border-indigo-100 p-6 flex flex-col items-center relative overflow-hidden group">
+                                <div class="absolute top-0 left-0 w-full h-1 bg-indigo-500"></div>
+                                <span class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">心理年龄</span>
+                                <span id="res-psych-age" class="text-6xl font-black text-indigo-600 mb-1">0</span>
+                                <span class="text-sm text-indigo-400 font-medium">岁</span>
+                            </div>
+
+                            <!-- Icon -->
+                            <div id="res-age-icon" class="flex flex-col items-center justify-center text-slate-300">
+                                <!-- Icon populated by JS -->
+                            </div>
+
+                            <!-- Actual Age -->
+                            <div class="flex-1 w-full bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col items-center relative overflow-hidden">
+                                <div class="absolute top-0 left-0 w-full h-1 bg-slate-400"></div>
+                                <span class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">实际年龄</span>
+                                <span id="res-actual-age" class="text-6xl font-black text-slate-700 mb-1">0</span>
+                                <span class="text-sm text-slate-400 font-medium">岁</span>
+                            </div>
+                        </div>
+                        <div class="mt-6 text-center">
+                            <span id="res-diff-text" class="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-slate-200 text-slate-600">
+                                <!-- Text populated by JS -->
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Banner -->
+                    <div id="res-banner" class="p-8 md:p-10 text-white text-center relative overflow-hidden bg-gradient-to-r from-blue-400 to-cyan-400">
+                        <div class="absolute top-0 left-0 w-full h-full opacity-10 bg-[radial-gradient(circle_at_center,_white,_transparent)]"></div>
+                        <p id="res-title" class="relative text-xl md:text-3xl font-bold opacity-100 tracking-wide"></p>
+                    </div>
+
+                    <!-- Core Profile & Chart -->
+                    <div class="p-6 md:p-10 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 border-b border-slate-100">
+                        <div class="space-y-6">
+                            <div>
+                                <h3 class="text-lg font-bold text-slate-900 mb-3 flex items-center">
+                                    <i data-lucide="quote" class="w-5 h-5 mr-2 text-indigo-500"></i>
+                                    性格深度解析
+                                </h3>
+                                <p id="res-desc" class="text-slate-600 leading-relaxed text-justify"></p>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-slate-900 mb-3">关键词标签</h3>
+                                <div id="res-traits" class="flex flex-wrap gap-2"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-col justify-center items-center bg-slate-50 rounded-2xl p-4">
+                            <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">维度分析</h3>
+                            <div class="w-full h-[300px] relative">
+                                <canvas id="radarChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Deep Analysis -->
+                    <div class="p-6 md:p-10 bg-slate-50/50 border-b border-slate-100">
+                        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center">
+                            <i data-lucide="bar-chart-2" class="w-6 h-6 mr-2 text-indigo-600"></i>
+                            深度自我分析
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                            <div class="bg-white p-5 rounded-xl border border-green-100 shadow-sm">
+                                <h4 class="flex items-center text-green-700 font-bold mb-3">
+                                    <i data-lucide="thumbs-up" class="w-5 h-5 mr-2"></i> 核心优势
+                                </h4>
+                                <ul id="res-strengths" class="space-y-2"></ul>
+                            </div>
+                            <div class="bg-white p-5 rounded-xl border border-amber-100 shadow-sm">
+                                <h4 class="flex items-center text-amber-700 font-bold mb-3">
+                                    <i data-lucide="alert-circle" class="w-5 h-5 mr-2"></i> 潜在盲点
+                                </h4>
+                                <ul id="res-blindspots" class="space-y-2"></ul>
+                            </div>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl border border-indigo-100 shadow-sm">
+                            <h4 class="text-indigo-800 font-bold mb-2 text-sm uppercase tracking-wider">维度解读</h4>
+                            <p id="res-dimension" class="text-slate-600 text-sm leading-relaxed"></p>
+                        </div>
+                    </div>
+
+                    <!-- Social Matches -->
+                    <div class="p-6 md:p-10">
+                        <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center">
+                            <i data-lucide="users" class="w-6 h-6 mr-2 text-rose-500"></i>
+                            社交与匹配
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <!-- Archetype -->
+                            <div class="bg-gradient-to-br from-violet-50 to-purple-50 p-6 rounded-2xl border border-violet-100 text-center">
+                                <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-violet-100 text-violet-600 mb-4">
+                                    <i data-lucide="user" class="w-6 h-6"></i>
+                                </div>
+                                <h4 class="text-slate-500 text-xs font-bold uppercase tracking-wider mb-1">你的原型角色</h4>
+                                <p id="res-archetype" class="text-lg font-bold text-violet-900"></p>
+                            </div>
+                            <!-- Partner -->
+                            <div class="bg-gradient-to-br from-rose-50 to-pink-50 p-6 rounded-2xl border border-rose-100 text-center">
+                                <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-rose-100 text-rose-500 mb-4">
+                                    <i data-lucide="users" class="w-6 h-6"></i>
+                                </div>
+                                <h4 class="text-slate-500 text-xs font-bold uppercase tracking-wider mb-1">最佳拍档</h4>
+                                <p id="res-partner" class="text-lg font-bold text-rose-900 mb-2"></p>
+                                <p id="res-partner-reason" class="text-xs text-rose-800/70 leading-relaxed px-2"></p>
+                            </div>
+                            <!-- Conflict -->
+                            <div class="bg-gradient-to-br from-slate-50 to-gray-100 p-6 rounded-2xl border border-slate-200 text-center">
+                                <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-slate-200 text-slate-600 mb-4">
+                                    <i data-lucide="zap" class="w-6 h-6"></i>
+                                </div>
+                                <h4 class="text-slate-500 text-xs font-bold uppercase tracking-wider mb-1">你的克星</h4>
+                                <p id="res-conflict" class="text-lg font-bold text-slate-800 mb-2"></p>
+                                <p id="res-conflict-reason" class="text-xs text-slate-600/70 leading-relaxed px-2"></p>
+                            </div>
+                        </div>
+
+                        <div class="mt-8 bg-indigo-50 rounded-xl p-5 border-l-4 border-indigo-500">
+                            <h4 class="font-bold text-indigo-900 mb-2 text-sm uppercase tracking-wider">给未来的建议</h4>
+                            <p id="res-advice" class="text-indigo-800 text-sm leading-relaxed"></p>
+                        </div>
+                    </div>
+
+                    <!-- Footer Actions -->
+                    <div class="bg-slate-50 p-6 md:p-8 flex flex-col sm:flex-row justify-between items-center gap-4 border-t border-slate-100">
+                        <div class="text-slate-500 text-sm">
+                            总分: <span id="res-total-score" class="font-bold text-slate-800">0</span> / 160
+                        </div>
+                        <div class="flex space-x-4">
+                            <button onclick="app.restart()" class="flex items-center px-6 py-2.5 rounded-full border-2 border-slate-300 text-slate-600 hover:border-slate-800 hover:text-slate-800 transition-colors font-medium">
+                                <i data-lucide="rotate-ccw" class="w-4 h-4 mr-2"></i>
+                                重新测试
+                            </button>
+                            <button onclick="app.share()" class="flex items-center px-6 py-2.5 rounded-full bg-indigo-600 text-white hover:bg-indigo-700 shadow-lg hover:shadow-indigo-500/30 transition-all font-medium">
+                                <i data-lucide="share-2" class="w-4 h-4 mr-2"></i>
+                                分享结果
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="relative z-10 text-center py-6 text-slate-400 text-sm">
+        <p>© <span id="year-copy"></span> 心理年龄探索 · 仅供娱乐与自我探索<br>不作心理诊断或专业测量，年龄不代表能力高低。</p>
+    </footer>
+
+    <!-- SCRIPT -->
+    
+    
+    
+    
+    
+    
+    <script>
+        // --- DATA ---
+        const QUESTIONS = [
+            { id: 1, text: "周末终于到了，你最理想的度过方式是？", options: [{ id: 'a', text: "去游乐园或者热闹的聚会，哪怕通宵也没关系！", score: 1 }, { id: 'b', text: "约三两好友去探店，打卡网红餐厅。", score: 2 }, { id: 'c', text: "在家处理一些积压的家务，或者通过学习提升自己。", score: 3 }, { id: 'd', text: "一个人安静地喝茶、看书，享受独处时光。", score: 4 }] },
+            { id: 2, text: "如果给你一笔意外之财（数额不大），你会？", options: [{ id: 'a', text: "立刻买那个心仪已久的玩具/游戏/潮玩！", score: 1 }, { id: 'b', text: "请朋友们吃顿饭，或者去周边旅游一下。", score: 2 }, { id: 'c', text: "存起来一部分，或者投资理财，以备不时之需。", score: 3 }, { id: 'd', text: "给家人买点实用的东西，或者捐赠一部分。", score: 4 }] },
+            { id: 3, text: "你对当下流行的短视频或网络热梗的态度是？", options: [{ id: 'a', text: "我是冲浪达人，什么梗我都懂，甚至我会去拍！", score: 1 }, { id: 'b', text: "偶尔会看，觉得挺有意思，但不至于沉迷。", score: 2 }, { id: 'c', text: "觉得有些喧闹和浪费时间，更倾向于深度内容。", score: 3 }, { id: 'd', text: "基本不关注，甚至觉得现在的网络世界太浮躁。", score: 4 }] },
+            { id: 4, text: "你最喜欢的电影类型通常是？", options: [{ id: 'a', text: "超级英雄、动作大片、热血动漫。", score: 1 }, { id: 'b', text: "爱情片、青春校园片、悬疑烧脑片。", score: 2 }, { id: 'c', text: "剧情片、传记片、现实题材。", score: 3 }, { id: 'd', text: "纪录片、历史剧、经典老片、文艺片。", score: 4 }] },
+            { id: 5, text: "对于“尝试新事物”（如新发型、新餐厅），你的态度是？", options: [{ id: 'a', text: "毫不犹豫，我就是喜欢新鲜感！", score: 1 }, { id: 'b', text: "看心情，如果有朋友陪我一起就可以。", score: 2 }, { id: 'c', text: "会先看看评价和性价比，再决定是否尝试。", score: 3 }, { id: 'd', text: "比较保守，习惯了现在的样子，不想折腾。", score: 4 }] },
+            { id: 6, text: "如果可以养一只宠物，你会选择？", options: [{ id: 'a', text: "一只精力旺盛、需要陪玩的哈士奇或鹦鹉。", score: 1 }, { id: 'b', text: "一只粘人可爱的布偶猫或泰迪。", score: 2 }, { id: 'c', text: "一只听话懂事、能看家护院的金毛或德牧。", score: 3 }, { id: 'd', text: "一只安静、不需要太多打理的乌龟或观赏鱼。", score: 4 }] },
+            { id: 7, text: "关于“熬夜”，你的真实写照是？", options: [{ id: 'a', text: "经常通宵打游戏/刷剧，第二天照样精神。", score: 1 }, { id: 'b', text: "虽然知道不好，但总是忍不住刷手机到两点。", score: 2 }, { id: 'c', text: "因工作或学习被迫熬夜，会努力补觉。", score: 3 }, { id: 'd', text: "作息非常规律，几乎不熬夜，重视养生。", score: 4 }] },
+            { id: 8, text: "对于时尚潮流，你的看法是？", options: [{ id: 'a', text: "必须追赶！我就是这条街最靓的仔。", score: 1 }, { id: 'b', text: "会关注流行色和搭配，让自己看起来不错。", score: 2 }, { id: 'c', text: "注重质感和得体，适合场合最重要。", score: 3 }, { id: 'd', text: "舒适第一，不在乎别人怎么看。", score: 4 }] },
+            { id: 9, text: "当遇到一件非常不顺心的事情（比如被误解）时，你的第一反应是？", options: [{ id: 'a', text: "立刻炸毛，必须当场解释清楚或者发泄出来。", score: 1 }, { id: 'b', text: "感到委屈，找朋友倾诉，寻求安慰。", score: 2 }, { id: 'c', text: "先压住火气，分析利弊，寻找解决办法。", score: 3 }, { id: 'd', text: "淡然处之，觉得这种事情人生常有，没必要动气。", score: 4 }] },
+            { id: 10, text: "如果你的朋友迟到了半小时，你会？", options: [{ id: 'a', text: "非常生气，甚至想直接走人。", score: 1 }, { id: 'b', text: "有点不高兴，见面后要让他请客赔罪。", score: 2 }, { id: 'c', text: "询问原因，如果是正当理由表示理解。", score: 3 }, { id: 'd', text: "无所谓，正好利用这段时间看看书或发发呆。", score: 4 }] },
+            { id: 11, text: "面对别人的批评，你通常会？", options: [{ id: 'a', text: "本能地反驳，觉得对方在针对我。", score: 1 }, { id: 'b', text: "表面接受，心里很难过，会怀疑自己。", score: 2 }, { id: 'c', text: "理性分析，有则改之无则加勉。", score: 3 }, { id: 'd', text: "一笑置之，清楚自己的价值，不被他人言语左右。", score: 4 }] },
+            { id: 12, text: "遇到堵车或者排长队时，你的状态是？", options: [{ id: 'a', text: "焦躁不安，不停地看表、叹气。", score: 1 }, { id: 'b', text: "掏出手机刷朋友圈，打发时间。", score: 2 }, { id: 'c', text: "思考接下来的行程安排，或者听听新闻。", score: 3 }, { id: 'd', text: "心态平和，正好听完一期播客或者闭目养神。", score: 4 }] },
+            { id: 13, text: "当你在公共场合出丑（比如摔了一跤）时？", options: [{ id: 'a', text: "大叫一声，或者尴尬得想找个地缝钻进去。", score: 1 }, { id: 'b', text: "赶紧看看有没有熟人看到，假装没事。", score: 2 }, { id: 'c', text: "自嘲一下，拍拍土站起来继续走。", score: 3 }, { id: 'd', text: "非常镇定，仿佛什么都没发生过。", score: 4 }] },
+            { id: 14, text: "如果工作/学习任务搞砸了，你会？", options: [{ id: 'a', text: "不知所措，甚至想逃避责任。", score: 1 }, { id: 'b', text: "很自责，担心被领导/老师骂。", score: 2 }, { id: 'c', text: "迅速制定补救方案，将损失降到最低。", score: 3 }, { id: 'd', text: "坦然承认错误，承担后果，并视其为宝贵经验。", score: 4 }] },
+            { id: 15, text: "对于“失恋”或“失去一段关系”，你的看法？", options: [{ id: 'a', text: "感觉世界崩塌了，痛哭流涕，无法接受。", score: 1 }, { id: 'b', text: "通过疯狂购物或旅行来转移注意力，疗愈自己。", score: 2 }, { id: 'c', text: "反思关系中的问题，整理心情重新出发。", score: 3 }, { id: 'd', text: "缘起缘灭终有时，彼此祝福，各自安好。", score: 4 }] },
+            { id: 16, text: "你容易被电影或小说里的情节感动流泪吗？", options: [{ id: 'a', text: "完全不会，那是假的！或者看什么都笑。", score: 1 }, { id: 'b', text: "超级容易，经常哭得稀里哗啦。", score: 2 }, { id: 'c', text: "只有触动到自己经历的点时才会动容。", score: 3 }, { id: 'd', text: "内心有波动，但表面通常波澜不惊。", score: 4 }] },
+            { id: 17, text: "朋友约你出门，但你已经很累了，你会？", options: [{ id: 'a', text: "硬着头皮去！不能错过热闹！", score: 1 }, { id: 'b', text: "看对方是谁，如果是死党就去。", score: 2 }, { id: 'c', text: "礼貌拒绝，说明身体情况，改天再约。", score: 3 }, { id: 'd', text: "直接拒绝，现在的我非常注重养生和休息。", score: 4 }] },
+            { id: 18, text: "在聚会上，你通常扮演什么角色？", options: [{ id: 'a', text: "气氛组组长，最活跃的那个。", score: 1 }, { id: 'b', text: "配合者，跟随大家的话题。", score: 2 }, { id: 'c', text: "组织者或照顾者，确保大家玩得开心。", score: 3 }, { id: 'd', text: "观察者，坐在角落安静地喝酒微笑。", score: 4 }] },
+            { id: 19, text: "听到朋友的八卦时，你的反应是？", options: [{ id: 'a', text: "超级兴奋，立刻去打听更多细节！", score: 1 }, { id: 'b', text: "有点好奇，会和闺蜜私下讨论。", score: 2 }, { id: 'c', text: "听听就好，不信谣不传谣。", score: 3 }, { id: 'd', text: "完全不感兴趣，那是别人的私事。", score: 4 }] },
+            { id: 20, text: "如果有不喜欢的人在场，你会？", options: [{ id: 'a', text: "把“讨厌”写在脸上，完全不理他。", score: 1 }, { id: 'b', text: "尽量避开眼神接触，只和喜欢的人说话。", score: 2 }, { id: 'c', text: "维持基本的社交礼仪，不让场面难看。", score: 3 }, { id: 'd', text: "一视同仁，甚至能和他谈笑风生。", score: 4 }] },
+            { id: 21, text: "关于“讨好别人”，你的状态是？", options: [{ id: 'a', text: "我为什么要讨好别人？我做我自己！", score: 1 }, { id: 'b', text: "很在意别人的看法，经常不自觉地讨好。", score: 2 }, { id: 'c', text: "在职场或必要场合会适当圆滑，但有底线。", score: 3 }, { id: 'd', text: "早已过了需要取悦他人的年纪，舒服最重要。", score: 4 }] },
+            { id: 22, text: "当你看到别人取得巨大成功时？", options: [{ id: 'a', text: "觉得他运气好，或者有点嫉妒。", score: 1 }, { id: 'b', text: "感到焦虑，觉得自己落后了。", score: 2 }, { id: 'c', text: "研究他是怎么做到的，激励自己。", score: 3 }, { id: 'd', text: "由衷为他高兴，并相信每个人有自己的时区。", score: 4 }] },
+            { id: 23, text: "你更倾向于哪种社交模式？", options: [{ id: 'a', text: "广交朋友，五湖四海皆兄弟。", score: 1 }, { id: 'b', text: "有几个小圈子，喜欢抱团取暖。", score: 2 }, { id: 'c', text: "注重人脉的质量和互换价值。", score: 3 }, { id: 'd', text: "极简社交，二三知己足矣。", score: 4 }] },
+            { id: 24, text: "对于比自己年轻很多的人，你的态度？", options: [{ id: 'a', text: "我们是同龄人！没有代沟！", score: 1 }, { id: 'b', text: "羡慕他们的青春和活力。", score: 2 }, { id: 'c', text: "愿意给他们一些建议和指导。", score: 3 }, { id: 'd', text: "慈祥地看着他们，包容他们的幼稚。", score: 4 }] },
+            { id: 25, text: "关于未来的规划，你更倾向于哪种想法？", options: [{ id: 'a', text: "未来太远了，活在当下最重要，开心就好！", score: 1 }, { id: 'b', text: "有很多梦想想去实现，正在努力探索中。", score: 2 }, { id: 'c', text: "有明确的职业规划和家庭计划，正在按部就班执行。", score: 3 }, { id: 'd', text: "顺其自然，不再强求什么，健康平安即是福。", score: 4 }] },
+            { id: 26, text: "你认为“成功”的定义是？", options: [{ id: 'a', text: "成为明星、网红，或者非常有钱！", score: 1 }, { id: 'b', text: "做自己喜欢的事，被大家认可。", score: 2 }, { id: 'c', text: "事业有成，家庭美满，社会地位高。", score: 3 }, { id: 'd', text: "内心富足，身体健康，无愧于心。", score: 4 }] },
+            { id: 27, text: "对于“改变”这件事（如搬家、换工作），你的态度是？", options: [{ id: 'a', text: "超级兴奋！我喜欢新鲜感！", score: 1 }, { id: 'b', text: "有点紧张，但如果是为了更好的发展愿意尝试。", score: 2 }, { id: 'c', text: "比较谨慎，会仔细评估风险后再做决定。", score: 3 }, { id: 'd', text: "不太喜欢变动，更习惯安稳熟悉的环境。", score: 4 }] },
+            { id: 28, text: "你如何看待“规则”？", options: [{ id: 'a', text: "规则就是用来打破的！", score: 1 }, { id: 'b', text: "有时候觉得规则很束缚，想反抗。", score: 2 }, { id: 'c', text: "规则是维持秩序的必要手段，应当遵守。", score: 3 }, { id: 'd', text: "心中有度，随心所欲而不逾矩。", score: 4 }] },
+            { id: 29, text: "如果给你一个回到过去的机会，你会？", options: [{ id: 'a', text: "毫不犹豫地回去，重新玩一遍！", score: 1 }, { id: 'b', text: "想回去弥补某个遗憾，或者对某人表白。", score: 2 }, { id: 'c', text: "可能会回去利用先知优势投资赚钱。", score: 3 }, { id: 'd', text: "拒绝，当下的每一步都算数，无需回头。", score: 4 }] },
+            { id: 30, text: "你对“责任”的看法？", options: [{ id: 'a', text: "好沉重啊，能躲就躲。", score: 1 }, { id: 'b', text: "虽然有点累，但为了证明自己愿意承担。", score: 2 }, { id: 'c', text: "这是成年人的基本修养，责无旁贷。", score: 3 }, { id: 'd', text: "责任已融入血液，不再是负担，而是守护。", score: 4 }] },
+            { id: 31, text: "对于“爱情”，你现在更相信？", options: [{ id: 'a', text: "轰轰烈烈，一见钟情！", score: 1 }, { id: 'b', text: "浪漫唯美，灵魂伴侣。", score: 2 }, { id: 'c', text: "势均力敌，共同进步。", score: 3 }, { id: 'd', text: "相濡以沫，细水长流。", score: 4 }] },
+            { id: 32, text: "看到一群孩子在公园里玩耍，你的感受是？", options: [{ id: 'a', text: "想加入他们一起玩！", score: 1 }, { id: 'b', text: "觉得很可爱，但也觉得很吵。", score: 2 }, { id: 'c', text: "思考教育孩子真是不容易，责任重大。", score: 3 }, { id: 'd', text: "感受到了生命的活力与传承，内心平静。", score: 4 }] },
+            { id: 33, text: "回顾过去，你经常有的想法是？", options: [{ id: 'a', text: "基本不回忆，我只看前面！", score: 1 }, { id: 'b', text: "偶尔会怀念学生时代的无忧无虑。", score: 2 }, { id: 'c', text: "复盘过去的得失，总结经验教训。", score: 3 }, { id: 'd', text: "一切都是最好的安排，无论好坏都已释怀。", score: 4 }] },
+            { id: 34, text: "独处时，你通常会思考什么？", options: [{ id: 'a', text: "好无聊啊，找谁聊聊天呢？", score: 1 }, { id: 'b', text: "胡思乱想，容易陷入情绪内耗。", score: 2 }, { id: 'c', text: "思考工作计划，或者生活琐事。", score: 3 }, { id: 'd', text: "享受内心的宁静，思考生命的本质。", score: 4 }] },
+            { id: 35, text: "你觉得自己了解自己吗？", options: [{ id: 'a', text: "没想过这个问题，开心就好。", score: 1 }, { id: 'b', text: "有时候觉得自己很矛盾，搞不懂自己。", score: 2 }, { id: 'c', text: "比较了解，知道自己的长处和短板。", score: 3 }, { id: 'd', text: "非常了解，并已接纳了自己的一切不完美。", score: 4 }] },
+            { id: 36, text: "对于“衰老”，你的态度是？", options: [{ id: 'a', text: "太可怕了，我不想变老！", score: 1 }, { id: 'b', text: "有点焦虑，开始用各种抗衰老产品。", score: 2 }, { id: 'c', text: "接受这是自然规律，注重锻炼保持状态。", score: 3 }, { id: 'd', text: "优雅地老去，皱纹是岁月的馈赠。", score: 4 }] },
+            { id: 37, text: "如果必须做出一项牺牲，你会优先牺牲？", options: [{ id: 'a', text: "未来的利益（为了现在的快乐）。", score: 1 }, { id: 'b', text: "个人的面子（为了获得实惠）。", score: 2 }, { id: 'c', text: "部分娱乐时间（为了事业发展）。", score: 3 }, { id: 'd', text: "身外之物（为了内心的安宁）。", score: 4 }] },
+            { id: 38, text: "你如何看待“复杂的人际关系”？", options: [{ id: 'a', text: "搞不懂，也不想懂，谁对我好我就对谁好。", score: 1 }, { id: 'b', text: "觉得很累，希望能简单点。", score: 2 }, { id: 'c', text: "游刃有余，知道如何平衡各方利益。", score: 3 }, { id: 'd', text: "看破不说破，超脱其中。", score: 4 }] },
+            { id: 39, text: "你认为人生的意义在于？", options: [{ id: 'a', text: "吃喝玩乐，体验这个世界！", score: 1 }, { id: 'b', text: "爱与被爱，寻找情感的归宿。", score: 2 }, { id: 'c', text: "创造价值，留下自己的痕迹。", score: 3 }, { id: 'd', text: "修行，体验生命的过程，回归本真。", score: 4 }] },
+            { id: 40, text: "测试结束了，你现在的感受是？", options: [{ id: 'a', text: "好玩！快告诉我结果！", score: 1 }, { id: 'b', text: "有点紧张，担心结果不准。", score: 2 }, { id: 'c', text: "回顾了一下自己的选择，挺有意思。", score: 3 }, { id: 'd', text: "平静地等待，结果如何都无所谓。", score: 4 }] }
+        ];
+
+        const RESULTS = [
+            {
+                minScore: 40, maxScore: 69, title: "天真烂漫的孩童", ageRange: "心理年龄：6 - 12 岁",
+                description: "你的内心住着一个永远长不大的彼得·潘。世界在你眼中是彩色的游乐场，你拥有令人羡慕的好奇心和想象力。你直率、真诚，喜怒哀乐都写在脸上。这种纯真在复杂的成人世界里显得尤为珍贵，但也让你容易在人际交往中受挫，或者因为冲动而做出后悔的决定。",
+                traits: ["好奇心强", "情绪外露", "依赖直觉", "爱冒险", "单纯"],
+                advice: "保持你的童心是上天的礼物，但在需要承担责任的时候，试着多想一步。学会保护自己，不要让你的善良成为别人伤害你的工具。",
+                color: "from-pink-400 to-rose-400",
+                matches: { bestPartner: "通透豁达的智者", partnerReason: "智者的包容能呵护你的童心，而你的活力能点亮他们的生活。", conflict: "奋斗进取的青年", conflictReason: "他们的务实和功利可能会让你感到压抑和不被理解。", archetype: "彼得·潘 / 小王子" },
+                analysis: { strengths: ["无与伦比的创造力", "感染他人的快乐能量", "直觉敏锐"], blindSpots: ["缺乏长期规划", "容易情绪化"], dimensionHighlight: "极高的生活热情和好奇心是你最大的天赋，但抗逆力和责任担当是需要后天补足的短板。" },
+                chartData: [{ subject: '好奇心', A: 95 }, { subject: '情绪稳定', A: 40 }, { subject: '社交从容', A: 60 }, { subject: '责任担当', A: 30 }, { subject: '抗逆力', A: 45 }, { subject: '生活热情', A: 95 }, { subject: '包容度', A: 50 }, { subject: '自我接纳', A: 70 }]
+            },
+            {
+                minScore: 70, maxScore: 92, title: "热血探索的少年", ageRange: "心理年龄：13 - 19 岁",
+                description: "你的心理状态正处于充满活力的青春期。你对世界有自己的看法，渴望表达，渴望被认可。你可能时常感到迷茫和纠结，在理想与现实之间反复横跳。你重视朋友情谊，敏感细腻，虽然有时候会表现出一点叛逆，但那正是你独立人格觉醒的标志。",
+                traits: ["理想主义", "敏感", "重视社交", "求知欲", "纠结"],
+                advice: "迷茫是成长的必经之路，不要因为暂时的不确定而焦虑。利用这段充满激情的时光去尝试不同的领域，你的试错成本还很低。",
+                color: "from-orange-400 to-amber-400",
+                matches: { bestPartner: "从容成熟的中坚", partnerReason: "他们能给你提供方向指引，而你唤醒了他们沉睡的热血。", conflict: "天真烂漫的孩童", conflictReason: "你正在努力摆脱幼稚，所以可能会对他们的行为感到不耐烦。", archetype: "霍尔顿 (麦田守望者) / 鸣人" },
+                analysis: { strengths: ["敢于挑战现状", "对朋友仗义", "学习能力强"], blindSpots: ["容易钻牛角尖", "过度在意他人评价"], dimensionHighlight: "好奇心和生活热情维持在较高水平，但情绪稳定性和自我接纳度波动较大，这是成长的阵痛。" },
+                chartData: [{ subject: '好奇心', A: 85 }, { subject: '情绪稳定', A: 55 }, { subject: '社交从容', A: 70 }, { subject: '责任担当', A: 50 }, { subject: '抗逆力', A: 60 }, { subject: '生活热情', A: 90 }, { subject: '包容度', A: 60 }, { subject: '自我接纳', A: 50 }]
+            },
+            {
+                minScore: 93, maxScore: 115, title: "奋斗进取的青年", ageRange: "心理年龄：20 - 35 岁",
+                description: "你处于人生的黄金奋斗期，心理状态成熟且务实。你知道自己想要什么，并愿意为此付出努力。你开始承担起工作和家庭的责任，虽然偶尔会感到压力山大，焦虑感爆棚，但你有足够的韧性和能力去应对挑战。你是现实主义者，注重效率和结果。",
+                traits: ["务实", "野心", "抗压强", "焦虑", "执行力"],
+                advice: "你做得已经很好了，不要把自己逼得太紧。偶尔停下来喘口气并不代表退步，学会平衡工作与生活，照顾好自己的身体和情绪。",
+                color: "from-blue-400 to-cyan-400",
+                matches: { bestPartner: "从容成熟的中坚", partnerReason: "强强联手，他们是你在事业和生活上最可靠的战友。", conflict: "天真烂漫的孩童", conflictReason: "你会觉得他们不切实际，而他们觉得你太功利。", archetype: "钢铁侠 / 盖茨比" },
+                analysis: { strengths: ["超强的执行力", "理性解决问题", "抗压能力"], blindSpots: ["甚至会忽略身体信号", "难以享受当下"], dimensionHighlight: "责任担当和抗逆力是你的强项，但为了成功，你可能压抑了部分生活热情和好奇心。" },
+                chartData: [{ subject: '好奇心', A: 70 }, { subject: '情绪稳定', A: 75 }, { subject: '社交从容', A: 75 }, { subject: '责任担当', A: 90 }, { subject: '抗逆力', A: 85 }, { subject: '生活热情', A: 80 }, { subject: '包容度', A: 65 }, { subject: '自我接纳', A: 75 }]
+            },
+            {
+                minScore: 116, maxScore: 138, title: "从容成熟的中坚", ageRange: "心理年龄：36 - 55 岁",
+                description: "经过岁月的洗礼，你的内心如磐石般稳固。你不再轻易被情绪左右，看问题深刻且全面。你是周围人的依靠，行事稳重，顾全大局。你更看重长远的价值而非眼前的利益，对于复杂的人际关系处理得游刃有余，生活节奏尽在你的掌握之中。",
+                traits: ["稳重", "深思熟虑", "可靠", "城府", "掌控力"],
+                advice: "过于稳重有时会显得缺乏情趣，不妨偶尔打破一下常规，给生活制造一点小惊喜。保持对新事物的好奇心，能让你看起来更年轻。",
+                color: "from-emerald-400 to-teal-400",
+                matches: { bestPartner: "奋斗进取的青年", partnerReason: "你欣赏他们的冲劲，而你的稳重能帮他们规避风险。", conflict: "热血探索的少年", conflictReason: "少年的情绪化和冲动有时会挑战你的掌控欲。", archetype: "教父 / 诸葛亮" },
+                analysis: { strengths: ["情绪管理大师", "极高的可靠性", "全局视野"], blindSpots: ["略显保守", "对他人的高标准要求"], dimensionHighlight: "情绪稳定、社交从容和责任担当都接近满分，唯独好奇心和生活热情有所下降，记得找回一些乐趣。" },
+                chartData: [{ subject: '好奇心', A: 50 }, { subject: '情绪稳定', A: 95 }, { subject: '社交从容', A: 90 }, { subject: '责任担当', A: 95 }, { subject: '抗逆力', A: 90 }, { subject: '生活热情', A: 60 }, { subject: '包容度', A: 80 }, { subject: '自我接纳', A: 85 }]
+            },
+            {
+                minScore: 139, maxScore: 160, title: "通透豁达的智者", ageRange: "心理年龄：60+ 岁",
+                description: "你的心理年龄已经达到了超然的境界。世间万物在你眼中都已回归本质，你很少焦虑，更多的是包容与释怀。你追求内心的宁静，物质对你来说已不再是束缚，精神的自由才是终极追求。你看淡了得失，拥有了大智慧。",
+                traits: ["豁达", "淡泊", "智慧", "慈悲", "宁静"],
+                advice: "你的智慧是宝贵的财富，能够指引很多人。但也要注意不要与时代完全脱节，保持与年轻人的交流会让你的智慧更具活力。",
+                color: "from-violet-400 to-purple-400",
+                matches: { bestPartner: "天真烂漫的孩童", partnerReason: "一老一少，回归本真的快乐，彼此都能在对方身上看到纯粹。", conflict: "奋斗进取的青年", conflictReason: "他们的焦虑和忙碌在你看来是没有必要的自我折磨。", archetype: "邓布利多 / 尤达大师" },
+                analysis: { strengths: ["极高的自我接纳", "看透本质的智慧", "宽广的胸怀"], blindSpots: ["可能显得疏离", "对世俗成功的漠视"], dimensionHighlight: "你的包容度、情绪稳定和自我接纳达到了顶峰，但好奇心和生活热情转为了内向的探索。" },
+                chartData: [{ subject: '好奇心', A: 40 }, { subject: '情绪稳定', A: 100 }, { subject: '社交从容', A: 95 }, { subject: '责任担当', A: 80 }, { subject: '抗逆力', A: 95 }, { subject: '生活热情', A: 50 }, { subject: '包容度', A: 100 }, { subject: '自我接纳', A: 100 }]
+            }
+        ];
+
+        function calculatePsychAge(score) {
+            if (score <= 69) return Math.round(6 + ((score - 40) / (69 - 40)) * (12 - 6));
+            if (score <= 92) return Math.round(13 + ((score - 70) / (92 - 70)) * (19 - 13));
+            if (score <= 115) return Math.round(20 + ((score - 93) / (115 - 93)) * (35 - 20));
+            if (score <= 138) return Math.round(36 + ((score - 116) / (138 - 116)) * (55 - 36));
+            return Math.round(60 + ((score - 139) / (160 - 139)) * (80 - 60));
+        }
+
+        function buildResultPayload(score, result, actualAge) {
+            const psychAge = calculatePsychAge(score);
+            const ageDiff = psychAge - actualAge;
+            let diffMode = 'match';
+            let diffText = '你的身心年龄完美契合，知行合一。';
+
+            if (Math.abs(ageDiff) > 2) {
+                if (ageDiff > 0) {
+                    diffMode = 'older';
+                    diffText = `你的内心比实际年龄成熟 ${Math.abs(ageDiff)} 岁，拥有超龄的稳重。`;
+                } else {
+                    diffMode = 'younger';
+                    diffText = `你的内心比实际年龄年轻 ${Math.abs(ageDiff)} 岁，保留着珍贵的活力。`;
+                }
+            }
+
+            return {
+                version: 1,
+                score,
+                totalScore: score,
+                actualAge,
+                psychAge,
+                ageDiff,
+                diffMode,
+                diffText,
+                title: result.title,
+                description: result.description,
+                traits: Array.isArray(result.traits) ? result.traits.slice(0, 5) : [],
+                advice: result.advice || '',
+                color: result.color || 'from-blue-400 to-cyan-400',
+                matches: result.matches || {},
+                analysis: result.analysis || {},
+                chartData: Array.isArray(result.chartData) ? result.chartData : []
+            };
+        }
+
+        // --- APP LOGIC ---
+        const app = {
+            state: {
+                currentQuestionIndex: 0,
+                score: 0,
+                actualAge: 20,
+                chartInstance: null,
+                latestResultPayload: null
+            },
+
+            init: function() {
+                this.updateYearCopy();
+                lucide.createIcons();
+                this.initDateInputs();
+            },
+
+            updateYearCopy: function() {
+                document.getElementById('year-copy').textContent = new Date().getFullYear();
+            },
+
+            showScreen: function(screenId) {
+                document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+                document.getElementById(screenId).classList.add('active');
+                const nav = document.getElementById('psycheNav');
+                if (nav) {
+                    if (screenId === 'start-screen') {
+                        nav.classList.remove('hidden');
+                    } else {
+                        nav.classList.add('hidden');
+                    }
+                }
+            },
+
+            // --- DATE INPUT LOGIC ---
+            initDateInputs: function() {
+                const yearSel = document.getElementById('input-year');
+                const monthSel = document.getElementById('input-month');
+                const daySel = document.getElementById('input-day');
+                
+                const currentYear = new Date().getFullYear();
+                
+                // Populate Years
+                for (let i = 0; i < 80; i++) {
+                    const y = currentYear - i - 5;
+                    const opt = document.createElement('option');
+                    opt.value = y;
+                    opt.text = y;
+                    yearSel.add(opt);
+                }
+                yearSel.value = 2000;
+
+                // Populate Months
+                for (let i = 1; i <= 12; i++) {
+                    const opt = document.createElement('option');
+                    opt.value = i;
+                    opt.text = i + '月';
+                    monthSel.add(opt);
+                }
+
+                // Update Days based on Year/Month
+                const updateDays = () => {
+                    const y = parseInt(yearSel.value);
+                    const m = parseInt(monthSel.value);
+                    const daysInMonth = new Date(y, m, 0).getDate();
+                    
+                    daySel.innerHTML = '';
+                    for (let i = 1; i <= daysInMonth; i++) {
+                        const opt = document.createElement('option');
+                        opt.value = i;
+                        opt.text = i + '日';
+                        daySel.add(opt);
+                    }
+                };
+
+                yearSel.addEventListener('change', updateDays);
+                monthSel.addEventListener('change', updateDays);
+                
+                // Initial call
+                updateDays();
+            },
+
+            startFlow: function() {
+                this.showScreen('date-input-screen');
+            },
+
+            submitDate: function() {
+                const year = parseInt(document.getElementById('input-year').value);
+                const month = parseInt(document.getElementById('input-month').value);
+                const day = parseInt(document.getElementById('input-day').value);
+
+                const today = new Date();
+                let age = today.getFullYear() - year;
+                const m = today.getMonth() + 1 - month;
+                if (m < 0 || (m === 0 && today.getDate() < day)) {
+                    age--;
+                }
+                
+                this.state.actualAge = age;
+                this.startQuiz();
+            },
+
+            // --- QUIZ LOGIC ---
+            startQuiz: async function() {
+                await clearForFreshStart();
+                window.history.replaceState(null, '', buildWelcomeUrl());
+                this.state.score = 0;
+                this.state.currentQuestionIndex = 0;
+                this.showScreen('quiz-screen');
+                this.renderQuestion();
+            },
+
+            renderQuestion: function() {
+                const q = QUESTIONS[this.state.currentQuestionIndex];
+                
+                // Update Progress
+                document.getElementById('question-counter').textContent = `Question ${this.state.currentQuestionIndex + 1}`;
+                document.getElementById('question-total').textContent = `${QUESTIONS.length} total`;
+                const progress = ((this.state.currentQuestionIndex + 1) / QUESTIONS.length) * 100;
+                document.getElementById('progress-bar').style.width = `${progress}%`;
+
+                // Update Text
+                document.getElementById('question-text').textContent = q.text;
+
+                // Render Options
+                const container = document.getElementById('options-container');
+                container.innerHTML = '';
+                
+                q.options.forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.className = "group w-full text-left p-4 md:p-5 rounded-xl border-2 border-slate-100 hover:border-indigo-600 hover:bg-indigo-50 transition-all duration-200 flex items-center justify-between";
+                    btn.onclick = () => this.handleAnswer(opt.score);
+                    
+                    const span = document.createElement('span');
+                    span.className = "text-lg text-slate-700 group-hover:text-indigo-900 font-medium";
+                    span.textContent = opt.text;
+                    
+                    const icon = document.createElement('i');
+                    icon.setAttribute('data-lucide', 'check-circle-2');
+                    icon.className = "w-6 h-6 text-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex-shrink-0 ml-4";
+
+                    btn.appendChild(span);
+                    btn.appendChild(icon);
+                    container.appendChild(btn);
+                });
+                lucide.createIcons();
+            },
+
+            handleAnswer: function(score) {
+                this.state.score += score;
+                
+                if (this.state.currentQuestionIndex < QUESTIONS.length - 1) {
+                    this.state.currentQuestionIndex++;
+                    // Small delay for UX
+                    setTimeout(() => this.renderQuestion(), 200);
+                } else {
+                    this.showResult();
+                }
+            },
+
+            // --- RESULT LOGIC ---
+            showResult: async function() {
+                const score = this.state.score;
+                const result = RESULTS.find(r => score >= r.minScore && score <= r.maxScore) || RESULTS[RESULTS.length - 1];
+                const payload = buildResultPayload(score, result, this.state.actualAge);
+                this.state.latestResultPayload = payload;
+                const record = await saveRecoveryResult(payload);
+                window.location.href = buildResultLoadHref(record);
+            },
+
+            applyResultPayload: function(payload) {
+                if (!payload || typeof payload !== 'object') {
+                    return;
+                }
+
+                this.state.latestResultPayload = payload;
+                this.state.score = Number(payload.score || payload.totalScore) || 0;
+                this.state.actualAge = Number(payload.actualAge) || this.state.actualAge;
+
+                document.getElementById('res-psych-age').textContent = Number(payload.psychAge) || 0;
+                document.getElementById('res-actual-age').textContent = Number(payload.actualAge) || 0;
+
+                const iconContainer = document.getElementById('res-age-icon');
+                const diffText = document.getElementById('res-diff-text');
+                iconContainer.innerHTML = '';
+                diffText.className = "inline-flex items-center px-4 py-2 rounded-full text-sm font-bold";
+
+                if (payload.diffMode === 'older') {
+                    iconContainer.innerHTML = '<div class="flex flex-col items-center text-emerald-500"><i data-lucide="trending-up" class="w-8 h-8 mb-1"></i><span class="text-xs font-bold">成熟</span></div>';
+                    diffText.classList.add('bg-emerald-100', 'text-emerald-700');
+                } else if (payload.diffMode === 'younger') {
+                    iconContainer.innerHTML = '<div class="flex flex-col items-center text-pink-500"><i data-lucide="trending-down" class="w-8 h-8 mb-1"></i><span class="text-xs font-bold">年轻</span></div>';
+                    diffText.classList.add('bg-pink-100', 'text-pink-700');
+                } else {
+                    iconContainer.innerHTML = '<i data-lucide="minus" class="w-8 h-8"></i>';
+                    diffText.classList.add('bg-slate-200', 'text-slate-600');
+                }
+                diffText.textContent = payload.diffText || '你的身心年龄完美契合，知行合一。';
+
+                document.getElementById('res-banner').className = `p-8 md:p-10 text-white text-center relative overflow-hidden bg-gradient-to-r ${payload.color || 'from-blue-400 to-cyan-400'}`;
+                document.getElementById('res-title').textContent = payload.title || '';
+                document.getElementById('res-desc').textContent = payload.description || '';
+
+                const traitsContainer = document.getElementById('res-traits');
+                traitsContainer.innerHTML = '';
+                (Array.isArray(payload.traits) ? payload.traits : []).forEach((t) => {
+                    const span = document.createElement('span');
+                    span.className = "px-3 py-1 bg-slate-100 text-slate-700 rounded-lg text-sm font-medium";
+                    span.textContent = `#${t}`;
+                    traitsContainer.appendChild(span);
+                });
+
+                const createList = (id, items, colorClass) => {
+                    const ul = document.getElementById(id);
+                    ul.innerHTML = '';
+                    (Array.isArray(items) ? items : []).forEach((item) => {
+                        const li = document.createElement('li');
+                        li.className = "flex items-start text-slate-600 text-sm";
+                        li.innerHTML = `<span class="mr-2 ${colorClass}">•</span> ${item}`;
+                        ul.appendChild(li);
+                    });
+                };
+
+                const analysis = payload.analysis && typeof payload.analysis === 'object' ? payload.analysis : {};
+                const matches = payload.matches && typeof payload.matches === 'object' ? payload.matches : {};
+                createList('res-strengths', analysis.strengths, 'text-green-500');
+                createList('res-blindspots', analysis.blindspots || analysis.blindSpots, 'text-amber-500');
+                document.getElementById('res-dimension').textContent = analysis.dimensionHighlight || '';
+
+                document.getElementById('res-archetype').textContent = matches.archetype || '';
+                document.getElementById('res-partner').textContent = matches.bestPartner || '';
+                document.getElementById('res-partner-reason').textContent = matches.partnerReason || '';
+                document.getElementById('res-conflict').textContent = matches.conflict || '';
+                document.getElementById('res-conflict-reason').textContent = matches.conflictReason || '';
+                document.getElementById('res-advice').textContent = payload.advice || '';
+                document.getElementById('res-total-score').textContent = Number(payload.score || payload.totalScore) || 0;
+
+                this.showScreen('result-screen');
+                lucide.createIcons();
+                this.renderChart(Array.isArray(payload.chartData) ? payload.chartData : [], payload.title || '心理画像');
+            },
+
+            renderChart: function(data, label) {
+                const ctx = document.getElementById('radarChart').getContext('2d');
+                
+                if (this.state.chartInstance) {
+                    this.state.chartInstance.destroy();
+                }
+
+                const labels = data.map(d => d.subject);
+                const values = data.map(d => d.A);
+
+                this.state.chartInstance = new Chart(ctx, {
+                    type: 'radar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: label,
+                            data: values,
+                            backgroundColor: 'rgba(62, 132, 120, 0.25)', // indigo-400 0.5
+                            borderColor: '#347f71', // indigo-500
+                            pointBackgroundColor: '#347f71',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: '#347f71'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            r: {
+                                angleLines: {
+                                    color: '#e2e8f0' // slate-200
+                                },
+                                grid: {
+                                    color: '#e2e8f0'
+                                },
+                                pointLabels: {
+                                    color: '#64748b', // slate-500
+                                    font: {
+                                        size: 11
+                                    }
+                                },
+                                ticks: {
+                                    display: false,
+                                    max: 100,
+                                    min: 0,
+                                    stepSize: 20
+                                },
+                                suggestedMin: 0,
+                                suggestedMax: 100
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+            },
+
+            restart: async function() {
+                await clearForFreshStart();
+                window.location.href = './index.html';
+            },
+
+            share: function() {
+                if (navigator.share) {
+                    navigator.share({
+                        title: '我的心理年龄测试结果',
+                        text: `我的实际年龄${this.state.actualAge}岁，但心理年龄是${document.getElementById('res-psych-age').textContent}岁！。你也来试试吧！`,
+                        url: window.location.href,
+                    }).catch(console.error);
+                } else {
+                    alert('截屏即可分享结果给朋友哦！');
+                }
+            }
+        };
+
+    </script>
+<script src="local.js"></script>
+<dialog id="auth-dialog" aria-labelledby="auth-title"><form id="auth-form"><button type="button" class="dialog-close" onclick="document.getElementById('auth-dialog').close()" aria-label="关闭">×</button><h2 id="auth-title">开启你的探索</h2><p>输入访问密码，开始了解内在的自己。</p><label for="auth-input">访问密码</label><input id="auth-input" placeholder="请输入你的访问密码" type="password" autocomplete="off" maxlength="32" aria-label="访问密码" required><p id="auth-error" role="alert"></p><button class="local-primary" type="submit">确认，开始探索</button></form></dialog></body></html>
